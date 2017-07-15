@@ -1,2 +1,3 @@
 .idea
+users/static/bower_components/*
 db.sqlite3
