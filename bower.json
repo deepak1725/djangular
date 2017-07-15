@@ -1,0 +1,21 @@
+{
+  "name": "crudapi",
+  "authors": [
+    "Deepak Sharma <sharma1725@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "crudapi/static/bower_components"
+  ],
+  "dependencies": {
+    "AdminLTE": "admin-lte#^2.3.11"
+  }
+}

@@ -1,0 +1,33 @@
+{#This is Base Template of Whole Site#}
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+    {% block meta %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {% endblock meta %}
+<title>{% block title %}    AdminLTE 2 {% endblock title %}</title>
+
+
+
+
+{% block app-content %}
+    {% block css %}
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" href="{% static 'bower_components/AdminLTE/bootstrap/css/bootstrap.min.css' %}">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    {% endblock css %}
+
+    {% block js %}
+        <script src="{% static 'bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js' %}"></script>
+        <script src="{% static 'bower_components/AdminLTE/bootstrap/js/bootstrap.min.js' %}"></script>
+    {% endblock js %}
+
+{% endblock app-content %}
+
+
+    </html>
+
