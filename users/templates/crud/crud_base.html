@@ -271,7 +271,12 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{% static 'bower_components/AdminLTE/dist/img/user2-160x160.jpg' %}"
                                      class="user-image" alt="User Image">
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                {% if user.is_authenticated %}
+                                     <span class="hidden-xs">{{ user.username }}</span>
+                                {% else %}
+                                     <span class="hidden-xs">Welcome, Guest</span>
+                                {% endif %}
+
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -305,7 +310,11 @@
                                         <a href="#" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        {% if user.is_authenticated %}
+                                            <a href="{% url 'users:logout' %}" class="btn btn-default btn-flat">Sign out</a>
+                                        {% else %}
+                                            <a href="{% url 'users:login' %}" class="btn btn-default btn-flat">Sign in</a>
+                                        {% endif %}
                                     </div>
                                 </li>
                             </ul>
@@ -529,6 +538,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             {% block content %}
+                {% block message %}
+                    {{ block.super }}
+                {% endblock message %}
+
             {% endblock content %}
         </div>
         <!-- /.content-wrapper -->

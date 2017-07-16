@@ -22,9 +22,10 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice_text
 
+
 class Users(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     name = models.CharField(max_length=255, blank = False, null=False)
-    email = models.EmailField(max_length=250, blank = False, null=False, validators=[validate_email])
+    email = models.EmailField(max_length=250, blank = False, null=False)
     created = models.DateTimeField(auto_created=True)
     modified = models.DateTimeField(auto_now=True)
