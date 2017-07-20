@@ -35,9 +35,17 @@
           <span class="text-danger">
               {{ form.name.errors|striptags }}
           </span>
-          {{ form.name }}
+          {{ form.first_name }}
       </div>
-      <div class="form-group has-feedback">
+
+        <div class="form-group has-feedback">
+          <span class="text-danger">
+              {{ form.last_name.errors|striptags }}
+          </span>
+          {{ form.last_name }}
+      </div>
+
+        <div class="form-group has-feedback">
           <span class="text-danger">
             {{ form.username.errors|striptags }}
           </span>
