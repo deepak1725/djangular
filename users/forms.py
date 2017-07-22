@@ -4,6 +4,14 @@ from django.core.validators import EmailValidator, MinLengthValidator, MaxLength
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
 
 class SignupForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs=
@@ -68,3 +76,11 @@ class LoginForm(AuthenticationForm):
         ),
         'inactive': _("This account is inactive."),
     }
+
+UserModel = get_user_model()
+
+class ForgotPassword(PasswordResetForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs=
+                                {'class': 'form-control', 'title': 'Enter Email', 'placeholder': 'Email'}),
+                             max_length=50, label=False, required=True,
+                             )
