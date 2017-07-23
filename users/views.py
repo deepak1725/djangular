@@ -14,9 +14,10 @@ from django.contrib.sessions.models import Session
 from django.contrib import messages
 from django.shortcuts import resolve_url
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class HomePageView(generic.TemplateView):
+class HomePageView(LoginRequiredMixin,generic.TemplateView):
     template_name = 'users/index.html'
     context_object_name = 'latest_question_list'
     def get_context_data(self, **kwargs):
@@ -33,7 +34,7 @@ class RegisterView(generic.CreateView):
     template_name = 'users/register.html'
 
 
-class MyLoginView(LoginView):
+class MyLogin(LoginView):
     authentication_form = LoginForm
     template_name = 'users/login.html'
     redirect_authenticated_user = True
@@ -43,19 +44,18 @@ class MyLoginView(LoginView):
         return url or resolve_url(settings.LOGIN_REDIRECT_URL)
 
 
-class PasswordReset(PasswordResetView):
-    template_name = 'users/forgot_password.html'
+class MyPasswordReset(PasswordResetView):
     form_class = ForgotPassword
     from_email = 'admin@crud.com'
-    email_template_name = 'users/forgot-password.html'
+    email_template_name = 'email/forgot_password.html'
     success_url = reverse_lazy('users:password_reset_done')
 
 
-class PasswordResetDone(PasswordResetDoneView):
-    template_name = 'users/password_reset_done.html'
+class MyPasswordResetDone(PasswordResetDoneView):
+    template_name = 'registration/password_reset_done.html'
 
 
-class Password(PasswordResetConfirmView):
+class MyPasswordResetConfirm(PasswordResetConfirmView):
     success_url = reverse_lazy('users: password_reset_complete')
     template_name = 'registration/password_reset_confirm.html'
 

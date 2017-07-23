@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 # from django.urls import reverse
 import os
+from django.core.mail.backends.filebased import EmailBackend
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.CrudConfig',
+    'myapp.apps.MyappConfig',
     'debug_toolbar',
 ]
 MIDDLEWARE = [
@@ -131,12 +133,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
 STATIC_URL = '/static/'
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/index/'
-LOGOUT_REDIRECT_URL = '/index/'
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'users:index'
+LOGOUT_REDIRECT_URL = 'users:login'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+
+ANGULAR_URL = '/ng/'
+ANGULAR_ROOT = os.path.join(BASE_DIR, 'ngApp/')
