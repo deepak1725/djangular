@@ -27,7 +27,13 @@ class SignupForm(ModelForm):
                             label=False,
                         )
 
-    username = forms.EmailField(widget=forms.EmailInput(attrs=
+    username = forms.CharField(widget=forms.TextInput(attrs=
+                                {'class': 'form-control', 'title': 'Enter Username', 'placeholder': 'Username'}),
+                             max_length=50, min_length=3,required=True,
+                             validators=[MinLengthValidator(3,'Username should be more than 3 Characters long')],
+                             label=False
+                             )
+    email = forms.EmailField(widget=forms.EmailInput(attrs=
                                 {'class': 'form-control', 'title': 'Enter Email', 'placeholder': 'Email'}),
                              max_length=50, min_length=3,required=True,
                              validators=[EmailValidator, MinLengthValidator(3,'Email should be more than 3 Characters long')],
@@ -36,7 +42,7 @@ class SignupForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ('name','username','password')
+        fields = ('name','username','password','email')
         error_messages = {
             'name': {
                 'min_length': _("This writer's name is too short."),
@@ -57,10 +63,10 @@ class SignupForm(ModelForm):
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.EmailField(widget=forms.EmailInput(attrs=
-                                {'class': 'form-control', 'title': 'Enter Email','placeholder': 'Email'}),
+    username = forms.CharField(widget=forms.TextInput(attrs=
+                                {'class': 'form-control', 'title': 'Enter username','placeholder': 'Username'}),
                                 max_length=50, min_length=3, required=True,
-                                validators=[EmailValidator],
+                                validators=[MinLengthValidator(3)],
                                 label=False
                                 )
     password = forms.CharField(widget=forms.PasswordInput(attrs=

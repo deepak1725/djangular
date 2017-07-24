@@ -43,21 +43,23 @@ class MyLogin(LoginView):
         messages.success(self.request, 'Successfully logged in',extra_tags='alert-success')
         return url or resolve_url(settings.LOGIN_REDIRECT_URL)
 
-
+# Forgot Password
 class MyPasswordReset(PasswordResetView):
     form_class = ForgotPassword
     from_email = 'admin@crud.com'
+    template_name = 'users/registration/password_reset_form.html'
     email_template_name = 'email/forgot_password.html'
     success_url = reverse_lazy('users:password_reset_done')
+    subject_template_name = 'users/registration/password_reset_subject.txt'
 
 
 class MyPasswordResetDone(PasswordResetDoneView):
-    template_name = 'registration/password_reset_done.html'
+    template_name = 'users/registration/password_reset_done.html'
 
 
 class MyPasswordResetConfirm(PasswordResetConfirmView):
     success_url = reverse_lazy('users: password_reset_complete')
-    template_name = 'registration/password_reset_confirm.html'
+    template_name = 'users/registration/password_reset_confirm.html'
 
 
 

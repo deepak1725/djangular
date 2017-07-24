@@ -2,3 +2,4 @@
 users/static/bower_components/*
 db.sqlite3
 *.pyc
+/sent_emails/
