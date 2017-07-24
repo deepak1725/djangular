@@ -14,8 +14,14 @@ from django.utils.encoding import force_bytes
 
 
 class SignupForm(ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs=
-                                    {'class': 'form-control', 'title': 'Enter your name', 'placeholder': 'Name'}),
+    first_name = forms.CharField(widget=forms.TextInput(attrs=
+                                    {'class': 'form-control', 'title': 'First Name', 'placeholder': 'First Name'}),
+                            max_length=100, required=True,
+                            validators=[MinLengthValidator(5,'Name should be more than 3 characters long'), MaxLengthValidator(30)],
+                            label=False,
+                        )
+    last_name = forms.CharField(widget=forms.TextInput(attrs=
+                                    {'class': 'form-control', 'title': 'Last Name', 'placeholder': 'Last Name'}),
                             max_length=100, required=True,
                             validators=[MinLengthValidator(5,'Name should be more than 3 characters long'), MaxLengthValidator(30)],
                             label=False,
@@ -42,7 +48,7 @@ class SignupForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ('name','username','password','email')
+        fields = ('first_name','last_name','username','password', 'email')
         error_messages = {
             'name': {
                 'min_length': _("This writer's name is too short."),

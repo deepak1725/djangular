@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'users.apps.CrudConfig',
     'myapp.apps.MyappConfig',
     'debug_toolbar',
+    'rest_framework',
+    'api',
+    'guardian',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -146,3 +149,20 @@ EMAIL_PORT = 1025
 
 ANGULAR_URL = '/ng/'
 ANGULAR_ROOT = os.path.join(BASE_DIR, 'ngApp/')
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissions'
+    ]
+}
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
