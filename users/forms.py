@@ -3,9 +3,9 @@ from django.forms import ModelForm
 from django.core.validators import EmailValidator, MinLengthValidator, MaxLengthValidator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model,password_validation
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -91,8 +91,21 @@ class LoginForm(AuthenticationForm):
 
 UserModel = get_user_model()
 
-class ForgotPassword(PasswordResetForm):
+class MyForgotPasswordForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs=
                                 {'class': 'form-control', 'title': 'Enter Email', 'placeholder': 'Email'}),
                              max_length=50, label=False, required=True,
                              )
+
+class MySetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label=_("New password"),
+        widget=forms.PasswordInput({'class': 'form-control', 'placeholder' : 'New Password'}),
+        strip=False,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password2 = forms.CharField(
+        label=_("New password confirmation"),
+        strip=False,
+        widget=forms.PasswordInput({'class': 'form-control', 'placeholder' : 'Confirm Password'}),
+    )

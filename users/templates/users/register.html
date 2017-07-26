@@ -1,28 +1,9 @@
 <!DOCTYPE html>
-{% extends 'base.html' %}
+{% extends 'users/login_base.html' %}
 {% load staticfiles %}
-{% block title %} {{ block.super }}|Registration Page{% endblock title %}
-{% block app-content %}
+{% block title %} {{ block.super }}Registration Page{% endblock title %}
 
-    <head>
-
-        {% block css %}
-            {{ block.super }}
-            <!-- Ionicons -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-            <!-- Theme style -->
-            <link rel="stylesheet" href="{% static 'bower_components/AdminLTE/dist/css/AdminLTE.min.css' %}">
-            <!-- iCheck -->
-            <link rel="stylesheet" href="{% static 'bower_components/AdminLTE/plugins/iCheck/square/blue.css' %}">
-        {% endblock css %}
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-    </head>
-    <body class="hold-transition register-page">
+{% block content %}
     <div class="register-box">
         <div class="login-logo">
             <a href="#"><b>CRUD</b><br>
@@ -88,6 +69,4 @@
         </div>
         <!-- /.form-box -->
     </div>
-    <!-- /.register-box -->
-    </body>
-{% endblock app-content %}
+{% endblock content %}

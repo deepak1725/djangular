@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.views import generic
 from .models import Choice, Question, Users
-from .forms import SignupForm, LoginForm, ForgotPassword
+from .forms import SignupForm, LoginForm, MyForgotPasswordForm, MySetPasswordForm
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
@@ -47,7 +47,7 @@ class MyLogin(LoginView):
 
 # Forgot Password Form
 class MyPasswordReset(PasswordResetView):
-    form_class = ForgotPassword
+    form_class = MyForgotPasswordForm
     from_email = 'admin@crud.com'
     template_name = 'users/registration/password_reset_form.html'
     email_template_name = 'email/forgot_password.html'
@@ -60,6 +60,9 @@ class MyPasswordResetDone(PasswordResetDoneView):
 
 # LINK Landing Page
 class MyPasswordResetConfirm(PasswordResetConfirmView):
+    post_reset_login = True
+    post_reset_login_backend = 'django.contrib.auth.backends.ModelBackend'
+    form_class = MySetPasswordForm
     success_url = reverse_lazy('users:password_reset_complete')
     template_name = 'users/registration/password_reset_confirm.html'
 
