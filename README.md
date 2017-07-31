@@ -19,8 +19,34 @@ Steps to Install / Run:
 5. Install Bower (if not present already).
 6. `bower install`
 7. run server: python manage.py runserver
-8. go to http://localhost:8000
+8. go to http://localhost:8000  
+
 *** Done. :) ***
+
+**Set Up Angular2 App:**  
+  
+  1. Install Angular CLI globally :[Angular CLI](https://cli.angular.io/). Check while typing `ng --version` , (> 1.x).
+  2. Go to static folder `mkdir ngApp` in users app then run `ng new angular2`. This will create new Angular app in static folder of your app.
+  3. Go to newly created angular2 folder, run `ng eject` : This will create **webpack.config.js** file. 
+    Again run `npm install` and `npm build` after that.
+  4. Now in Angular2 folder, find **_index.html_** . Move it to your templates folder .
+  for ex: in my case, move it to **ngApp/Templates/ngApp/index.html**.
+  5. In **webpack.config.js** file find:   
+  
+  Was:
+  
+  `new HtmlWebpackPlugin({
+      "template": "./src/index.html",` 
+      
+  Change this to :
+  
+  `new HtmlWebpackPlugin({
+      "template": "../../../../ngApp/templates/ngApp/index.html"`
+
+``       or which ever is your new location of **index.html**.
+  6. Finally in angular2 folder ,run `npm start`. to start your development server of angular2.
+       
+7. Visit localhost:4200 to verify it.
 
 if during installation any problem occurs, contact project owner or raise an issue.
 
