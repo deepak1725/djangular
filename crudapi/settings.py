@@ -25,7 +25,7 @@ SECRET_KEY = 'wtouj#(&=4_x)z_7#lu9qfuz04jy#&q-k!_jb=fs9ehg68h1!$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.CrudConfig',
-    'myapp.apps.MyappConfig',
-    'debug_toolbar',
+    'ngApp.apps.AppConfig',
+    # 'debug_toolbar',
     'rest_framework',
     'api',
     'guardian',
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,6 +61,15 @@ INTERNAL_IPS = ('127.0.0.1',)
 ROOT_URLCONF = 'crudapi.urls'
 
 TEMPLATES = [
+    # {
+    #         'BACKEND': 'django.template.backends.jinja2.Jinja2',
+    #         'DIRS': ['jinja2'],
+    #         'APP_DIRS': True,
+    #         'OPTIONS': {
+    #             'variable_start_string': '[[',
+    #             'variable_end_string': ']]',
+    #         },
+    # },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -70,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.media',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -141,14 +151,19 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
 STATIC_URL = '/static/'
 
+SITE_ID = 1
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'users:index'
 LOGOUT_REDIRECT_URL = 'users:login'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
-ANGULAR_URL = '/ng/'
-ANGULAR_ROOT = os.path.join(BASE_DIR, 'ngApp/')
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'users/static/angular2/quickstart/')
+MEDIA_URL = '/ng/'
+
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
