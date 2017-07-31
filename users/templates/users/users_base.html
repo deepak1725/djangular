@@ -538,9 +538,15 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             {% block content %}
+
+
+
                 {% block message %}
                     {{ block.super }}
                 {% endblock message %}
+
+
+
 
             {% endblock content %}
         </div>
