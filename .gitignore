@@ -5,3 +5,4 @@ db.sqlite3
 /sent_emails/
 /ngApp/static/node_modules/
 /users/static/ngApp/angular2/node_modules/
+/users/static/ngApp/angular2/dist/
