@@ -16,4 +16,4 @@ services:
 script: ./manage.py
 
 before_script:
-  - psql -c 'create database myproject;' -U postgres -P 123456
+  - psql -c 'create database myproject;' -U postgres
