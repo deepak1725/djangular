@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 # from django.urls import reverse
 import os
+from django.core.mail.backends.filebased import EmailBackend
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -24,7 +25,7 @@ SECRET_KEY = 'wtouj#(&=4_x)z_7#lu9qfuz04jy#&q-k!_jb=fs9ehg68h1!$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.CrudConfig',
-    'debug_toolbar',
+    'ngApp.apps.AppConfig',
+    # 'debug_toolbar',
     'rest_framework',
     'api',
     'guardian',
@@ -46,7 +48,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -59,6 +61,15 @@ INTERNAL_IPS = ('127.0.0.1',)
 ROOT_URLCONF = 'crudapi.urls'
 
 TEMPLATES = [
+    # {
+    #         'BACKEND': 'django.template.backends.jinja2.Jinja2',
+    #         'DIRS': ['jinja2'],
+    #         'APP_DIRS': True,
+    #         'OPTIONS': {
+    #             'variable_start_string': '[[',
+    #             'variable_end_string': ']]',
+    #         },
+    # },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -68,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.media',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -132,12 +144,26 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-# import django
-# django.setup()
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # During development only
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
 STATIC_URL = '/static/'
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/index/'
+
+SITE_ID = 1
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'users:index'
+LOGOUT_REDIRECT_URL = 'users:login'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'users/static/angular2/quickstart/')
+MEDIA_URL = '/ng/'
+
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -149,7 +175,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissions'
     ]
 }
-LOGOUT_REDIRECT_URL = '/index/'
 
 
 AUTHENTICATION_BACKENDS = (

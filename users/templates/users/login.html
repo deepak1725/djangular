@@ -1,0 +1,51 @@
+{% extends 'users/login_base.html' %}
+{% load staticfiles %}
+{% block title %}{{ block.super }} Log in{% endblock title %}
+
+{% block content %}
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#"><b>CRUD</b><br>
+                <small>LOGIN</small>
+            </a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+            <span class="text-danger">
+           {{ form.non_field_errors|striptags }}
+            </span>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group has-feedback">
+		            <span class="text-danger">
+				        {{ form.username.errors|striptags }}
+		            </span>
+                    {{ form.username }}
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <span class="text-danger">
+                     {{ form.password.errors|striptags }}
+                  </span>
+                    {{ form.password }}
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <a href="{% url 'users:forgot' %}">Forgot Password </a>|
+                        <a href="{% url 'users:register' %}" class="text-center">Register</a>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+
+{% endblock content %}
+

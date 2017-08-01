@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% extends 'users/login_base.html' %}
+{% load staticfiles %}
+{% block title %} {{ block.super }}Registration Page{% endblock title %}
+
+{% block content %}
+    <div class="register-box">
+        <div class="login-logo">
+            <a href="#"><b>CRUD</b><br>
+                <small>Register</small>
+            </a>
+        </div>
+        <div class="register-box-body">
+            <p class="login-box-msg">Register a new membership</p>
+
+            <form action="" method="post" novalidate>{% csrf_token %}
+
+
+                <div class="form-group has-feedback">
+                  <span class="text-danger">
+                      {{ form.name.errors|striptags }}
+                  </span>
+                    {{ form.first_name }}
+                </div>
+
+                <div class="form-group has-feedback">
+          <span class="text-danger">
+              {{ form.last_name.errors|striptags }}
+          </span>
+                    {{ form.last_name }}
+                </div>
+
+                <div class="form-group has-feedback">
+          <span class="text-danger">
+            {{ form.username.errors|striptags }}
+          </span>
+                    {{ form.username }}
+                    <span class="glyphicon glyphicon-envelope clearfix form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback">
+          <span class="text-danger">
+            {{ form.email.errors|striptags }}
+          </span>
+                    {{ form.email }}
+                    <span class="glyphicon glyphicon-envelope clearfix form-control-feedback"></span>
+                </div>
+
+                <div class="form-group has-feedback">
+          <span class="text-danger">
+          {{ form.password.errors|striptags }}
+          </span>
+                    {{ form.password }}
+                    <span class="glyphicon glyphicon-lock clearfix form-control-feedback"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8">
+                        <a href="{% url 'users:login' %}" class="text-center">Login</a>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+        </div>
+        <!-- /.form-box -->
+    </div>
+{% endblock content %}
