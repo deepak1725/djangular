@@ -40,11 +40,12 @@ Steps to Install / Run:
   Change this to :
   
   `new HtmlWebpackPlugin({ "template": "../../../../ngApp/templates/ngApp/index.html" ...`
-  or Which ever new location to **index.html**
+  or Which ever new location to **index.html**.
+  
   6. Finally in angular folder ,run `npm start`. to start your development server of angular2.
        
-7. Visit localhost:4200 to verify it.
+  7. Visit localhost:4200 to verify it.
 
-if during installation any problem occurs, contact project owner or raise an issue.
+**If during installation any problem occurs, contact Me or raise an issue.**
 
 
