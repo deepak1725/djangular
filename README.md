@@ -1,4 +1,4 @@
-# Basic Crud         [![Build Status](https://travis-ci.org/deepak1725/basicCrud.svg?branch=develop)](https://travis-ci.org/deepak1725/basicCrud)
+# Django-Angular4        [![Build Status](https://travis-ci.org/deepak1725/basicCrud.svg?branch=develop)](https://travis-ci.org/deepak1725/basicCrud)
 Angular2 App Configured with Django for Basic Signup Operations
 
 This Project includes Django's Basic Signup Operation using latest functionalities as recommended by Django Team itself.
@@ -23,13 +23,13 @@ Steps to Install / Run:
 
 *** Done. :) ***
 
-**Set Up Angular2 App:**  
+**Set Up Angular App:**  
   
   1. Install Angular CLI globally :[Angular CLI](https://cli.angular.io/). Check while typing `ng --version` , (> 1.x).
-  2. Go to static folder `mkdir ngApp` in users app then run `ng new angular2`. This will create new Angular app in static folder of your app.
-  3. Go to newly created angular2 folder, run `ng eject` : This will create **webpack.config.js** file. 
+  2. Go to static folder `mkdir ngApp` in users app then run `ng new angular`. This will create new Angular app in static folder of your app.
+  3. Go to newly created angular folder, run `ng eject` : This will create **webpack.config.js** file. 
     Again run `npm install` and `npm build` after that.
-  4. Now in Angular2 folder, find **_index.html_** . Move it to your templates folder .
+  4. Now in Angular folder, find **_index.html_** . Move it to your templates folder .
   for ex: in my case, move it to **ngApp/Templates/ngApp/index.html**.
   5. In **webpack.config.js** file find:   
   
