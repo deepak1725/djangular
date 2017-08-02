@@ -1,4 +1,4 @@
-# Basic Crud
+# Basic Crud         [![Build Status](https://travis-ci.org/deepak1725/basicCrud.svg?branch=develop)](https://travis-ci.org/deepak1725/basicCrud)
 Angular2 App Configured with Django for Basic Signup Operations
 
 This Project includes Django's Basic Signup Operation using latest functionalities as recommended by Django Team itself.
@@ -35,15 +35,12 @@ Steps to Install / Run:
   
   Was:
   
-  `new HtmlWebpackPlugin({
-      "template": "./src/index.html",` 
+  `new HtmlWebpackPlugin({ "template": "./src/index.html", ...`
       
   Change this to :
   
-  `new HtmlWebpackPlugin({
-      "template": "../../../../ngApp/templates/ngApp/index.html"`
-
-``       or which ever is your new location of **index.html**.
+  `new HtmlWebpackPlugin({ "template": "../../../../ngApp/templates/ngApp/index.html" ...`
+  or Which ever new location to **index.html**
   6. Finally in angular2 folder ,run `npm start`. to start your development server of angular2.
        
 7. Visit localhost:4200 to verify it.
