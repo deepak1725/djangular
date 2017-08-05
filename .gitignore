@@ -6,3 +6,4 @@ db.sqlite3
 /ngApp/static/node_modules/
 /users/static/ngApp/angular2/node_modules/
 /users/static/ngApp/angular2/dist/
+/.vscode/
