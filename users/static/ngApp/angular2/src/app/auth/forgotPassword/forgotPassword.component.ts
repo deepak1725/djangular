@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector : 'app-forget',
-  templateUrl : './forgetPassword.component.html',
-  styleUrls: ['./forgetPassword.component.css']
+  selector : 'app-forgot',
+  templateUrl : './forgotPassword.component.html',
+  styleUrls: ['./forgotPassword.component.css']
 
 })
 export class ForgotPasswordComponent {

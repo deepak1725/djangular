@@ -11,6 +11,6 @@ app_name = 'app'
 
 
 urlpatterns = [
-    url(r'^$', AppPageView.as_view(), name="app_index"),
+    url(r'^', AppPageView.as_view(), name="app_index"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
