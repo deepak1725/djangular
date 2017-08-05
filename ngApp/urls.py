@@ -7,10 +7,10 @@ from ngApp.views import AppPageView
 
 
 
-app_name = 'ngApp'
+app_name = 'app'
 
 
 urlpatterns = [
-    url(r'^$', AppPageView.as_view(), name="angular_app"),
+    url(r'^$', AppPageView.as_view(), name="app_index"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

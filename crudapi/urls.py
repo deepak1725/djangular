@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('users.urls')),
     url(r'^api/', include('api.urls')),
-    url(r'^ngApp/', include('ngApp.urls')),
+    url(r'^app/', include('ngApp.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')) #Browseable API
 ]
 

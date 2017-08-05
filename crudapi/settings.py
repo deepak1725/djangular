@@ -99,8 +99,8 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'myproject',
-        'USER': 'deepak',
+        'NAME': 'crudapi',
+        'USER': 'postgres',
         'PASSWORD':'123456',
         'HOST':'localhost',
         'PORT': '',
@@ -160,9 +160,14 @@ EMAIL_PORT = 1025
 
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'users/static/angular2/quickstart/')
+ANGULAR_APP_DIR = os.path.join(BASE_DIR, 'users/static/ngApp/angular2/')
 MEDIA_URL = '/ng/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = [
+    os.path.join(ANGULAR_APP_DIR),
+]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
