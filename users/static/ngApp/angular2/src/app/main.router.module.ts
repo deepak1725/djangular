@@ -6,6 +6,7 @@ import { AuthModule, AuthMethods } from './auth/auth.module';
 import { AuthComponent } from './auth/auth.component';
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
+import { PageNotFoundComponent } from './404/pageNotFound.component';
 // import { ModuleWithProviders } from '@angular/core';
 
 
@@ -23,7 +24,7 @@ const appRoutes : Routes = [
     //         { path: 'register', component : RegisterComponent}
     //     ]
     // },
-    // { path: '**', module : PageNotFoundComponent }
+    { path: '**', component : PageNotFoundComponent }
 ]
 
 @NgModule({
@@ -35,4 +36,4 @@ const appRoutes : Routes = [
     ]
 })
 export class MainRouterModule{}
-export const routingMethods = [AuthMethods];
+export const routingMethods = [AuthMethods, PageNotFoundComponent];
