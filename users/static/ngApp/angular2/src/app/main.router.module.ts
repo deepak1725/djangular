@@ -8,13 +8,14 @@ import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from './404/pageNotFound.component';
 // import { ModuleWithProviders } from '@angular/core';
-
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const appRoutes : Routes = [
     { path: 'base', component: AppComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component : RegisterComponent},
+    { path: 'dashboard', component : DashboardComponent},
     { path: 'forgot-password', component : ForgotPasswordComponent},
     // { 
     //     path: '', 
@@ -36,4 +37,4 @@ const appRoutes : Routes = [
     ]
 })
 export class MainRouterModule{}
-export const routingMethods = [AuthMethods, PageNotFoundComponent];
+export const routingMethods = [AuthMethods, PageNotFoundComponent, DashboardComponent];

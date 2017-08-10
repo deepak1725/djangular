@@ -3,7 +3,7 @@ from api import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 
-
+from rest_framework_jwt.views import obtain_jwt_token
 
 router = DefaultRouter()
 router.register(r'users', views.UsersViewSet)
@@ -14,6 +14,7 @@ router.register(r'users', views.UsersViewSet)
 # Additionally, we include login URLs for the browsable API.
 
 urlpatterns = [
-    url(r'^', include(router.urls))
+    url(r'^', include(router.urls)),
+    url(r'^get-token/', obtain_jwt_token),
 ]
 

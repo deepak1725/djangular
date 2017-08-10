@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     # 'debug_toolbar',
     'rest_framework',
     'api',
-    'guardian',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -172,17 +171,11 @@ STATICFILES_DIRS = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
+
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissions'
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
-
-
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend', # this is default
-    'guardian.backends.ObjectPermissionBackend',
-)
