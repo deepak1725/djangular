@@ -21,7 +21,7 @@ Steps to Install / Run:
 7. run server: python manage.py runserver
 8. go to http://localhost:8000  
 
-*** Done. :simple_smile: ***
+*** Done.  ***
 
 **Set Up Angular App:**  
   
