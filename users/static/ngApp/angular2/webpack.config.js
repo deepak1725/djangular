@@ -361,7 +361,7 @@ module.exports = {
     }),
     new ProgressPlugin(),
     new HtmlWebpackPlugin({
-      "template": "../../../../ngApp/templates/ngApp/index.html",
+      "template": "../../../templates/ngApp/index.html",
       "filename": "./index.html",
       "hash": false,
       "inject": true,

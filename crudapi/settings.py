@@ -42,7 +42,14 @@ INSTALLED_APPS = [
     'ngApp.apps.AppConfig',
     # 'debug_toolbar',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'api',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,6 +146,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+REST_USE_JWT = True
+
 # from django.urls import reverse
 
 # Static files (CSS, JavaScript, Images)
@@ -179,3 +188,17 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'api.serializers.UserSerializer'
+}
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'api.serializers.ResetPasswordSerializer'
+}
+DEFAULT_FROM_EMAIL = 'admin@crud.com'
+# ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 0
+# SITE_NAME = 'MYCRUD'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True

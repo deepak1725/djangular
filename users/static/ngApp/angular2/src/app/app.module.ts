@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { MainRouterModule, routingMethods } from './main.router.module';
 import {UserService} from './_services/user.service';
 import {AuthenticationService} from './_services/authentication.service';
-import {CustomHttp} from './_helpers/custom-http';
 import { Http} from '@angular/http';
 import { HttpModule } from '@angular/http';
 
@@ -21,7 +20,7 @@ import { HttpModule } from '@angular/http';
     MainRouterModule,
     HttpModule
   ],
-  providers: [UserService, AuthenticationService, CustomHttp],
+  providers: [UserService, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
