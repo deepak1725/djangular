@@ -2,6 +2,7 @@ import { RouterModule, Routes }   from '@angular/router';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgotPassword/forgotPassword.component';
+import { ChangePasswordComponent } from './auth/changePassword/changePassword.component';
 import { AuthModule, AuthMethods } from './auth/auth.module';
 import { AuthComponent } from './auth/auth.component';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ const appRoutes : Routes = [
     { path: 'register', component : RegisterComponent},
     { path: 'dashboard', component : DashboardComponent},
     { path: 'forgot-password', component : ForgotPasswordComponent},
+    { path: 'change-password', component : ChangePasswordComponent},
     // { 
     //     path: '', 
     //     component: AuthComponent,

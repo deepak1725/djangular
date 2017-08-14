@@ -17,8 +17,6 @@ export class UserService {
         this.options.headers.append('Content-Type', 'application/json');
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.options.headers.append('Authorization','JWT ' + currentUser.token);
-        //  let headers = new Headers();
-        // headers.append('Authorisation', 'ds');
 
         console.log("In COnstructor");
         console.log(this.options);

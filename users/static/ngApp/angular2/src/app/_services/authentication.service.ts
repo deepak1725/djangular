@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import { HttpHeaders } from '@angular/common/http';
@@ -20,44 +20,84 @@ export class AuthenticationService {
     // }
 
     login(username: string, password: string) {
-        // this.beforeRequest();
         return this.http.post(
-            '/api/get-token/', 
-            { username: username, password: password } 
-            )
-            .map((response: Response) => {
-                // login successful if there's a jwt token in the response
-                let user = response.json();
-                if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                }
- 
-                return user;
-            });
+                '/api/login/', 
+                { username: username, password: password } 
+        )
+        .map((response: Response) => {
+            let user = response.json();
+            
+            if (user && user.token) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+            return user;
+        });
     }
  
     logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+        return this.http.post(
+            '/api/register/',
+            { }
+        )
+        .map((response: Response) => {
+            // remove user from local storage to log user out
+                localStorage.removeItem('currentUser');                    
+        });
     }
 
     register(first_name:string, last_name:string, username:string, email: string, password: string) {
-        return this.http.post('/api/users/', 
-        { first_name: first_name, last_name:last_name, username:username, email:email, password: password })
-            .map((response: Response) => {
-                // login successful if there's a jwt token in the response
-                let user = response.json();
-                if (user) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                }
- 
-                return user;
-            });
+        return this.http.post(
+                '/api/register/', 
+                {first_name: first_name, last_name:last_name, username:username, email:email, password: password }
+        )
+        .map((response: Response) => {
+            let user = response.json();
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+
+            return user;
+        });
     }
     
+
+    forgotPassword(email: string) {
+        return this.http.post(
+                '/api/reset-password/', 
+                { email:email}
+        )
+        .map((response: Response) => {
+            let user = response.json();
+
+            return user;
+        });
+    }
     
+    options: RequestOptionsArgs; //For AuthHeader
+    headers: Headers;
+    
+    getAuthHeader(){
+        this.options = new RequestOptions ();
+        if (this.options.headers == null) {
+            this.options.headers = new Headers();
+        }
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.headers = new Headers({'Authorization':'JWT ' + currentUser.token});
+    }
+
+    changePassword(new_password1: string, new_password2: string){
+        this.getAuthHeader()
+        return this.http.post(
+            '/api/change-password',
+            {new_password1: new_password1, new_password2: new_password2},
+            {headers: this.headers}
+        )
+        .map((response: Response) => {
+            response = response.json();
+            console.log(response);
+        })
+    }
     
     
 

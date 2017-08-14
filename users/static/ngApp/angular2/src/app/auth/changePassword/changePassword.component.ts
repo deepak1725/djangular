@@ -2,22 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../_services/authentication.service';
 
 @Component({
-  selector : 'app-forgot',
-  templateUrl : './forgotPassword.component.html',
-  styleUrls: ['./forgotPassword.component.css']
+  selector : 'app-change',
+  templateUrl : './changePassword.component.html',
+  styleUrls: ['./changePassword.component.css']
 
 })
-export class ForgotPasswordComponent implements OnInit{
-title = 'Forgot Password';
+export class ChangePasswordComponent implements OnInit{
+title = 'Change Password';
 ngOnInit(){
-	console.log("Welcome to forgot password")
+	console.log("Welcome to change password")
 }
 constructor(private authenticationService : AuthenticationService){}
 
 
-forgott(details:any){
+changePassword(details:any){
 	console.log(details);
-  this.authenticationService.forgotPassword(details.email)
+  this.authenticationService.changePassword(details.password1, details.password2)
         .subscribe(
           function(response){ 
               console.log("Success response", response)
