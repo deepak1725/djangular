@@ -1,11 +1,19 @@
-<div style="text-align:center">
-    Welcome to {{title}}!<br>
-    <a routerLink="/register">Register</a>
-    <a routerLink="/forgot-password">Forgot</a>
-    <a routerLink="/login">Login</a><br>
-    <a routerLink="/change-password">Change Password</a><br>
+
+<md-toolbar color="primary">
+
+    <span>Djangular</span>
+    <span class="example-spacer"></span>
+    <button md-button [mdMenuTriggerFor]="appMenu">
+        <md-icon>menu</md-icon> 
+        Menu
+    </button>
+    
+</md-toolbar>
+
+<md-menu #appMenu="mdMenu">
+  <button md-menu-item routerLink="/login"> Login </button>
+  <button md-menu-item routerLink="/register"> Register </button>
+  <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
+  <button md-menu-item routerLink="/change-password"> Change Password </button>
+</md-menu>
     <router-outlet></router-outlet>
-
-</div>
-
-

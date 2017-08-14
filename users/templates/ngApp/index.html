@@ -1,12 +1,19 @@
-{% extends 'users/login_base.html' %}
-{% load staticfiles %}
-
-{% block content %}
-<base href="/app">
-  <app-root></app-root>
-    <script src="{% static 'ngApp/angular2/dist/inline.bundle.js' %}"></script>
-    <script src="{% static 'ngApp/angular2/dist/polyfills.bundle.js' %}"></script>
-    <script src="{% static 'ngApp/angular2/dist/styles.bundle.js' %}"></script>
-    <script src="{% static 'ngApp/angular2/dist/vendor.bundle.js' %}"></script>
-    <script src="{% static 'ngApp/angular2/dist/main.bundle.js' %}"></script>
-{% endblock content %}
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    {% load staticfiles %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    {% block content %}
+    <base href="/app">
+      <app-root></app-root>
+        <script src="{% static 'ngApp/angular2/dist/inline.bundle.js' %}"></script>
+        <script src="{% static 'ngApp/angular2/dist/polyfills.bundle.js' %}"></script>
+        <script src="{% static 'ngApp/angular2/dist/styles.bundle.js' %}"></script>
+        <script src="{% static 'ngApp/angular2/dist/vendor.bundle.js' %}"></script>
+        <script src="{% static 'ngApp/angular2/dist/main.bundle.js' %}"></script>
+    {% endblock content %}
+  </body>
+</html>
