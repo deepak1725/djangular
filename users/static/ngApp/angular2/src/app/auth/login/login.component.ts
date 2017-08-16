@@ -15,7 +15,7 @@ import {MdSnackBar} from '@angular/material';
 })
 export class LoginComponent implements OnInit{
   title = 'Login';
-  addForm: FormGroup;
+  loginForm: FormGroup;
 
 
   constructor(
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit{
 	) { }
 
 	ngOnInit() {
-		this.addForm = this.formBuilder.group({
+		this.loginForm = this.formBuilder.group({
 			username: ['', Validators.required],
 			password: ['', Validators.required],
 		})
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit{
 	passwordFormControl = new FormControl('', [
 		Validators.required,
 	]);
+
 	openSnackBar = function (message){
-		console.log(message);
 		this.snackBar.open(message," ", {
 			duration: 2000,
 		}); 
@@ -48,8 +48,8 @@ export class LoginComponent implements OnInit{
 	
 	loginUser(){
 		var adduser = {
-			username: this.addForm.controls['username'].value,
-			password: this.addForm.controls['password'].value,    
+			username: this.loginForm.controls['username'].value,
+			password: this.loginForm.controls['password'].value,    
 		};
 
 		console.log(adduser);
@@ -58,15 +58,7 @@ export class LoginComponent implements OnInit{
 		this.authenticationService.login(adduser.username, adduser.password)
 			.subscribe(
 				function(response){
-					console.log(response);
-					// response = response.json();
-					that.openSnackBar("Successfully logged in.")
-
-					// that.openSnackBar(response.non_field_errors)
-					// this.snackBar.open("PizzaPartyComponent"," ", {
-					// 	duration: 500,
-					// }); 
-							
+					that.openSnackBar("Successfully logged in.")							
 					console.log("Success response", response)
 				},
 				function(response){ 

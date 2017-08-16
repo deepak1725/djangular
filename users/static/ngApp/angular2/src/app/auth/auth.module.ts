@@ -4,13 +4,15 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgotPassword/forgotPassword.component';
 import { ChangePasswordComponent } from './changePassword/changePassword.component';
+import { AuthComponent } from './auth.component';
 
 @NgModule({
   declarations: [
     RegisterComponent,
     ForgotPasswordComponent,
     LoginComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    AuthComponent
   ],
   imports: [
     FormsModule
@@ -20,4 +22,10 @@ import { ChangePasswordComponent } from './changePassword/changePassword.compone
 export class AuthModule { 
 
 }
-export const AuthMethods = [ChangePasswordComponent, ForgotPasswordComponent, LoginComponent, RegisterComponent];
+export const AuthMethods = [
+  ChangePasswordComponent, 
+  ForgotPasswordComponent, 
+  LoginComponent, 
+  RegisterComponent,
+  AuthComponent
+];

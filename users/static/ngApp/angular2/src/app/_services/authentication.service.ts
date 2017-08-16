@@ -45,10 +45,10 @@ export class AuthenticationService {
         });
     }
 
-    register(first_name:string, last_name:string, username:string, email: string, password: string) {
+    register(userInputs) {
         return this.http.post(
                 '/api/register/', 
-                {first_name: first_name, last_name:last_name, username:username, email:email, password: password }
+                userInputs,
         )
         .map((response: Response) => {
             let user = response.json();
@@ -86,11 +86,11 @@ export class AuthenticationService {
         this.headers = new Headers({'Authorization':'JWT ' + currentUser.token});
     }
 
-    changePassword(new_password1: string, new_password2: string){
+    changePassword(userInputs){
         this.getAuthHeader()
         return this.http.post(
             '/api/change-password',
-            {new_password1: new_password1, new_password2: new_password2},
+            userInputs,
             {headers: this.headers}
         )
         .map((response: Response) => {

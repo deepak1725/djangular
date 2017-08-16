@@ -10,7 +10,6 @@ import { HttpModule } from '@angular/http';
 import {MyOwnCustomMaterialModule} from './material.module';
 import 'hammerjs';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +21,7 @@ import 'hammerjs';
     MainRouterModule,
     HttpModule,
     MyOwnCustomMaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
     ],
   providers: [UserService, AuthenticationService],
   bootstrap: [AppComponent]
