@@ -167,16 +167,6 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
 
-
-ANGULAR_APP_DIR = os.path.join(BASE_DIR, 'users/static/ngApp/angular2/')
-MEDIA_URL = '/ng/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-STATICFILES_DIRS = [
-    os.path.join(ANGULAR_APP_DIR),
-]
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -192,13 +182,19 @@ REST_FRAMEWORK = {
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 
 REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'api.serializers.UserSerializer'
+    'REGISTER_SERIALIZER': 'api.serializers.MyRegisterSerializer'
 }
 
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'api.serializers.ResetPasswordSerializer'
 }
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
 DEFAULT_FROM_EMAIL = 'admin@crud.com'
-# ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 0
-# SITE_NAME = 'MYCRUD'
+
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+ACCOUNT_USERNAME_REQUIRED =  True
+
+ACCOUNT_EMAIL_REQUIRED =  True

@@ -9,23 +9,15 @@ from ngApp.forms import MyPasswordResetForm
 
 
 
-class UserSerializer(RegisterSerializer):
-    password = serializers.CharField(write_only=True)
-    email = serializers.EmailField(required=True)
-
+class MyRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
-    password1 = password2 = password
-
-
-    def validate(self, data):
-        # This Checks data['password1'] with password2 , hence raises key error
-        return data
 
     def get_cleaned_data(self):
+        super(MyRegisterSerializer, self).get_cleaned_data()
         return {
             'username': self.validated_data.get('username', ''),
-            'password': self.validated_data.get('password', ''),
+            'password1': self.validated_data.get('password1', ''),
             'email': self.validated_data.get('email', ''),
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', '')

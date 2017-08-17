@@ -31,12 +31,12 @@ constructor(
 
 ngOnInit(){
 this.signupForm = this.formBuilder.group({
-			username: ['', Validators.required],
-			password: ['', Validators.required],
-			first_name: ['', Validators.required],
-			last_name: ['', Validators.required],
-			email: ['', Validators.required],
-		})
+		username: ['', Validators.required],
+		password: ['', Validators.required],
+		first_name: ['', Validators.required],
+		last_name: ['', Validators.required],
+		email: ['', Validators.required],
+	})
 }
  
 

@@ -17,4 +17,4 @@ urlpatterns = [
         url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', PasswordResetConfirmView.as_view(),
           name='password_reset_confirm'),
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

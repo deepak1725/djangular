@@ -62,10 +62,10 @@ export class AuthenticationService {
     }
     
 
-    forgotPassword(email: string) {
+    forgotPassword(userInputs) {
         return this.http.post(
                 '/api/reset-password/', 
-                { email:email}
+                userInputs
         )
         .map((response: Response) => {
             let user = response.json();
