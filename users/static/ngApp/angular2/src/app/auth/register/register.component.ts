@@ -49,7 +49,8 @@ openSnackBar = function (message){
 registerUser(){
 		var userInputs = {
 			username: this.signupForm.controls['username'].value,
-			password: this.signupForm.controls['password'].value,    
+			password1: this.signupForm.controls['password'].value,    
+			password2: this.signupForm.controls['password'].value,    
 			first_name: this.signupForm.controls['first_name'].value,    
 			last_name: this.signupForm.controls['last_name'].value,    
 			email: this.signupForm.controls['email'].value,    
