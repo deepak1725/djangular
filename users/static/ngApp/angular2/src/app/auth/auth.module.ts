@@ -5,6 +5,9 @@ import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgotPassword/forgotPassword.component';
 import { ChangePasswordComponent } from './changePassword/changePassword.component';
 import { AuthComponent } from './auth.component';
+import {ForgotConfirmComponent} from './forgotConfirm/forgotConfirm.component';
+
+
 
 @NgModule({
   declarations: [
@@ -12,7 +15,8 @@ import { AuthComponent } from './auth.component';
     ForgotPasswordComponent,
     LoginComponent,
     ChangePasswordComponent,
-    AuthComponent
+    AuthComponent,
+    ForgotConfirmComponent
   ],
   imports: [
     FormsModule
@@ -27,5 +31,6 @@ export const AuthMethods = [
   ForgotPasswordComponent, 
   LoginComponent, 
   RegisterComponent,
-  AuthComponent
+  AuthComponent,
+  ForgotConfirmComponent
 ];

@@ -3,6 +3,7 @@ import { Http, Headers, Response, RequestOptions, RequestOptionsArgs } from '@an
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import { HttpHeaders } from '@angular/common/http';
+// import {Observable} from 'rxjs/Rx';
 
 
 @Injectable()
@@ -94,11 +95,24 @@ export class AuthenticationService {
             {headers: this.headers}
         )
         .map((response: Response) => {
-            response = response.json();
+            var responsee = response.json();
             console.log(response);
+            return responsee;
+        });
+    }
+
+    forgotPasswordConfirm(userInputs) {
+        return this.http.post(
+                '/api/reset/password/confirm', 
+                userInputs
+        )
+       .map((response: Response) => {
+            var responsee = response.json();
+            console.log("response");
+            return responsee;
         })
     }
     
-    
+   
 
 }

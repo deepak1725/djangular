@@ -19,10 +19,10 @@ from django.conf import settings
 from users.views import MyPasswordResetConfirm
 from rest_auth.registration.views import VerifyEmailView
 from rest_auth.views import PasswordResetConfirmView
+# from ngApp.views import ResetPasswordConfirm
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'', include('users.urls', namespace='users')),
     url(r'^api/', include('api.urls', namespace='api')),
     url(r'^app/', include('ngApp.urls', namespace='app')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -32,11 +32,15 @@ urlpatterns = [
     #Used in Signup
     url(r'^account-confirm-email/(?P<key>[-:\w]+)/$', VerifyEmailView.as_view(),
     name='account_confirm_email'),
+
+
+    url(r'^', include('users.urls', namespace='users')),
+
 ]
 
-#
-# if settings.DEBUG:
-#     import debug_toolbar
-#     urlpatterns = [
-#         url(r'^__debug__/', include(debug_toolbar.urls)),
-#     ] + urlpatterns
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

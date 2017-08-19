@@ -35,6 +35,8 @@ urlpatterns += [
 
     # Password Reset
     url(r'^reset-password', PasswordResetView.as_view(), name='resetPassword'),
+    #POST NEW PASSWORD HERE
+    url(r'^reset/password/confirm', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 
     # Password Reset Confirm
     #TODO BRING Back reset password serializer link here|

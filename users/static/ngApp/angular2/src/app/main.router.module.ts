@@ -10,6 +10,7 @@ import { NgModule } from '@angular/core';
 import { PageNotFoundComponent } from './404/pageNotFound.component';
 // import { ModuleWithProviders } from '@angular/core';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {ForgotConfirmComponent} from './auth/forgotConfirm/forgotConfirm.component';
 
 
 const appRoutes : Routes = [
@@ -19,6 +20,7 @@ const appRoutes : Routes = [
     { path: 'dashboard', component : DashboardComponent},
     { path: 'forgot-password', component : ForgotPasswordComponent},
     { path: 'change-password', component : ChangePasswordComponent},
+    { path: 'reset/:uid/:token', component: ForgotConfirmComponent },
     // { 
     //     path: '', 
     //     component: AuthComponent,
