@@ -216,9 +216,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = "media"
 MEDIA_URL = '/media/'
 
-# STATICFILES_DIRS = (
-#     os.path.join(PROJECT_ROOT, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
