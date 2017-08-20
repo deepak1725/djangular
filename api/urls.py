@@ -14,7 +14,7 @@ from django.views.generic import TemplateView
 
 
 router = DefaultRouter()
-router.register(r'users', views.UsersViewSet)
+# router.register(r'users', views.UsersViewSet)
 
 
 urlpatterns = [
