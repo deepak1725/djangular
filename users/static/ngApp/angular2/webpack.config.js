@@ -89,7 +89,8 @@ module.exports = {
   "output": {
     "path": path.join(process.cwd(), "dist"),
     "filename": "[name].bundle.js",
-    "chunkFilename": "[id].chunk.js"
+    "chunkFilename": "[id].chunk.js",
+    "crossOriginLoading" : "use-credentials"
   },
   "module": {
     "rules": [
@@ -360,7 +361,7 @@ module.exports = {
     }),
     new ProgressPlugin(),
     new HtmlWebpackPlugin({
-      "template": "../../../../ngApp/templates/ngApp/index.html",
+      "template": "../../../templates/ngApp/index.html",
       "filename": "./index.html",
       "hash": false,
       "inject": true,
