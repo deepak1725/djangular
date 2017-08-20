@@ -7,10 +7,8 @@ db.sqlite3
 /users/static/ngApp/angular2/node_modules/
 /users/static/ngApp/angular2/dist/
 /.vscode/
-/staticfiles/
-/crudapi/staticfiles/
 /node_modules/
-
+/bower_components/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -110,3 +108,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+!/crudapi/staticfiles/

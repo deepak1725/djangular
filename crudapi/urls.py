@@ -25,8 +25,7 @@ urlpatterns = [
 
     url(r'^', include('users.urls', namespace='users')),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
+]
 
 if settings.DEBUG:
     import debug_toolbar
