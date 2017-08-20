@@ -1,0 +1,26 @@
+{
+  "name": "crudapi",
+  "version": "1.0.0",
+  "description": "Angular App Configured with Django for Basic Signup Operations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install"
+  },
+  "engines": {
+    "node": "6.11.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepak1725/django-angular4.git"
+  },
+  "author": "Deepak Sharma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deepak1725/django-angular4/issues"
+  },
+  "homepage": "https://github.com/deepak1725/django-angular4#readme",
+  "dependencies": {
+    "bower": "^1.8.0"
+  }
+}
