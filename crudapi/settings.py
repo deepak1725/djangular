@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
 INTERNAL_IPS = ('127.0.0.1',)
@@ -165,7 +166,6 @@ REST_USE_JWT = True
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
-STATIC_URL = '/static/'
 
 SITE_ID = 1
 LOGIN_URL = 'users:login'
@@ -208,7 +208,17 @@ ACCOUNT_USERNAME_REQUIRED =  True
 ACCOUNT_EMAIL_REQUIRED =  True
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
+STATIC_URL = '/static/'
+
+# STATICFILES_DIRS = (
+#     os.path.join(PROJECT_ROOT, 'static'),
+# )
+
 db_from_env = dj_database_url.config(conn_max_age=500)
+
 DATABASES['default'].update(db_from_env)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
