@@ -13,7 +13,7 @@ db.sqlite3
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*$py.class 
+*$py.class
 package-lock.json
 # C extensions
 *.so
