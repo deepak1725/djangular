@@ -14,7 +14,7 @@ import os
 from django.core.mail.backends.filebased import EmailBackend
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+import dj_database_url
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -40,19 +40,28 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.CrudConfig',
     'ngApp.apps.AppConfig',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'api',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'jinja2'
+
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
 INTERNAL_IPS = ('127.0.0.1',)
@@ -60,15 +69,7 @@ INTERNAL_IPS = ('127.0.0.1',)
 ROOT_URLCONF = 'crudapi.urls'
 
 TEMPLATES = [
-    # {
-    #         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-    #         'DIRS': ['jinja2'],
-    #         'APP_DIRS': True,
-    #         'OPTIONS': {
-    #             'variable_start_string': '[[',
-    #             'variable_end_string': ']]',
-    #         },
-    # },
+
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -82,6 +83,21 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+    },
+    {
+            'BACKEND': 'django.template.backends.jinja2.Jinja2',
+            'DIRS': 'users',
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'environment': 'crudapi.jinja2_bridge.environment',
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.template.context_processors.media',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
     },
 ]
 
@@ -139,6 +155,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+REST_USE_JWT = True
+
 # from django.urls import reverse
 
 # Static files (CSS, JavaScript, Images)
@@ -148,7 +166,6 @@ USE_TZ = True
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
-STATIC_URL = '/static/'
 
 SITE_ID = 1
 LOGIN_URL = 'users:login'
@@ -157,16 +174,6 @@ LOGOUT_REDIRECT_URL = 'users:login'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
-
-
-ANGULAR_APP_DIR = os.path.join(BASE_DIR, 'users/static/ngApp/angular2/')
-MEDIA_URL = '/ng/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-STATICFILES_DIRS = [
-    os.path.join(ANGULAR_APP_DIR),
-]
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -179,3 +186,42 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'api.serializers.MyRegisterSerializer'
+}
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'api.serializers.ResetPasswordSerializer'
+}
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+DEFAULT_FROM_EMAIL = 'admin@crud.com'
+
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+ACCOUNT_USERNAME_REQUIRED =  True
+
+ACCOUNT_EMAIL_REQUIRED =  True
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = "media"
+MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+
+DATABASES['default'].update(db_from_env)
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

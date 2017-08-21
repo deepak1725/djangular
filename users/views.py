@@ -52,7 +52,7 @@ class MyPasswordReset(PasswordResetView):
     template_name = 'users/registration/password_reset_form.html'
     email_template_name = 'email/forgot_password.html'
     success_url = reverse_lazy('users:password_reset_done')
-    subject_template_name = 'users/registration/password_reset_subject.txt'
+    subject_template_name = 'users/auth/password_reset_subject.txt'
 
 # Email Sent
 class MyPasswordResetDone(PasswordResetDoneView):

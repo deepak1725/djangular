@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
-
 import {UserService} from '../../_services/user.service';
+import { NgForm } from '@angular/forms';
+import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
+
 
 
 @Component({
@@ -11,33 +14,58 @@ import {UserService} from '../../_services/user.service';
 
 })
 export class LoginComponent implements OnInit{
-  loading = false;
-  returnUrl: string;
   title = 'Login';
-  model: any = {};
+  loginForm: FormGroup;
+
 
   constructor(
+        private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private authenticationService: AuthenticationService) { }
+		private authenticationService: AuthenticationService,
+		public snackBar: MdSnackBar
+	) { }
 
-  ngOnInit() {
-        // reset login status
-        this.authenticationService.logout();
- 
-        // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-  }
+	ngOnInit() {
+		this.loginForm = this.formBuilder.group({
+			username: ['', Validators.required],
+			password: ['', Validators.required],
+		})
+	};
 
-  login(details: any){
-  console.log(details);
-  this.loading = true;
-  this.authenticationService.login(details.username, details.password)
-      .subscribe(
-         function(response){ 
-             console.log("Success response", response)
-            },
-         function(response){ console.log("Error happened", response )}
-        );
-  }
+	emailFormControl = new FormControl('', [
+		Validators.required,
+	]);
+	passwordFormControl = new FormControl('', [
+		Validators.required,
+	]);
+
+	openSnackBar = function (message){
+		this.snackBar.open(message," ", {
+			duration: 2000,
+		}); 
+	};
+	
+	loginUser(){
+		var adduser = {
+			username: this.loginForm.controls['username'].value,
+			password: this.loginForm.controls['password'].value,    
+		};
+
+		console.log(adduser);
+		let that = this;
+
+		this.authenticationService.login(adduser.username, adduser.password)
+			.subscribe(
+				function(response){
+					that.openSnackBar("Successfully logged in.")							
+					console.log("Success response", response)
+				},
+				function(response){ 
+					response = response.json();
+					that.openSnackBar(response[Object.keys(response)[0]])
+					console.log("Error happened", response )
+				}
+			);
+	}
 }

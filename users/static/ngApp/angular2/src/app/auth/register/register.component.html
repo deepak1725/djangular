@@ -1,53 +1,62 @@
-<div class="register-box">
-  <div class="register-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
-  </div>
 
-  <div class="register-box-body">
-    <p class="login-box-msg">Register a new membership</p>
-
-    <form action="#" #signupForm = "ngForm" method="post" (ngSubmit)="register(signupForm.value)" novalidate>
-      <div class="form-group has-feedback">
-        <input type="text" class="form-control" placeholder="First name" name="first_name" ngModel>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="text" class="form-control" placeholder="last name" name="last_name" ngModel>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="text" class="form-control" placeholder="Username" name="username" ngModel>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email" name="email"ngModel >
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password" name="password" ngModel>
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Retype password" name="password2" ngModel>
-        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
-      </div>
-      <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox"> I agree to the <a href="#">terms</a>
-            </label>
-          </div>
-        </div>
-        <!-- /.col -->
-        <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
-        </div>
-        <!-- /.col -->
-      </div>
-    </form>
-
-    <a routerLink="/login" class="text-center">I already have a membership</a>
-  </div>
-  <!-- /.form-box -->
-</div>
+<md-card>
+   <md-toolbar>
+        <md-card-title>
+	        {{this.title}}
+        </md-card-title>
+    </md-toolbar>
+        <!-- Inputs -->
+    <md-card-content>
+			<form [formGroup]="signupForm" class="">
+				
+				<p>
+					<md-input-container class="col-md-12 form-group">
+						<input mdInput placeholder="Username" formControlName="username">
+						<md-error >
+							Please enter your <strong>username</strong>
+						</md-error>
+					</md-input-container>
+				</p>
+				<p>
+					<md-input-container class="col-md-6 form-group">
+						<input mdInput  placeholder="First Name" formControlName="first_name">
+						<md-error>
+							Please enter your <strong>First Name</strong>
+						</md-error>
+					</md-input-container>
+			
+					<md-input-container class="col-md-6 form-group">
+							<input mdInput placeholder="Last Name" formControlName="last_name">
+							<md-error>
+								Please enter your <strong>Last Name</strong>
+							</md-error>
+					</md-input-container>
+				</p>
+				<p>
+					<md-input-container class="col-md-12 form-group">
+						<input type="email" mdInput placeholder="Email" formControlName="email">
+						<md-error>
+							Please enter your <strong>email</strong>
+						</md-error>
+					</md-input-container>
+				</p>
+			
+				<p>
+					<md-input-container class="col-md-12 form-group">
+						<input mdInput type="password" placeholder="Password" formControlName="password">
+						<md-error>
+							Please enter your <strong>password</strong>
+						</md-error>
+					</md-input-container>
+				</p>
+				<div >
+					<button style="margin:20px 15px" mdInput [disabled]=!signupForm.valid  type="submit" md-raised-button color="primary" (click)="registerUser()">Submit</button>
+				</div>
+			</form>
+    </md-card-content>
+        
+    <md-card-footer>
+        <!-- Footer -->
+         <!-- <small> All Copyright nothing reserved| Free to copy n disctribute.</small>  -->
+    </md-card-footer>
+</md-card>
