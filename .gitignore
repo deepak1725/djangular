@@ -110,3 +110,4 @@ ENV/
 # mypy
 .mypy_cache/
 !/crudapi/staticfiles/
+/users/static/ngApp/angular2/bin/
