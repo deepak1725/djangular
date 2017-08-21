@@ -8,6 +8,7 @@ db.sqlite3
 /users/static/ngApp/angular2/dist/
 /.vscode/
 /node_modules/
+/home/deepak/project/djangular/users/static/bower_components
 /bower_components/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
