@@ -10,10 +10,10 @@
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
     "pree2e": "webdriver-manager update --standalone false --gecko false --quiet",
-    "preinstall": "npm install webpack",
+    "postinstall": "npm install webpack",
     "webpack": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack -w",
-    "clean": "rm -r ./dist/",
+    "clean": "rm -r ./dist/"
   },
   "private": true,
   "dependencies": {
