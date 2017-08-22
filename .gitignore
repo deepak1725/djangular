@@ -17,6 +17,8 @@ __pycache__/
 package-lock.json
 # C extensions
 *.so
+package-lock.json
+
 
 # Distribution / packaging
 .Python
