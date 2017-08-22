@@ -22,6 +22,7 @@
   "homepage": "https://github.com/deepak1725/django-angular4#readme",
   "dependencies": {
     "bower": "^1.8.0",
-    "webpack": "^2.4.0"
+    "webpack": "^2.4.0",
+    "html-webpack-plugin" : "2.26.0"
   }
 }
