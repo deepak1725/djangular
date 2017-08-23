@@ -12,7 +12,8 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false --quiet",
     "webpack": "/users/static/ngApp/angular/node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack -w",
-    "clean": "rm -r ./dist/"
+    "clean": "rm -r ./dist/",
+    "postinstall" : "npm run build"
   },
   "private": true,
   "dependencies": {
