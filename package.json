@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "bower install admin-lte && cd users/static/ngApp/angular2 && npm install --prefix ."
+    "postinstall": "bower install admin-lte && cd users/static/ngApp/angular2 && npm install --dev --prefix ."
   },
   "engines": {
     "node": "6.11.1"
