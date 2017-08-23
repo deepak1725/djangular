@@ -1,0 +1,23 @@
+{
+  "name": "django-angular4",
+  "scripts": {
+  },
+  "env": {
+    "NPM_CONFIG_PRODUCTION": "false",
+    "DISABLE_COLLECTSTATIC": "0",
+    "NODE_MODULES_CACHE": "false"
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/node"
+    }
+  ]
+}
