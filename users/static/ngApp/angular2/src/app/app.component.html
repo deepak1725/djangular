@@ -13,7 +13,7 @@
   <button md-menu-item routerLink="/login"> Login </button>
   <button md-menu-item routerLink="/register"> Register </button>
   <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
-  <button md-menu-item routerLink="/change-password"> Change Password </button>
+  <button md-menu-item [routerLink]="['/change-password']"> Change Password </button>
 </md-menu>
 
 <router-outlet>

@@ -52,14 +52,13 @@ export class LoginComponent implements OnInit{
 			password: this.loginForm.controls['password'].value,    
 		};
 
-		console.log(adduser);
+		
 		let that = this;
 
 		this.authenticationService.login(adduser.username, adduser.password)
 			.subscribe(
 				function(response){
 					that.openSnackBar("Successfully logged in.")							
-					console.log("Success response", response)
 				},
 				function(response){ 
 					response = response.json();

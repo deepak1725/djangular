@@ -7,15 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'App Component';
-  hero: Hero = {
-    id: 1,
-    name: 'Windstorm'
-  };
-}
 
-export class Hero {
-  id: number;
-  name: string;
 }
 
 

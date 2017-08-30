@@ -4,13 +4,18 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import { HttpHeaders } from '@angular/common/http';
 // import {Observable} from 'rxjs/Rx';
+import 'rxjs/add/operator/do';
+import {Router} from '@angular/router';
 
 
 @Injectable()
 export class AuthenticationService {
     
 
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private router: Router
+    ) { }
     
     // private beforeRequest(): void {
     // this.notifyService.showPreloader();
@@ -19,6 +24,8 @@ export class AuthenticationService {
     // private afterRequest(): void {
     // this.notifyService.hidePreloader();
     // }
+    isLoggedIn = false;
+    redirectUrl: string;
 
     login(username: string, password: string) {
         return this.http.post(
@@ -26,14 +33,20 @@ export class AuthenticationService {
                 { username: username, password: password } 
         )
         .map((response: Response) => {
+            this.isLoggedIn = true;
             let user = response.json();
-            
             if (user && user.token) {
                 localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+            this.router.navigate(['dashboardd']);
+            if (this.redirectUrl) {
+                this.router.navigate([this.redirectUrl]);
             }
             return user;
         });
     }
+
+    
  
     logout() {
         return this.http.post(
@@ -42,7 +55,9 @@ export class AuthenticationService {
         )
         .map((response: Response) => {
             // remove user from local storage to log user out
-                localStorage.removeItem('currentUser');                    
+                localStorage.removeItem('currentUser');
+                this.isLoggedIn = false;
+                this.router.navigate(['login']);                    
         });
     }
 
