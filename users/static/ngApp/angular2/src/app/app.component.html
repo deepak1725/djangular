@@ -1,22 +1,23 @@
+<div class="flex-container" fxLayout='row' fxLayoutWrap fxLayoutGap="10px">
+            <md-toolbar color="primary">
 
-<md-toolbar color="primary">
+                <span>Djangular</span>
+                <span class="spacer"></span>
+                <button md-icon-button [mdMenuTriggerFor]="appMenu">
+                    <md-icon>menu</md-icon> 
+                </button>
+                
+            </md-toolbar>
 
-    <span>Djangular</span>
-    <span class="spacer"></span>
-    <button md-icon-button [mdMenuTriggerFor]="appMenu">
-        <md-icon>menu</md-icon> 
-    </button>
-    
-</md-toolbar>
-
-<md-menu #appMenu="mdMenu">
-  <button md-menu-item routerLink="/login"> Login </button>
-  <button md-menu-item routerLink="/register"> Register </button>
-  <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
-  <button md-menu-item [routerLink]="['/change-password']"> Change Password </button>
-</md-menu>
-
-<router-outlet>
-    
-</router-outlet>
-
+            <md-menu #appMenu="mdMenu">
+            <button md-menu-item routerLink="/login"> Login </button>
+            <button md-menu-item routerLink="/register"> Register </button>
+            <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
+            <button md-menu-item [routerLink]="['/change-password']"> Change Password </button>
+            </md-menu>
+            
+            <router-outlet>
+                <div style="margin-top: 10px;"></div>
+            </router-outlet>
+                
+</div>

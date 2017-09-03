@@ -1,2 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+body{
+    margin: 0;
+    margin-bottom: 20px;
+    background-color: #FFD54F;
+    min-height: 100%;
+    
+    font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
+}
+.flex-container {
+    -webkit-flex-direction: column;
+    flex-direction:         column;
+    /* display: flex; */
+    /* display: -webkit-flex; */
+    -webkit-align-items: center;
+            align-items: center;
+    -webkit-justify-content: space-between;;
+            justify-content: space-between;;
+    /* align-content: stretch; */
+}
+
+a{
+    text-decoration: none;
+    text-transform: uppercase;    
+}
+.mat-card-footer{ 
+    margin: 0  !important;
+    text-align: center;
+}
+/* .mat-tab-labels{
+    margin: auto;
+    width: 50%;    
+} */
+.mat-form-field{
+    width: 50%;
+}
+table{
+    width: 50%;
+}
+table .mat-form-field{
+    width: stretch;
+}
+
+/* app-login{
+    width: 50%;
+    margin: auto    
+} */
+.mat-tab-label{
+    width: 50%;    
+}
+/* app-register{
+    width: 50%;
+    margin: auto    
+} */
+/* md-card{
+    align-items: center;
+    justify-content: center;
+} */
+
+/* app-root{
+    width: 100%;
+} */
+.mat-card{
+    width: 95%;
+    margin: auto;
+}

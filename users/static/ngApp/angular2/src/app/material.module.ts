@@ -10,11 +10,12 @@ import {
   MdInputModule,
   MdProgressSpinnerModule,
   MdTabsModule,
-  MdSnackBarModule
+  MdSnackBarModule,
+  MdListModule,
   
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {CdkTableModule} from '@angular/cdk';
+// import {CdkTableModule} from '@angular/cdk';
 // import {
 //   MdAutocompleteModule,
 //   MdButtonModule,
@@ -26,7 +27,6 @@ import {CdkTableModule} from '@angular/cdk';
 //   MdDatepickerModule,
 //   MdDialogModule,
 //   MdExpansionModule,
-//   MdGridListModule,
 //   MdIconModule,
 //   MdInputModule,
 //   MdListModule,
@@ -57,6 +57,7 @@ import {CdkTableModule} from '@angular/cdk';
     // CdkTableModule,
     // MdAutocompleteModule,
     MdButtonModule,
+    MdMenuModule,
     // MdButtonToggleModule,
     MdCardModule,
     // MdCheckboxModule,
@@ -69,7 +70,7 @@ import {CdkTableModule} from '@angular/cdk';
     MdIconModule,
     MdInputModule,
     // MdListModule,
-    MdMenuModule,
+    MdListModule,
     // MdNativeDateModule,
     // MdPaginatorModule,
     // MdProgressBarModule,

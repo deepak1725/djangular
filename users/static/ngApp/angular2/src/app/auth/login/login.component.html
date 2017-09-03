@@ -1,4 +1,3 @@
-<md-card>
     <md-toolbar>
         <md-card-title>
 	        {{this.title}}
@@ -8,7 +7,7 @@
     <md-card-content>
         <form [formGroup]="loginForm">
                 <p> 
-                    <md-input-container class="col-md-12 form-group">
+                    <md-input-container>
                         <input mdInput placeholder="Username" formControlName="username">
                         <md-error>
                             Please enter your <strong>username</strong>
@@ -17,7 +16,7 @@
                 </p>
         
                 <p>
-                    <md-input-container class="col-md-12 form-group">
+                    <md-input-container>
                         <input mdInput type="password" placeholder="Password" formControlName="password">
                         <md-error>
                             Please enter your <strong>password</strong>
@@ -25,18 +24,13 @@
                     </md-input-container>
                 </p>
                 <div>
-                    <button mdInput style="margin:20px 15px" type="submit" md-raised-button color="primary" (click)="loginUser()">Submit</button>
+                    <button mdInput [disabled]=!loginForm.valid type="submit" md-raised-button color="primary" (click)="loginUser()">Submit</button>
                 </div>
         </form>
     </md-card-content>
     <md-card-footer class="text-center">
         <!-- Footer -->
-        <a routerLink="/register" > <small>Register </small></a>|
-        <a routerLink="/forgot-password" > <small>Forgot Password </small></a>
-          <!-- <small> Login.</small>   -->
+        <a routerLink="/register"> <small>REGISTER &nbsp;</small></a>|
+        <a routerLink="/forgot-password"> <small>FORGOT PASSWORD </small></a>
     </md-card-footer>
-</md-card>
-<md-card>
-    <!-- <router-outlet></router-outlet>  -->
-</md-card>
 

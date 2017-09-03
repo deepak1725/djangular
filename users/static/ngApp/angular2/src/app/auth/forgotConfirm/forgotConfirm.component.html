@@ -1,41 +1,39 @@
-<md-card>
-    <md-toolbar>
-        <md-card-title>
-	        {{this.title}}
-        </md-card-title>
-    </md-toolbar>
-        <!-- Inputs -->
-    <md-card-content>
-        <form [formGroup]="forgotConfirmForm">
+    <md-card>
+        <md-toolbar>
+            <md-card-title>
+                {{this.title}}
+            </md-card-title>
+        </md-toolbar>
+            <!-- Inputs -->
+        <md-card-content>
+            <form [formGroup]="forgotConfirmForm">
+            
+                    <p>
+                        <md-input-container class="col-md-12 form-group">
+                            <input mdInput type="password1" placeholder="Password" formControlName="password1">
+                            <md-error>
+                                Please enter your <strong>Password</strong>
+                            </md-error>
+                        </md-input-container>
+                    </p>
+                    <p>
+                        <md-input-container class="col-md-12 form-group">
+                            <input mdInput type="password2" placeholder="Confirm Password" formControlName="password2">
+                            <md-error>
+                                Please confirm your <strong>Password</strong>
+                            </md-error>
+                        </md-input-container>
+                    </p>
+                    <div>
+                        <button mdInput style="margin:20px 15px" type="submit" md-raised-button color="primary" (click)="forgotConfirm()">Submit</button>
+                    </div>
+            </form>
+        </md-card-content>
+        <md-card-footer class="text-center">
+            <!-- Footer -->
+            <a routerLink="/login" > <small>Login </small></a>|
+            <a routerLink="/register" > <small>Register </small></a>
+            <!-- <small> Login.</small>   -->
+        </md-card-footer>
+    </md-card>
         
-                <p>
-                    <md-input-container class="col-md-12 form-group">
-                        <input mdInput type="password1" placeholder="Password" formControlName="password1">
-                        <md-error>
-                            Please enter your <strong>Password</strong>
-                        </md-error>
-                    </md-input-container>
-                </p>
-                <p>
-                    <md-input-container class="col-md-12 form-group">
-                        <input mdInput type="password2" placeholder="Confirm Password" formControlName="password2">
-                        <md-error>
-                            Please confirm your <strong>Password</strong>
-                        </md-error>
-                    </md-input-container>
-                </p>
-                <div>
-                    <button mdInput style="margin:20px 15px" type="submit" md-raised-button color="primary" (click)="forgotConfirm()">Submit</button>
-                </div>
-        </form>
-    </md-card-content>
-    <md-card-footer class="text-center">
-        <!-- Footer -->
-        <a routerLink="/login" > <small>Login </small></a>|
-        <a routerLink="/register" > <small>Register </small></a>
-          <!-- <small> Login.</small>   -->
-    </md-card-footer>
-</md-card>
-<md-card>
-    <!-- <router-outlet></router-outlet>  -->
-</md-card>
