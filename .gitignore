@@ -153,3 +153,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+/crudapi/my_cdn/*
+!/crudapi/my_cdn/empty
