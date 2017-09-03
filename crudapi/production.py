@@ -213,9 +213,9 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'my_cdn')
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = "media"
-MEDIA_URL = '/media/'
-
+# MEDIA_ROOT = "media"
+# MEDIA_URL = '/media/'
+# PROJECT_ROOT > crudapi.crudapi...
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'local_statics'),
 )
