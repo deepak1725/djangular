@@ -1,1 +1,1 @@
-web: gunicorn crudapi.wsgi --log-file -
+web: python my_django_app/manage.py collectstatic --noinput; web: gunicorn crudapi.wsgi --log-file -
