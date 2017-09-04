@@ -1,4 +1,4 @@
-# Django-Angular4        [![Build Status](https://travis-ci.org/deepak1725/django-angular4.svg?branch=master)](https://travis-ci.org/deepak1725/django-angular4)
+# Django-Angular        [![Build Status](https://travis-ci.org/deepak1725/django-angular4.svg?branch=master)](https://travis-ci.org/deepak1725/django-angular4)
 Angular App Configured with Django for Basic Signup Operations
 
 This Project includes Django's Basic Signup Operation using latest functionalities as recommended by Django Team itself.
