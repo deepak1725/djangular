@@ -2,7 +2,7 @@
   "name": "development",
   "version": "1.0.0",
   "description": "",
-  "main": "webpack.config.js",
+  "main": "webpack.production.js",
   "license": "MIT",
   "scripts": {
     "ng": "ng",

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { routing, routingMethods } from './app-routing.module';
+import { routing, routingMethods,MainRouterModule } from './app-routing.module';
 import {UserService} from './_services/user.service';
 import {AuthenticationService} from './_services/authentication.service';
 import { Http} from '@angular/http';
@@ -21,7 +21,7 @@ import { AuthGuard }                from './auth-guard.service';
 	imports: [
 		BrowserModule,
 		ReactiveFormsModule,
-		routing,
+		MainRouterModule,
 		HttpModule,
 		MyOwnCustomMaterialModule,
 		],

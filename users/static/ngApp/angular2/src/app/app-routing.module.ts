@@ -38,15 +38,15 @@ export const APPROUTES : Routes = [
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(APPROUTES);
 
-// @NgModule({
-//     imports: [
-//         RouterModule.forRoot(APPROUTES,
-//             { enableTracing: false }
-//         )
-//     ],
-//     exports : [
-//         RouterModule
-//     ]
-// })
-// export class MainRouterModule{}
+@NgModule({
+    imports: [
+        RouterModule.forRoot(APPROUTES,
+            { enableTracing: false }
+        )
+    ],
+    exports : [
+        RouterModule
+    ]
+})
+export class MainRouterModule{}
 export const routingMethods = [ PageNotFoundComponent, DashboardComponent];

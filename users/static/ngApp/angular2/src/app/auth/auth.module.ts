@@ -8,7 +8,7 @@ import { AuthComponent } from './auth.component';
 import {ForgotConfirmComponent} from './forgotConfirm/forgotConfirm.component';
 import {MyOwnCustomMaterialModule} from '../material.module';
 import { RouterModule } from '@angular/router';
-import { routing, routingMethods } from '../app-routing.module';
+import { routing, routingMethods, MainRouterModule } from '../app-routing.module';
 
 
 @NgModule({
@@ -24,7 +24,7 @@ import { routing, routingMethods } from '../app-routing.module';
   imports: [
     RouterModule,
     FormsModule,
-    routing,
+    MainRouterModule,
     ReactiveFormsModule,
     MyOwnCustomMaterialModule
     
