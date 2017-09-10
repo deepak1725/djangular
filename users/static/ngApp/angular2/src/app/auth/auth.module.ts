@@ -34,7 +34,6 @@ export const AuthMethods = [
   ForgotPasswordComponent, 
   LoginComponent, 
   RegisterComponent,
-  AuthComponent,
   ForgotConfirmComponent,
   PageNotFoundComponent,
   DashboardComponent
