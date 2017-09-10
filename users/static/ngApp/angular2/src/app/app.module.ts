@@ -10,12 +10,14 @@ import { HttpModule } from '@angular/http';
 import {MyOwnCustomMaterialModule} from './material.module';
 import 'hammerjs';
 import { AuthGuard }                from './auth-guard.service';
+import { AuthMethods } from './auth/auth.module';
 
 
 
 @NgModule({
 	declarations: [
 		AppComponent,
+		AuthMethods,
 		
 	],
 	imports: [

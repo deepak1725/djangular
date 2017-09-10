@@ -9,18 +9,13 @@ import {ForgotConfirmComponent} from './forgotConfirm/forgotConfirm.component';
 import {MyOwnCustomMaterialModule} from '../material.module';
 import { RouterModule } from '@angular/router';
 import { routing, routingMethods, MainRouterModule } from '../app-routing.module';
+import { PageNotFoundComponent }    from '../404/pageNotFound.component';
+import { DashboardComponent }       from '../dashboard/dashboard.component';
 
 
 @NgModule({
   declarations: [
-    RegisterComponent,
-    ForgotPasswordComponent,
-    LoginComponent,
-    ChangePasswordComponent,
-    AuthComponent,
-    ForgotConfirmComponent,
-    routingMethods
-  ],
+    ],
   imports: [
     RouterModule,
     FormsModule,
@@ -40,5 +35,7 @@ export const AuthMethods = [
   LoginComponent, 
   RegisterComponent,
   AuthComponent,
-  ForgotConfirmComponent
+  ForgotConfirmComponent,
+  PageNotFoundComponent,
+  DashboardComponent
 ];
