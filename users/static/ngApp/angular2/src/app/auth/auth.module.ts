@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,    ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgotPassword/forgotPassword.component';
 import { ChangePasswordComponent } from './changePassword/changePassword.component';
 import { AuthComponent } from './auth.component';
 import {ForgotConfirmComponent} from './forgotConfirm/forgotConfirm.component';
-
+import {MyOwnCustomMaterialModule} from '../material.module';
+import { RouterModule } from '@angular/router';
+import { routing, routingMethods } from '../app-routing.module';
 
 
 @NgModule({
@@ -16,10 +18,16 @@ import {ForgotConfirmComponent} from './forgotConfirm/forgotConfirm.component';
     LoginComponent,
     ChangePasswordComponent,
     AuthComponent,
-    ForgotConfirmComponent
+    ForgotConfirmComponent,
+    routingMethods
   ],
   imports: [
-    FormsModule
+    RouterModule,
+    FormsModule,
+    routing,
+    ReactiveFormsModule,
+    MyOwnCustomMaterialModule
+    
   ],
   providers: [],
 })

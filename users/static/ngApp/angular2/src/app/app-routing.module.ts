@@ -12,9 +12,10 @@ import { LoginComponent }           from './auth/login/login.component';
 import { ForgotPasswordComponent }  from './auth/forgotPassword/forgotPassword.component';
 import { ChangePasswordComponent }  from './auth/changePassword/changePassword.component';
 import { AuthGuard }                from './auth-guard.service';
+import { ModuleWithProviders }  from '@angular/core';
 
 
-const APPROUTES : Routes = [
+export const APPROUTES : Routes = [
     { 
         path: '', component: AuthComponent, children:
         [
@@ -35,15 +36,17 @@ const APPROUTES : Routes = [
     { path: '**', component : PageNotFoundComponent, }
 ]
 
-@NgModule({
-    imports: [
-        RouterModule.forRoot(APPROUTES,
-            { enableTracing: false }
-        )
-    ],
-    exports : [
-        RouterModule
-    ]
-})
-export class MainRouterModule{}
-export const routingMethods = [AuthMethods, PageNotFoundComponent, DashboardComponent];
+export const routing: ModuleWithProviders = RouterModule.forRoot(APPROUTES);
+
+// @NgModule({
+//     imports: [
+//         RouterModule.forRoot(APPROUTES,
+//             { enableTracing: false }
+//         )
+//     ],
+//     exports : [
+//         RouterModule
+//     ]
+// })
+// export class MainRouterModule{}
+export const routingMethods = [ PageNotFoundComponent, DashboardComponent];
