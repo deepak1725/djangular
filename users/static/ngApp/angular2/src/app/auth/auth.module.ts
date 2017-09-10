@@ -30,11 +30,10 @@ export class AuthModule {
 
 }
 export const AuthMethods = [
+  AuthComponent,
   ChangePasswordComponent, 
   ForgotPasswordComponent, 
   LoginComponent, 
   RegisterComponent,
-  ForgotConfirmComponent,
-  PageNotFoundComponent,
-  DashboardComponent
+  ForgotConfirmComponent
 ];

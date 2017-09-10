@@ -49,4 +49,4 @@ export const routing: ModuleWithProviders = RouterModule.forRoot(APPROUTES);
     ]
 })
 export class MainRouterModule{}
-export const routingMethods = [ PageNotFoundComponent, DashboardComponent];
+export const routingMethods = [AuthMethods, PageNotFoundComponent, DashboardComponent];
