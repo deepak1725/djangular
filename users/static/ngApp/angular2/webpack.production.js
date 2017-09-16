@@ -450,7 +450,6 @@ module.exports = {
 			"hashDigest": "base64",
 			"hashDigestLength": 4
 		}),
-		new ModuleConcatenationPlugin({}),
 		new UglifyJsPlugin({
 			"mangle": {
 				"screw_ie8": true
@@ -468,7 +467,7 @@ module.exports = {
 		new AotPlugin({
 			"mainPath": "main.ts",
 			"hostReplacementPaths": {
-			  "environments/environment.ts": "environments/environment.ts"
+			  "environments/environment.ts": "environments/environment.prod.ts"
 			},
 			"exclude": [],
 			"tsConfigPath": "src/tsconfig.app.json",

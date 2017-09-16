@@ -78,7 +78,7 @@ module.exports = {
   },
   "entry": {
     "main": [
-      "./src/main.ts"
+      "./src/main-jit.ts"
     ],
     "polyfills": [
       "./src/polyfills.ts"

@@ -6,15 +6,15 @@
     {% load staticfiles %}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    {% block content %}
+    <link href="{%  static 'ngApp/angular2/dist/styles.bundle.css' %}" rel="stylesheet"/>
     <base href="/app">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js">
-          </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/zone.js/0.8.17/zone.min.js">
-          </script>
-        
-        <app-root></app-root>
-        <script src="{% static 'ngApp/angular2/src/build.js' %}"></script>
-    {% endblock content %}
+
+
+    <app-root></app-root>
+
+    <script src="{% static 'ngApp/angular2/dist/common.js' %}"></script>
+    <script src="{% static 'ngApp/angular2/dist/polyfills.bundle.js' %}"></script>
+    <script src="{% static 'ngApp/angular2/dist/main.bundle.js' %}"></script>
+
   </body>
 </html>

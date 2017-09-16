@@ -6,4 +6,4 @@ from django.conf import settings
 
 
 class AppPageView(generic.TemplateView):
-    template_name = "ngApp/index-jit.html"
+    template_name = "ngApp/index.html"

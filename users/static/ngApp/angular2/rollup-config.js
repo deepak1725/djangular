@@ -3,12 +3,13 @@ import commonjs    from 'rollup-plugin-commonjs';
 import uglify      from 'rollup-plugin-uglify';
 
 export default {
-  input: './src/main.js',
+  input: 'dist/myApp/main.js',
   output : {
-      file : './src/build.js', // output a single application bundle
+      file : 'src/build.js', // output a single application bundle
       format: 'iife',
+      name: 'Test123',
+      sourcemap: true
     },
-  sourceMap: false,
   onwarn: function(warning) {
     // Skip certain warnings
 

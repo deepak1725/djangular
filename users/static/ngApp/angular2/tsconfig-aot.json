@@ -10,7 +10,7 @@
     "lib": ["es2016","dom"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,    
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist/myApp",
     "declaration": false,
     "typeRoots": [
       "./node_modules/@types"
