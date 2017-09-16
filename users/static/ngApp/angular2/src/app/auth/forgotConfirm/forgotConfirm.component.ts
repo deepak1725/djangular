@@ -31,7 +31,7 @@ export class ForgotConfirmComponent implements OnInit{
         })
     }
     
-    openSnackBar = function (message){
+    openSnackBar = function (message: string){
 		this.snackBar.open(message," ", {
 			duration: 5000,
 		}); 

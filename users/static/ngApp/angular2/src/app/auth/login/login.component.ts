@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit{
 		Validators.required,
 	]);
 
-	openSnackBar = function (message){
+	openSnackBar = function (message: string){
 		this.snackBar.open(message," ", {
 			duration: 2000,
 		}); 

@@ -4,7 +4,7 @@ import {AbstractControl} from '@angular/forms';
 
 export class PasswordValidation {
 
-    static MatchPassword(AC: AbstractControl) {
+    static MatchPassword(AC: AbstractControl) : void {
        let password = AC.get('password1').value; // to get value in input tag
        let confirmPassword = AC.get('password2').value; // to get value in input tag
         if(password != confirmPassword) {

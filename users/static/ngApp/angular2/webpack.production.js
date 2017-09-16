@@ -68,14 +68,12 @@ module.exports = {
 			".js"
 		],
 		"modules": [
-			"./node_modules",
 			"./node_modules"
 		],
 		"symlinks": true
 	},
 	"resolveLoader": {
 		"modules": [
-			"./node_modules",
 			"./node_modules"
 		]
 	},
@@ -92,8 +90,7 @@ module.exports = {
 	},
 	"output": {
 		"path": path.join(process.cwd(), "dist"),
-		"filename": "[name].[chunkhash:20].bundle.js",
-		"chunkFilename": "[id].[chunkhash:20].chunk.js"
+		"filename": "[name].bundle.js",
 	},
 	"module": {
 		"rules": [
@@ -355,13 +352,24 @@ module.exports = {
 			},
 			{
 				"test": /\.ts$/,
-				"use": [
-					"@ngtools/webpack"
-				]
+				"loader": '@ngtools/webpack',
 			}
 		]
 	},
 	"plugins": [
+		new webpack.LoaderOptionsPlugin({
+			minimize: true,
+			debug: false
+		}),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false
+			},
+			output: {
+				comments: false
+			},
+			sourceMap: true
+		}),
 		new webpack.optimize.ModuleConcatenationPlugin(),
 		new NoEmitOnErrorsPlugin(),
 		new CopyWebpackPlugin([
@@ -425,59 +433,15 @@ module.exports = {
 		}
 		}),
 		new BaseHrefWebpackPlugin({}),
-		new CommonsChunkPlugin({
-			"name": [
-				"inline"
-			],
-			"minChunks": null
-		}),
-		new CommonsChunkPlugin({
-			"name": [
-				"vendor"
-			],
-			"minChunks": (module) => {
-								return module.resource
-										&& (module.resource.startsWith(nodeModules)
-												|| module.resource.startsWith(genDirNodeModules)
-												|| module.resource.startsWith(realNodeModules));
-						},
-			"chunks": [
-				"main"
-			]
-		}),
-		new CommonsChunkPlugin({
-			"name": [
-				"main"
-			],
-			"minChunks": 2,
-			"async": "common"
+		new webpack.optimize.CommonsChunkPlugin({
+			"name" : 'common', 
+			"filename" : 'common.js',
 		}),
 		new ExtractTextPlugin({
-			"filename": "[name].[contenthash:20].bundle.css"
+			"filename": "[name].bundle.css"
 		}),
 		new SuppressExtractedTextChunksWebpackPlugin(),
-		new LicenseWebpackPlugin({
-			"licenseFilenames": [
-				"LICENSE",
-				"LICENSE.md",
-				"LICENSE.txt",
-				"license",
-				"license.md",
-				"license.txt"
-			],
-			"perChunkOutput": false,
-			"outputTemplate": "/home/deepak/projects/crudapi/users/static/ngApp/angular2/node_modules/license-webpack-plugin/output.template.ejs",
-			"outputFilename": "3rdpartylicenses.txt",
-			"suppressErrors": true,
-			"includePackagesWithoutLicense": false,
-			"abortOnUnacceptableLicense": false,
-			"addBanner": false,
-			"bannerTemplate": "/*! 3rd party license information is available at <%- filename %> */",
-			"includedChunks": [],
-			"excludedChunks": [],
-			"additionalPackages": [],
-			"pattern": /^(MIT|ISC|BSD.*)$/
-		}),
+		
 		new EnvironmentPlugin({
 			"NODE_ENV": "production"
 		}),
@@ -503,12 +467,12 @@ module.exports = {
 		}),
 		new AotPlugin({
 			"mainPath": "main.ts",
-			"replaceExport": false,
 			"hostReplacementPaths": {
-				"environments/environment.ts": "environments/environment.prod.ts"
+			  "environments/environment.ts": "environments/environment.ts"
 			},
 			"exclude": [],
-			"tsConfigPath": "src/tsconfig.app.json"
+			"tsConfigPath": "src/tsconfig.app.json",
+			"skipCodeGeneration": true
 		})
 	],
 	"node": {

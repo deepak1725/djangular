@@ -40,7 +40,7 @@ ngOnInit(){
 	let	that = this;
 }
 
-openSnackBar = function (message){
+openSnackBar = function (message: string){
 		this.snackBar.open(message," ", {
 			duration: 5000,
 		}); 

@@ -61,7 +61,7 @@ export class AuthenticationService {
         });
     }
 
-    register(userInputs) {
+    register(userInputs:object) {
         return this.http.post(
                 '/api/register/', 
                 userInputs,
@@ -78,7 +78,7 @@ export class AuthenticationService {
     }
     
 
-    forgotPassword(userInputs) {
+    forgotPassword(userInputs:object) {
         return this.http.post(
                 '/api/reset-password/', 
                 userInputs
@@ -102,7 +102,7 @@ export class AuthenticationService {
         this.headers = new Headers({'Authorization':'JWT ' + currentUser.token});
     }
 
-    changePassword(userInputs){
+    changePassword(userInputs:object){
         this.getAuthHeader()
         return this.http.post(
             '/api/change-password',
@@ -116,7 +116,7 @@ export class AuthenticationService {
         });
     }
 
-    forgotPasswordConfirm(userInputs) {
+    forgotPasswordConfirm(userInputs:object) {
         return this.http.post(
                 '/api/reset/password/confirm', 
                 userInputs

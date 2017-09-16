@@ -155,3 +155,5 @@ testem.log
 Thumbs.db
 /crudapi/my_cdn/*
 !/crudapi/my_cdn/empty
+/users/static/ngApp/angular2/aot/
+/users/static/ngApp/angular2/dist/

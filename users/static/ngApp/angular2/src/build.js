@@ -1,0 +1,1 @@
+!function(){"use strict";exports.__esModule=!0;var r=require("@angular/core"),e=require("./environments/environment"),o=require("../aot/src/app/app.module.ngfactory"),n=require("@angular/platform-browser");e.environment.production&&r.enableProdMode(),n.platformBrowser().bootstrapModuleFactory(o.AppModuleNgFactory)}();
