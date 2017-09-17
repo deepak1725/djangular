@@ -14,6 +14,8 @@ const { BaseHrefWebpackPlugin, SuppressExtractedTextChunksWebpackPlugin } = requ
 const { CommonsChunkPlugin, ModuleConcatenationPlugin, UglifyJsPlugin } = require('webpack').optimize;
 const { LicenseWebpackPlugin } = require('license-webpack-plugin');
 const { AotPlugin } = require('@ngtools/webpack');
+var CompressionPlugin = require("compression-webpack-plugin");
+
 
 const nodeModules = path.join(process.cwd(), 'node_modules');
 const realNodeModules = fs.realpathSync(nodeModules);
@@ -89,7 +91,7 @@ module.exports = {
 		]
 	},
 	"output": {
-		"path": path.join(process.cwd(), "dist"),
+		"path": path.join(process.cwd(), "prod"),
 		"filename": "[name].bundle.js",
 	},
 	"module": {
@@ -368,7 +370,14 @@ module.exports = {
 			output: {
 				comments: false
 			},
-			sourceMap: true
+			sourceMap: false
+		}),
+		new CompressionPlugin({
+			asset: "[path].gz[query]",
+			algorithm: "gzip",
+			test: /\.js$|\.html$/,
+			threshold: 10240,
+			minRatio: 0.8
 		}),
 		new webpack.optimize.ModuleConcatenationPlugin(),
 		new NoEmitOnErrorsPlugin(),
