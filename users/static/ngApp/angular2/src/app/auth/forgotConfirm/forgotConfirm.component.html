@@ -9,7 +9,7 @@
             <form [formGroup]="forgotConfirmForm">
             
                     <p>
-                        <md-input-container class="col-md-12 form-group">
+                        <md-input-container>
                             <input mdInput type="password1" placeholder="Password" formControlName="password1">
                             <md-error>
                                 Please enter your <strong>Password</strong>
@@ -17,7 +17,7 @@
                         </md-input-container>
                     </p>
                     <p>
-                        <md-input-container class="col-md-12 form-group">
+                        <md-input-container>
                             <input mdInput type="password2" placeholder="Confirm Password" formControlName="password2">
                             <md-error>
                                 Please confirm your <strong>Password</strong>
@@ -25,7 +25,7 @@
                         </md-input-container>
                     </p>
                     <div>
-                        <button mdInput style="margin:20px 15px" type="submit" md-raised-button color="primary" (click)="forgotConfirm()">Submit</button>
+                        <button mdInput type="submit" md-raised-button color="primary" (click)="forgotConfirm()">Submit</button>
                     </div>
             </form>
         </md-card-content>

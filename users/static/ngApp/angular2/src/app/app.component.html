@@ -1,4 +1,4 @@
-<div class="flex-container" fxLayout='row' fxLayoutWrap fxLayoutGap="10px">
+<div class="flex-container">
             <md-toolbar color="primary">
 
                 <span>Djangular</span>
@@ -10,14 +10,13 @@
             </md-toolbar>
 
             <md-menu #appMenu="mdMenu">
-            <button md-menu-item routerLink="/login"> Login </button>
-            <button md-menu-item routerLink="/register"> Register </button>
-            <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
-            <button md-menu-item [routerLink]="['/change-password']"> Change Password </button>
+                <button md-menu-item routerLink="/login"> Login </button>
+                <button md-menu-item routerLink="/register"> Register </button>
+                <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
+                <button md-menu-item [routerLink]="['/change-password']"> Change Password </button>
             </md-menu>
             
             <router-outlet>
-                <div style="margin-top: 10px;"></div>
             </router-outlet>
                 
 </div>

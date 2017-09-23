@@ -1,10 +1,19 @@
-    <md-card class="card-container">
-        <md-tab-group>
-            <md-tab label="LOGIN" class="tablabels"> 
-                <app-login></app-login>
+<md-card>
+    <md-tab-group>
+        <div>
+            <md-tab label="LOGIN"> 
+                <div class="card-container">
+                    <app-login class="loginForm w-50"></app-login>
+                </div>                    
             </md-tab>
+        </div>
+        <div>
             <md-tab label="REGISTER" [routerLink]="['/register']">
-                <app-register></app-register>
-            </md-tab>     
-        </md-tab-group>
-    </md-card>        
+                <div class="card-container">                    
+                    <app-register></app-register>
+                </div>        
+            </md-tab>
+        </div>     
+    </md-tab-group>
+</md-card>
+        
