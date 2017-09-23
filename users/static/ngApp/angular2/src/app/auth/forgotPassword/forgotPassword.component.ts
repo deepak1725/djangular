@@ -23,12 +23,14 @@ forgotPasswordForm: FormGroup;
 		public snackBar: MdSnackBar
 	){}
 
-	ngOnInit(){
-		console.log("Welcome to forgot password")
-		this.forgotPasswordForm = this.formBuilder.group({
-			email: ['', Validators.required],
-		})
-	}
+ngOnInit(){
+	
+	this.forgotPasswordForm = this.formBuilder.group({
+		"email": ['', Validators.compose([Validators.required, Validators.email])]
+	})
+
+	console.log("hey");
+}
 
 	openSnackBar = function (message: string){
 			this.snackBar.open(message," ", {
@@ -45,12 +47,12 @@ forgotPasswordForm: FormGroup;
 		this.authenticationService.forgotPassword(userInputs)
 			.subscribe(
 				function(response){
-					that.openSnackBar("Email sent Success. Kindly check your email address.") 
-					console.log("Success response", response)
+					that.openSnackBar("Email sent successfully! Kindly check your email inbox") 
 				},
 				function(response){
-					that.openSnackBar(response[Object.keys(response)[0]])
-					console.log("Error happened", response )
+					if (response.statusText === "Bad Request") {
+						that.openSnackBar("Please Enter a valid Email Address.")
+					}
 				}
 			);
 	}

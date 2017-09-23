@@ -32,6 +32,9 @@ md-card{
 .m-auto{
     margin: auto !important;
 }
+.m-t-10{
+    margin-top: 10px; 
+}
 
 .t-a-center{
     text-align: center;
