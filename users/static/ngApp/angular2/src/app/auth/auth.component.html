@@ -1,19 +1,21 @@
-<md-card>
-    <md-tab-group>
-        <div>
-            <md-tab label="LOGIN"> 
-                <div class="card-container">
-                    <app-login class="loginForm w-50"></app-login>
-                </div>                    
-            </md-tab>
-        </div>
-        <div>
-            <md-tab label="REGISTER" [routerLink]="['/register']">
-                <div class="card-container">                    
-                    <app-register></app-register>
-                </div>        
-            </md-tab>
-        </div>     
-    </md-tab-group>
-</md-card>
-        
+<div class="">
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
+        <md-card tabindex="0">
+            <nav md-tab-nav-bar>
+                <a md-tab-link
+                   [routerLink]="['/login']"
+                   routerLinkActive #lla="routerLinkActive"
+                   [active]="lla.isActive">
+                  LOGIN
+                </a>
+                <a md-tab-link
+                   [routerLink]="['/register']"
+                   routerLinkActive #rla="routerLinkActive"
+                   [active]="rla.isActive">
+                  REGISTER
+                </a>
+            </nav>
+            <router-outlet></router-outlet>
+        </md-card>
+    </div>    
+</div>

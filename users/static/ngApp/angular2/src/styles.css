@@ -2,33 +2,18 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 body{
     margin: 0;
-    margin-bottom: 20px;
     background-color: #FFD54F;
     min-height: 100%;
     
     font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
 }
-.flex-container {
-    display: flex;
-    display: -webkit-flex;
-    -webkit-flex-direction: column;
-    flex-direction:         column;
-    -webkit-align-items: center;
-    align-items: center;
-    justify-content: center;
-    /* justify-content: space-between; */
-}
-md-card{
-    min-width: 500px;
-    min-height: 350px;
-    flex-grow: 1;
-}
-.w-50, .mat-tab-label{
+
+
+.w-50{
     width: 50%;
 }
-.overflow-hidden, .card-container{
-    overflow: hidden;
-}
+
+/*
 .m-auto{
     margin: auto !important;
 }
@@ -47,12 +32,12 @@ md-card{
 }
 .w-100{
     width: 100%;
-}
+}*/
 .text-center{
     text-align: center;
-}
+} 
 
 a{
     text-transform: uppercase;
     text-decoration: none;
-}
+} 

@@ -24,7 +24,7 @@ export class AuthenticationService {
     // private afterRequest(): void {
     // this.notifyService.hidePreloader();
     // }
-    isLoggedIn = false;
+    isLoggedIn = true;
     redirectUrl: string;
 
     login(username: string, password: string) {
@@ -38,7 +38,7 @@ export class AuthenticationService {
             if (user && user.token) {
                 localStorage.setItem('currentUser', JSON.stringify(user));
             }
-            this.router.navigate(['dashboardd']);
+            this.router.navigate(['dashboard']);
             if (this.redirectUrl) {
                 this.router.navigate([this.redirectUrl]);
             }
@@ -111,7 +111,6 @@ export class AuthenticationService {
         )
         .map((response: Response) => {
             var responsee = response.json();
-            console.log(response);
             return responsee;
         });
     }
@@ -123,7 +122,6 @@ export class AuthenticationService {
         )
        .map((response: Response) => {
             var responsee = response.json();
-            console.log("response");
             return responsee;
         })
     }

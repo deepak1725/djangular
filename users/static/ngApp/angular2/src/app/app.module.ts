@@ -12,6 +12,7 @@ import 'hammerjs';
 import { AuthGuard }                from './auth-guard.service';
 import { AuthMethods } from './auth/auth.module';
 import { AuthComponent } from './auth/auth.component';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 
 
@@ -26,6 +27,7 @@ import { AuthComponent } from './auth/auth.component';
 		ReactiveFormsModule,
 		MainRouterModule,
 		HttpModule,
+		FlexLayoutModule,
 		MyOwnCustomMaterialModule,
 		],
 	providers: [UserService, AuthenticationService, AuthGuard],

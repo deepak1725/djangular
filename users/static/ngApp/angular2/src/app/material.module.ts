@@ -12,6 +12,7 @@ import {
   MdTabsModule,
   MdSnackBarModule,
   MdListModule,
+  MdSidenavModule,
   
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -78,7 +79,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     // MdRadioModule,
     // MdRippleModule,
     // MdSelectModule,
-    // MdSidenavModule,
+    MdSidenavModule,
     // MdSliderModule,
     // MdSlideToggleModule,
     MdSnackBarModule,

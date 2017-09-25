@@ -1,57 +1,58 @@
-
 <md-toolbar>
-	<md-card-title>
-		{{this.title}}
-	</md-card-title>
+  <md-card-title>
+    {{this.title}}
+  </md-card-title>
 </md-toolbar>
-	<!-- Inputs -->
-<md-card-content>
-		<form [formGroup]="signupForm">
-				<div>
-					<md-input-container class="w-100 p-t-10">
-						<input mdInput placeholder="Username" formControlName="username">
-						<md-error >
-							Please enter your <strong>username</strong>
-						</md-error>
-					</md-input-container>
-				</div>
-				<div class="">
-					<md-input-container class="w-49 p-t-10">
-						<input mdInput  placeholder="First Name" formControlName="first_name">
-						<md-error>
-							Please enter your <strong>First Name</strong>
-						</md-error>
-					</md-input-container>
-					<md-input-container class="w-49 p-t-10">
-						<input mdInput placeholder="Last Name" formControlName="last_name">
-						<md-error>
-							Please enter your <strong>Last Name</strong>
-						</md-error>
-					</md-input-container>
-				</div>	
-				<div>
-					<md-input-container class="w-100 p-t-10">
-						<input type="email" mdInput placeholder="Email" formControlName="email">
-						<md-error>
-							Please enter your <strong>email</strong>
-						</md-error>
-					</md-input-container>
-				</div>		
-				<div>	
-					<md-input-container class="w-100 p-t-10">
-						<input mdInput type="password" placeholder="Password" formControlName="password">
-						<md-error>
-							Please enter your <strong>password</strong>
-						</md-error>
-					</md-input-container>
-				</div>
-			<div class="t-a-center p-t-10">
-				<button mdInput [disabled]=!signupForm.valid  type="submit" md-raised-button color="primary" (click)="registerUser()">Submit</button>
-			</div>
-		</form>
-</md-card-content>
-	<div>
-		<md-card-footer class="text-center m-auto">
-			<a routerLink="/login"> <small>login</small></a>
-		</md-card-footer>
-	</div>
+
+<!-- Inputs -->
+<form [formGroup]="signupForm">
+    <md-card-content fxLayoutAlign="space-evenly stretch" fxLayout="column" fxLayoutGap="10px">
+		
+		<md-input-container fxFill>
+          <input mdInput placeholder="Username" formControlName="username">
+          <md-error>
+            Please enter your username
+          </md-error>
+		</md-input-container>
+		
+		<div fxLayout="row" fxLayoutAlign="space-between stretch" class="">
+			<md-input-container fxFlex="48">
+				<input mdInput placeholder="First Name" formControlName="first_name">
+				<md-error>
+				Please enter your First Name
+				</md-error>
+			</md-input-container>
+
+			<md-input-container fxFlex="48">
+				<input mdInput placeholder="Last Name" formControlName="last_name">
+				<md-error>
+				Please enter your Last Name
+				</md-error>
+			</md-input-container>
+		</div>
+
+        <md-input-container fxFill>
+          <input type="email" mdInput placeholder="Email" formControlName="email">
+          <md-error>
+            Please enter your email
+          </md-error>
+        </md-input-container>
+	  
+        <md-input-container fxFill>
+          <input mdInput type="password" placeholder="Password" formControlName="password">
+          <md-error>
+            Please enter your password
+          </md-error>
+        </md-input-container>
+
+    </md-card-content>
+
+	<md-card-actions class="text-center">
+		<button mdInput [disabled]=!signupForm.valid type="submit" md-raised-button color="primary" (click)="registerUser()">Submit</button>
+	</md-card-actions>
+
+</form>
+
+  <md-card-footer class="text-center">
+    <a routerLink="/login"> <small>login</small></a>
+  </md-card-footer>

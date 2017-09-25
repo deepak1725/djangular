@@ -4,31 +4,31 @@
         </md-card-title>
     </md-toolbar>
         <!-- Inputs -->
-    <md-card-content>
         <form [formGroup]="loginForm">
-                <div> 
-                    <md-input-container class="w-100 p-t-10">
-                        <input mdInput placeholder="Username" formControlName="username">
-                        <md-error>
-                            Please enter your <strong>username</strong>
-                        </md-error>
-                    </md-input-container>
-                </div>
-        
-                <div>
-                    <md-input-container class="w-100 p-t-10">
-                        <input mdInput type="password" placeholder="Password" formControlName="password">
-                        <md-error>
-                            Please enter your <strong>password</strong>
-                        </md-error>
-                    </md-input-container>
-                </div>
-                <div class="t-a-center p-t-10">
-                    <button mdInput [disabled]=!loginForm.valid type="submit" md-raised-button color="primary" (click)="loginUser()">Submit</button>
-                </div>
+            
+            <md-card-content>
+                <md-input-container fxFill>
+                    <input mdInput placeholder="Username" formControlName="username">
+                    <md-error>
+                        Please enter your username
+                    </md-error>
+                </md-input-container>
+    
+                <md-input-container fxFill>
+                    <input mdInput type="password" placeholder="Password" formControlName="password">
+                    <md-error>
+                        Please enter your password
+                    </md-error>
+                </md-input-container>
+
+            </md-card-content>
+
+            <md-card-actions class="text-center">
+                <button mdInput [disabled]=!loginForm.valid type="submit" md-raised-button color="primary" (click)="loginUser()">Submit</button>
+            </md-card-actions>
         </form>
-    </md-card-content>
-    <md-card-footer class="text-center m-auto">
+
+    <md-card-footer class="text-center">
         <!-- Footer -->
         <a routerLink="/register"> <small>REGISTER &nbsp;</small></a>|
         <a routerLink="/forgot-password"> <small>FORGOT PASSWORD </small></a>
