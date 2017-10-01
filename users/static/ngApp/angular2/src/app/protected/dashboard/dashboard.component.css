@@ -1,0 +1,52 @@
+.dashboard-container{
+  font-size: 15px;
+}
+
+.message-boxx{
+  overflow: auto;
+  padding-bottom: 8%;
+  border: 1px solid blue;
+  
+}
+.side-bar{
+  height:100vh;
+  width: 15%;
+  overflow: auto;
+  bottom: 0;
+  top: 0;
+  position: fixed;
+  background-color: rgba(255, 248, 164, 0.78);
+}
+.message-text{
+  border: 1px solid brown;
+}
+
+.f-s-40{
+  font-size: 40px !important;
+}
+.online{
+  font-size: 15px !important; 
+  color: rgba(0, 128, 0, 0.7);  
+}
+.msg-container{
+  padding: 10px;
+  background-color:#fff;
+  top: 0;
+  overflow: auto;
+}
+
+.reply-box{
+    border: 2px solid grey;
+    border-radius: 20px;
+    padding: 10px;
+    width: 82%;    
+}
+.bottom{
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 2px;
+  width: 100%;
+  
+  
+}

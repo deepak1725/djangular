@@ -2,33 +2,29 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { routing, routingMethods,MainRouterModule } from './app-routing.module';
+import { routingMethods,MainRouterModule} from './app-routing.module';
 import {UserService} from './_services/user.service';
 import {AuthenticationService} from './_services/authentication.service';
-import { Http} from '@angular/http';
 import { HttpModule } from '@angular/http';
 import {MyOwnCustomMaterialModule} from './material.module';
 import 'hammerjs';
 import { AuthGuard }                from './auth-guard.service';
-import { AuthMethods } from './auth/auth.module';
-import { AuthComponent } from './auth/auth.component';
 import { FlexLayoutModule } from "@angular/flex-layout";
-
+import {DashboardComponent} from './protected/dashboard/dashboard.component';
 
 
 @NgModule({
 	declarations: [
-		AppComponent,
 		routingMethods,
-		
 	],
 	imports: [
 		BrowserModule,
 		ReactiveFormsModule,
-		MainRouterModule,
+		MyOwnCustomMaterialModule,
 		HttpModule,
 		FlexLayoutModule,
-		MyOwnCustomMaterialModule,
+		MainRouterModule,
+	  
 		],
 	providers: [UserService, AuthenticationService, AuthGuard],
 	bootstrap: [AppComponent]

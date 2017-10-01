@@ -51,43 +51,19 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // } from '@angular/material';
 
 @NgModule({
-  // imports: [BrowserAnimationsModule, MdButtonModule, MdCheckboxModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule],
-  // exports: [BrowserAnimationsModule, MdButtonModule, MdCheckboxModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule],
    exports: [
     BrowserAnimationsModule,
-    // CdkTableModule,
-    // MdAutocompleteModule,
     MdButtonModule,
     MdMenuModule,
-    // MdButtonToggleModule,
     MdCardModule,
-    // MdCheckboxModule,
-    // MdChipsModule,
-    // MdCoreModule,
-    // MdDatepickerModule,
-    // MdDialogModule,
-    // MdExpansionModule,
-    // MdGridListModule,
     MdIconModule,
     MdInputModule,
-    // MdListModule,
     MdListModule,
-    // MdNativeDateModule,
-    // MdPaginatorModule,
-    // MdProgressBarModule,
     MdProgressSpinnerModule,
-    // MdRadioModule,
-    // MdRippleModule,
-    // MdSelectModule,
     MdSidenavModule,
-    // MdSliderModule,
-    // MdSlideToggleModule,
     MdSnackBarModule,
-    // MdSortModule,
-    // MdTableModule,
     MdTabsModule,
     MdToolbarModule,
-    // MdTooltipModule,
   ]
 })
 export class MyOwnCustomMaterialModule { }

@@ -3,7 +3,7 @@
 body{
     margin: 0;
     background-color: #FFD54F;
-    min-height: 100%;
+    height: 100%;
     
     font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
 }
@@ -12,27 +12,6 @@ body{
 .w-50{
     width: 50%;
 }
-
-/*
-.m-auto{
-    margin: auto !important;
-}
-.m-t-10{
-    margin-top: 10px; 
-}
-
-.t-a-center{
-    text-align: center;
-}
-.p-t-10{
-    padding-top: 10px;
-}
-.w-49{
-    width: 49%;
-}
-.w-100{
-    width: 100%;
-}*/
 .text-center{
     text-align: center;
 } 

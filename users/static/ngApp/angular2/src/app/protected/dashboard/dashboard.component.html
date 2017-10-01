@@ -1,0 +1,58 @@
+<div fxLayout="row" class="dashboard-container">
+	<div #sidenav class="side-bar">
+		<md-list *ngFor = "let n of rakeArray; let index = index">
+			<md-list-item>
+				<md-icon class="online">
+					fiber_manual_record
+				</md-icon>
+				Online {{index+1}}
+			</md-list-item>
+		</md-list>
+	</div>
+
+	<div fxFlex fxLayoutAlign="start stretch" fxLayout="column" fxFlexOffset="15">
+		<div class="msg-container">
+			<div fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" class="message-boxx">
+				<ng-container *ngFor = "let n of fakeArray let index = index">
+					<div fxLayout="row" class="message-text">
+						<div fxFlex="5">
+							<md-icon color="accent" class="f-s-40">account_box</md-icon>
+						</div>
+						<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+							<div>
+								<b>Name{{index+1}}</b>
+							</div>
+							<div>
+								Message <br/>
+								dssdsdsdsdsdsd<br/>
+							</div>
+						</div>
+					</div>
+					<div fxLayout="row" class="message-text">
+						<div fxFlex="5">
+							<md-icon color="accent" class="f-s-40">account_box</md-icon>
+						</div>
+						<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+							<div>
+								<b>Name{{index+1}}</b>
+							</div>
+							<div>
+								Message Last <br/>
+								dssdsdsdsdsdsd<br/>
+							</div>
+						</div>
+					</div>
+				</ng-container>	
+			</div>
+		</div>
+	
+		<!-- Message Box -->
+		<div class="bottom">
+			<div class="border" class="reply-box">
+				<md-form-field fxFill>
+					<input tabindex="1" mdInput placeholder="Message">
+				</md-form-field>
+			</div>
+		</div>
+	</div>
+</div>

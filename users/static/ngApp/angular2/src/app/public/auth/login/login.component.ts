@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthenticationService } from '../../_services/authentication.service';
-import {UserService} from '../../_services/user.service';
+import { AuthenticationService } from '../../../_services/authentication.service';
+import {UserService} from '../../../_services/user.service';
 import { NgForm } from '@angular/forms';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
 import {MdSnackBar} from '@angular/material';

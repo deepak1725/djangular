@@ -1,23 +1,4 @@
-<div class="flex-container">
-            <md-toolbar color="primary">
-
-                <span>Djangular</span>
-                <span class="spacer"></span>
-                <button md-icon-button [mdMenuTriggerFor]="appMenu">
-                    <md-icon>menu</md-icon> 
-                </button>
+<router-outlet>
+    
+</router-outlet>
                 
-            </md-toolbar>
-
-            <md-menu #appMenu="mdMenu">
-                <button md-menu-item routerLink="/login"> Login </button>
-                <button md-menu-item routerLink="/register"> Register </button>
-                <button md-menu-item routerLink="/forgot-password"> Forgot Password</button>
-                <button md-menu-item [routerLink]="['/change-password']"> Change Password </button>
-                <button md-menu-item [routerLink]="['/dashboard']"> Dashboard </button>
-            </md-menu>
-            
-            <router-outlet>
-            </router-outlet>
-                
-</div>
