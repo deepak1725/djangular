@@ -1,7 +1,7 @@
 <div fxLayout="row" class="dashboard-container">
 	<div #sidenav class="side-bar">
 		<md-list *ngFor = "let n of rakeArray; let index = index">
-			<md-list-item>
+			<md-list-item class="online-name">
 				<md-icon class="online">
 					fiber_manual_record
 				</md-icon>
@@ -10,8 +10,13 @@
 		</md-list>
 	</div>
 
-	<div fxFlex fxLayoutAlign="start stretch" fxLayout="column" fxFlexOffset="15">
-		<div class="msg-container">
+	<div fxFlex fxLayoutAlign="start stretch" fxLayout="column" fxFlexOffset="15" class="">
+		<!-- Channel Heading -->
+		<div class="channel-heading">
+			Channel Details
+		</div>
+		<!-- Message Box -->		
+		<div class="msg-container all-messages">
 			<div fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" class="message-boxx">
 				<ng-container *ngFor = "let n of fakeArray let index = index">
 					<div fxLayout="row" class="message-text">
@@ -24,6 +29,7 @@
 							</div>
 							<div>
 								Message <br/>
+								dssdsdsdsdsdsd<br/>
 								dssdsdsdsdsdsd<br/>
 							</div>
 						</div>
@@ -46,9 +52,9 @@
 			</div>
 		</div>
 	
-		<!-- Message Box -->
-		<div class="bottom">
-			<div class="border" class="reply-box">
+		<!-- Reply Box -->
+		<div class="bottom all-messages">
+			<div class="reply-box">
 				<md-form-field fxFill>
 					<input tabindex="1" mdInput placeholder="Message">
 				</md-form-field>
