@@ -34,20 +34,6 @@
 							</div>
 						</div>
 					</div>
-					<div fxLayout="row" class="message-text">
-						<div fxFlex="5">
-							<md-icon color="accent" class="f-s-40">account_box</md-icon>
-						</div>
-						<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
-							<div>
-								<b>Name{{index+1}}</b>
-							</div>
-							<div>
-								Message Last <br/>
-								dssdsdsdsdsdsd<br/>
-							</div>
-						</div>
-					</div>
 				</ng-container>	
 			</div>
 		</div>
@@ -56,7 +42,11 @@
 		<div class="bottom all-messages">
 			<div class="reply-box">
 				<md-form-field fxFill>
-					<input tabindex="1" mdInput placeholder="Message">
+
+					<form autocomplete="off" #replyForm="ngForm" (ngSubmit)="sendMessage(replyForm)">
+						<input tabindex="1" name="message" [(ngModel)]="message" mdInput placeholder="Message">
+					</form>
+				
 				</md-form-field>
 			</div>
 		</div>

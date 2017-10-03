@@ -11,6 +11,7 @@ import 'hammerjs';
 import { AuthGuard }                from './auth-guard.service';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import {DashboardComponent} from './protected/dashboard/dashboard.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import {DashboardComponent} from './protected/dashboard/dashboard.component';
 		HttpModule,
 		FlexLayoutModule,
 		MainRouterModule,
-	  
+		FormsModule
+		
 		],
 	providers: [UserService, AuthenticationService, AuthGuard],
 	bootstrap: [AppComponent]

@@ -1,6 +1,10 @@
+
 .dashboard-container{
   font-size: 15px;
+  min-height: stretch;
+  background-color: #fff;
 }
+
 
 .message-boxx{
   overflow: auto;
