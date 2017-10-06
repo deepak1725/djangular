@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { NgForm } from '@angular/forms';
 import { PubNubAngular } from 'pubnub-angular2';
-
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-dashboard',
@@ -20,6 +20,8 @@ export class DashboardComponent implements OnInit{
 	rakeArray = new Array(1);
 	channelInit: object;
 	pubnub:PubNubAngular;
+	allMessages:any;
+	publishResponse:any;
 
 	// -------------- Chat -------------------
 	
@@ -31,13 +33,12 @@ export class DashboardComponent implements OnInit{
 		});
 		
 		this.pubnub=pubnub;
-		console.log("Init", this.channelInit);
 	}
 
 	ngOnInit(){
-		this.channelHistory('hello_world'),function(status){
-			console.log(status);
-		};
+		this.channelSubscribe(['hello_world']);		
+		this.channelHistory('hello_world');
+		
 	}
 
 	channelSubscribe = function(channelArray = null):any{
@@ -46,11 +47,11 @@ export class DashboardComponent implements OnInit{
 			withPresence: true
 		}),
 		function (status, response) {
-			console.log(response);
 		};
 	}
 
 	channelPublish = function(msg = null):any{
+		let that = this;
 		this.pubnub.publish({
 			message: {
 				text: msg
@@ -60,33 +61,55 @@ export class DashboardComponent implements OnInit{
 			ttl: 10
 		}).then((response) => {
 			console.log(response)
+			console.log(that.allMessages)
+			that.publishResponse = response;
+			console.log(that.publishResponse)
 		}).catch((error) => {
+			this.response = "Error";			
 			console.log(error)
-		});
-		return null
-	} 
-
+		}),
+		function () {
+			console.log("CallBack Publish");
+		};
+		return this.publishResponse
+		
+	}
 
 	channelHistory = function(channelName:string){
+		var that = this
 		this.pubnub.history({
 				channel: channelName,
 				reverse: false, // false is the default
 				count: 100, // 100 is the default
-				stringifiedTimeToken: true, // false is the default
-				end:"15070522842665239"
+				// stringifiedTimeToken: true, // false is the default
 			},
 			function (status, response) {
-				console.log("response",response);
+				console.log(response.messages);
+
+				that.renderMessages(response);
 			}
 		);
 	}
 
-	sendMessage = function (data: NgForm) {
-		console.log(data.value.message);
-		this.channelSubscribe(['hello_world']);
-		this.channelPublish(data.value.message);
-		this.channelHistory('hello_world');
-		data.reset()
+	getReadableTime(unixTime){
+		var date = new Date(unixTime/1e4)
+		let now = moment(date).fromNow();
+		return now;
+	}
+
+	sendMessage = function (formData: NgForm) {
+		console.log(formData.value.message);
+		let prest = this.channelPublish(formData.value.message);
+		console.log("OLd Response");
+		console.log("pres", prest);
+		console.log(this.publishResponse);
+		// this.allMessages.push("Hey");
+		formData.reset()
+	}
+
+	renderMessages = function(messageData){
+		console.log(messageData);
+		this.allMessages = messageData.messages;
 	}
 
 }

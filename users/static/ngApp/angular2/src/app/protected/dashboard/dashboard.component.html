@@ -18,7 +18,8 @@
 		<!-- Message Box -->		
 		<div class="msg-container all-messages">
 			<div fxLayout="column" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" class="message-boxx">
-				<ng-container *ngFor = "let n of fakeArray let index = index">
+				
+				<ng-container *ngFor = "let message of allMessages let index = index">
 					<div fxLayout="row" class="message-text">
 						<div fxFlex="5">
 							<md-icon color="accent" class="f-s-40">account_box</md-icon>
@@ -26,15 +27,15 @@
 						<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
 							<div>
 								<b>Name{{index+1}}</b>
+								<small>{{ this.getReadableTime(message.timetoken) }}</small>
 							</div>
 							<div>
-								Message <br/>
-								dssdsdsdsdsdsd<br/>
-								dssdsdsdsdsdsd<br/>
-							</div>
+								{{ message.entry.text}}
+							</div>							
 						</div>
 					</div>
 				</ng-container>	
+
 			</div>
 		</div>
 	
