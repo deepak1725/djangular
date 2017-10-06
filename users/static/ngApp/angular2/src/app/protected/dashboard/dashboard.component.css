@@ -1,16 +1,20 @@
 
 .dashboard-container{
   font-size: 15px;
-  min-height: stretch;
   background-color: #fff;
+  min-height: 90vh;
 }
 
 
 .message-boxx{
-  overflow: auto;
-  margin-bottom: 9%;
-  margin-top: 6%;
-  
+  height: 80vh;
+  overflow: scroll;
+  overflow-x: hidden;
+  /* padding-bottom:15px;  */
+  padding-bottom:2vh; 
+  padding-top:2vh; 
+  margin-top:9vh; 
+  margin-bottom:11vh; 
 }
 .side-bar{
   height:100vh;
@@ -26,9 +30,8 @@
   font-weight: bolder;  
 }
 .message-text{
-  border: 1px solid brown;
+  border-color: green;
 }
-
 .f-s-40{
   font-size: 40px !important;
 }
@@ -38,29 +41,27 @@
   height: auto !important;  
 }
 .all-messages{
-  padding: 10px;
-  background-color: #fff;  
-}
-.msg-container{
-  background-color:#fff;
-  top: 0;
-  overflow: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #fff;
+  padding-right: 0;  
 }
 
 .reply-box{
     border: 2px solid grey;
     border-radius: 20px;
-    padding: 7px;
+    padding: 5px;
     width: 82%;    
 }
 .bottom{
   background-color: #fff;
   position: fixed;
   bottom: 0;
-  margin-bottom: 2px;
+  height: 10vh;
   width: 100%;
-  padding-top:10px; 
+  /* padding-top:10px;  */
   padding-bottom:10px; 
+  padding-left:10px; 
 }
 
 .channel-heading{
