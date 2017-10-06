@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
 import { AuthenticationService } from '../../../_services/authentication.service'
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class ForgotConfirmComponent implements OnInit{
         private authenticationService : AuthenticationService,
         private route: ActivatedRoute,
         private formBuilder:FormBuilder,
-        public snackBar: MdSnackBar
+        public snackBar: MatSnackBar
 
     ) {}
 

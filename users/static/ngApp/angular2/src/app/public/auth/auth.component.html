@@ -1,13 +1,13 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
-    <md-card tabindex="0">
-        <nav md-tab-nav-bar>
-            <a md-tab-link
+    <mat-card tabindex="0">
+        <nav mat-tab-nav-bar>
+            <a mat-tab-link
                 [routerLink]="['/login']"
                 routerLinkActive #lla="routerLinkActive"
                 [active]="lla.isActive">
                 LOGIN
             </a>
-            <a md-tab-link
+            <a mat-tab-link
                 [routerLink]="['/register']"
                 routerLinkActive #rla="routerLinkActive"
                 [active]="rla.isActive">
@@ -15,5 +15,5 @@
             </a>
         </nav>
         <router-outlet></router-outlet>
-    </md-card>
+    </mat-card>
 </div>    

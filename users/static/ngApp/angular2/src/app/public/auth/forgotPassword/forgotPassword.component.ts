@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
 
 
@@ -20,7 +20,7 @@ forgotPasswordForm: FormGroup;
 		private route: ActivatedRoute,
 		private router: Router,
 		private formBuilder: FormBuilder,
-		public snackBar: MdSnackBar
+		public snackBar: MatSnackBar
 	){}
 
 ngOnInit(){

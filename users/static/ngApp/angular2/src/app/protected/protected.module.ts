@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   declarations: [],
   imports: [    
     BrowserModule,
+    MyOwnCustomMaterialModule
   ],
   providers: [PubNubAngular],
 })

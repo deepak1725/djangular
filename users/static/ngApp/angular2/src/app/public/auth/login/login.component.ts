@@ -4,7 +4,7 @@ import { AuthenticationService } from '../../../_services/authentication.service
 import {UserService} from '../../../_services/user.service';
 import { NgForm } from '@angular/forms';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 
 
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit{
         private route: ActivatedRoute,
         private router: Router,
 		private authenticationService: AuthenticationService,
-		public snackBar: MdSnackBar
+		public snackBar: MatSnackBar
 	) { }
 
 	ngOnInit() {

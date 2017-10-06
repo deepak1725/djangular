@@ -1,36 +1,36 @@
-    <md-toolbar>
-        <md-card-title>
+    <mat-toolbar>
+        <mat-card-title>
 	        {{this.title}}
-        </md-card-title>
-    </md-toolbar>
+        </mat-card-title>
+    </mat-toolbar>
         <!-- Inputs -->
         <form [formGroup]="loginForm">
             
-            <md-card-content fxLayoutAlign="space-evenly stretch" fxLayout="column" fxLayoutGap="10px">
-                <md-input-container fxFill>
-                    <input mdInput placeholder="Username" formControlName="username">
-                    <md-error>
+            <mat-card-content fxLayoutAlign="space-evenly stretch" fxLayout="column" fxLayoutGap="10px">
+                <mat-input-container fxFill>
+                    <input matInput placeholder="Username" formControlName="username">
+                    <mat-error>
                         Please enter your username
-                    </md-error>
-                </md-input-container>
+                    </mat-error>
+                </mat-input-container>
     
-                <md-input-container fxFill>
-                    <input mdInput type="password" placeholder="Password" formControlName="password">
-                    <md-error>
+                <mat-input-container fxFill>
+                    <input matInput type="password" placeholder="Password" formControlName="password">
+                    <mat-error>
                         Please enter your password
-                    </md-error>
-                </md-input-container>
+                    </mat-error>
+                </mat-input-container>
 
-            </md-card-content>
+            </mat-card-content>
 
-            <md-card-actions class="text-center">
-                <button mdInput [disabled]=!loginForm.valid type="submit" md-raised-button color="primary" (click)="loginUser()">Submit</button>
-            </md-card-actions>
+            <mat-card-actions class="text-center">
+                <button matInput [disabled]=!loginForm.valid type="submit" mat-raised-button color="primary" (click)="loginUser()">Submit</button>
+            </mat-card-actions>
         </form>
 
-    <md-card-footer class="text-center">
+    <mat-card-footer class="text-center">
         <!-- Footer -->
         <a routerLink="/register"> <small>REGISTER &nbsp;</small></a>|
         <a routerLink="/forgot-password"> <small>FORGOT PASSWORD </small></a>
-    </md-card-footer>
+    </mat-card-footer>
 
