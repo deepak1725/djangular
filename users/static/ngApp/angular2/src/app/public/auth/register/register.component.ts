@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../_services/authentication.service';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 
 
 
@@ -25,7 +25,7 @@ constructor(
     private router: Router,
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    public snackBar: MdSnackBar
+    public snackBar: MatSnackBar
 
     ) { }
 

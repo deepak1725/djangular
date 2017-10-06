@@ -1,58 +1,58 @@
-<md-toolbar>
-  <md-card-title>
+<mat-toolbar>
+  <mat-card-title>
     {{this.title}}
-  </md-card-title>
-</md-toolbar>
+  </mat-card-title>
+</mat-toolbar>
 
 <!-- Inputs -->
 <form [formGroup]="signupForm">
-    <md-card-content fxLayoutAlign="space-evenly stretch" fxLayout="column" fxLayoutGap="10px">
+    <mat-card-content fxLayoutAlign="space-evenly stretch" fxLayout="column" fxLayoutGap="10px">
 		
-		<md-input-container fxFill>
-          <input mdInput placeholder="Username" formControlName="username">
-          <md-error>
+		<mat-input-container fxFill>
+          <input matInput placeholder="Username" formControlName="username">
+          <mat-error>
             Please enter your username
-          </md-error>
-		</md-input-container>
+          </mat-error>
+		</mat-input-container>
 		
 		<div fxLayout="row" fxLayoutAlign="space-between stretch" class="">
-			<md-input-container fxFlex="48">
-				<input mdInput placeholder="First Name" formControlName="first_name">
-				<md-error>
+			<mat-input-container fxFlex="48">
+				<input matInput placeholder="First Name" formControlName="first_name">
+				<mat-error>
 				Please enter your First Name
-				</md-error>
-			</md-input-container>
+				</mat-error>
+			</mat-input-container>
 
-			<md-input-container fxFlex="48">
-				<input mdInput placeholder="Last Name" formControlName="last_name">
-				<md-error>
+			<mat-input-container fxFlex="48">
+				<input matInput placeholder="Last Name" formControlName="last_name">
+				<mat-error>
 				Please enter your Last Name
-				</md-error>
-			</md-input-container>
+				</mat-error>
+			</mat-input-container>
 		</div>
 
-        <md-input-container fxFill>
-          <input type="email" mdInput placeholder="Email" formControlName="email">
-          <md-error>
+        <mat-input-container fxFill>
+          <input type="email" matInput placeholder="Email" formControlName="email">
+          <mat-error>
             Please enter your email
-          </md-error>
-        </md-input-container>
+          </mat-error>
+        </mat-input-container>
 	  
-        <md-input-container fxFill>
-          <input mdInput type="password" placeholder="Password" formControlName="password">
-          <md-error>
+        <mat-input-container fxFill>
+          <input matInput type="password" placeholder="Password" formControlName="password">
+          <mat-error>
             Please enter your password
-          </md-error>
-        </md-input-container>
+          </mat-error>
+        </mat-input-container>
 
-    </md-card-content>
+    </mat-card-content>
 
-	<md-card-actions class="text-center">
-		<button mdInput [disabled]=!signupForm.valid type="submit" md-raised-button color="primary" (click)="registerUser()">Submit</button>
-	</md-card-actions>
+	<mat-card-actions class="text-center">
+		<button matInput [disabled]=!signupForm.valid type="submit" mat-raised-button color="primary" (click)="registerUser()">Submit</button>
+	</mat-card-actions>
 
 </form>
 
-  <md-card-footer class="text-center">
+  <mat-card-footer class="text-center">
     <a routerLink="/login"> <small>login</small></a>
-  </md-card-footer>
+  </mat-card-footer>
