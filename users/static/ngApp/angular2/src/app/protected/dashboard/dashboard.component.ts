@@ -4,13 +4,13 @@ import { NgForm } from '@angular/forms';
 import { PubNubAngular } from 'pubnub-angular2';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
+import { ChatService} from '../../_services/chat.service'
 
 @Component({
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.css'],
-	providers: [PubNubAngular]
-
+	providers: [PubNubAngular, ChatService ]
 	// encapsulation: ViewEncapsulation.None,
 
 })
@@ -19,7 +19,6 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	
 	title = 'Dashboard';
 	channel = 'hello_world'
-	fakeArray = new Array(1);
 	rakeArray = new Array(1);
 	channelInit: object;
 	pubnub: PubNubAngular;
@@ -27,27 +26,48 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	allMessages: any;
 	publishResponse: Observable<Array<string>>;
 
+
 	// -------------- Chat -------------------
 
-	constructor(pubnub: PubNubAngular) {
-
+	constructor(pubnub: PubNubAngular, public chatService: ChatService) {
 		this.channelInit = pubnub.init({
 			publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
 			subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72'
 		});
-
 		this.pubnub = pubnub;
+		this.chatService.getUuid().subscribe(
+			(response) => pubnub.setUUID(response)
+		)
 	}
 
 	ngOnInit() {
 		this.channelSubscribe([this.channel]);
-		this.channelHistory(this.channel);
-
+		this.channelHistory(this.channel);	
+		this.pubnub.hereNow(
+			{
+				channels: [this.channel],
+				// channelGroups : ["my_channelGroup"],
+				includeUUIDs: true,
+				includeState: true
+			},
+			function (status, response) {
+				console.log(status);
+				console.log(response);
+			}
+		);
 	}
+	
+	getUuid(){
+		this.chatService.getUuid().subscribe(
+			(response) => console.log(response)
+		)
+	}
+
 	ngAfterViewChecked() {
-		console.log("View Checked");        
+		// console.log("View Checked");        
         this.scrollToBottom();        
 	}
+
 	scrollToBottom(): void {
         try {
             this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
@@ -71,7 +91,6 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 			stringifiedTimeToken: true, // false is the default
 		},
 			function (status, response) {
-				console.log(response.messages);
 
 				that.renderMessages(response);
 			}
@@ -90,6 +109,10 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 		})
 	}
 
+	// userGetUuid = function(){
+	// 	return this.pubnub.getUUID()
+	// }
+
 
 
 
@@ -101,6 +124,7 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 		this.channelPublish(message)
 						.then((res) => {
 							console.log(res);
+							//PUSHING MSG
 							var obj = {
 								entry:{
 									text:message
@@ -111,6 +135,7 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 						}).catch((error) => {
 							console.log(error)
 						})
+
 		formData.reset()
 	}
 

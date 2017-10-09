@@ -12,9 +12,8 @@ from rest_auth.registration.views import RegisterView, VerifyEmailView
 from django.views.generic import TemplateView
 
 
-
 router = DefaultRouter()
-# router.register(r'users', views.UsersViewSet)
+router.register(r'chat', views.UsersChatRecoredsViewSet)
 
 
 urlpatterns = [

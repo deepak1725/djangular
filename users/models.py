@@ -2,6 +2,8 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.core.validators import validate_email
+from django.contrib.auth.models import User
+import uuid
 
 
 class Question(models.Model):
@@ -15,17 +17,11 @@ class Question(models.Model):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
 
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
+class UserChatRecords(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user = models.OneToOneField(User, unique=True)
+    created = models.DateTimeField(auto_created=True, auto_now=True)
+    modified = models.DateTimeField(auto_created=True, auto_now_add=True)
+
     def __str__(self):
-        return self.choice_text
-
-
-class Users(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True)
-    name = models.CharField(max_length=255, blank = False, null=False)
-    email = models.EmailField(max_length=250, blank = False, null=False)
-    created = models.DateTimeField(auto_created=True)
-    modified = models.DateTimeField(auto_now=True)
+        return self.user.first_name

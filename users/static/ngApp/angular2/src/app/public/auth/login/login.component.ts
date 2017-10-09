@@ -5,14 +5,14 @@ import {UserService} from '../../../_services/user.service';
 import { NgForm } from '@angular/forms';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
-
+import {ChatService} from '../../../_services/chat.service';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-
+  styleUrls: ['./login.component.css'],
+  providers: [ChatService ]
 })
 export class LoginComponent implements OnInit{
   title = 'Login';
@@ -24,7 +24,8 @@ export class LoginComponent implements OnInit{
         private route: ActivatedRoute,
         private router: Router,
 		private authenticationService: AuthenticationService,
-		public snackBar: MatSnackBar
+		public snackBar: MatSnackBar,
+		public chatService: ChatService
 	) { }
 
 	ngOnInit() {
@@ -59,6 +60,11 @@ export class LoginComponent implements OnInit{
 		this.authenticationService.login(adduser.username, adduser.password)
 			.subscribe(
 				function(response){
+					that.chatService.setUuid().subscribe(
+						function(response){
+							console.log(response);
+						}
+					)
 					that.openSnackBar("Successfully logged in.")							
 				},
 				function(response){ 
@@ -67,5 +73,7 @@ export class LoginComponent implements OnInit{
 					console.log("Error happened", response )
 				}
 			);
+
+		
 	}
 }

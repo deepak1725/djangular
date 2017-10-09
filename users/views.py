@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views import generic
-from .models import Choice, Question, Users
 from .forms import SignupForm, LoginForm, MyForgotPasswordForm, MySetPasswordForm
 from django.contrib.auth.models import User
 from django.http import JsonResponse

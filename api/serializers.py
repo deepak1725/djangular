@@ -1,11 +1,12 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from rest_framework import serializers, models
 
 UserModel = get_user_model()
 from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer
 from ngApp.forms import MyPasswordResetForm
+from users.models import UserChatRecords
 
 
 
@@ -27,4 +28,12 @@ class MyRegisterSerializer(RegisterSerializer):
 
 class ResetPasswordSerializer(PasswordResetSerializer):
     password_reset_form_class = MyPasswordResetForm
+
+
+
+class ChatRecordsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserChatRecords
+        fields = ('user','uuid', 'created', 'modified')
 

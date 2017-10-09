@@ -17,7 +17,7 @@
 		</div>
 		<!-- Message Box -->		
 		<div class="all-messages">
-			<div fxLayout="column" #scrollMe [scrollTop]="scrollMe.scrollHeight" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" class="message-boxx" >
+			<div fxLayout="column" #scrollMe [scrollTop]="scrollMe.scrollHeight" fxLayoutAlign="start stretch" fxLayoutGap="10px" class="message-boxx" >
 				
 				<div *ngFor = "let message of allMessages let index = index">
 					<div fxLayout="row" class="message-text">
