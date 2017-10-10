@@ -5,6 +5,8 @@ import { PubNubAngular } from 'pubnub-angular2';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
+import {UserService} from '../../_services/user.service'
+
 
 @Component({
 	selector: 'app-dashboard',
@@ -25,24 +27,35 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	chatMsg: string;
 	allMessages: any;
 	publishResponse: Observable<Array<string>>;
-
+	userFullName: String
+	userUUID: String
 
 	// -------------- Chat -------------------
 
-	constructor(pubnub: PubNubAngular, public chatService: ChatService) {
-		this.channelInit = pubnub.init({
-			publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
-			subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72'
-		});
+	constructor(
+		pubnub: PubNubAngular, 
+		public chatService: ChatService,
+		public userService: UserService,
+	) {
+		
 		this.pubnub = pubnub;
 		this.chatService.getUuid().subscribe(
-			(response) => pubnub.setUUID(response)
+			(response) => {
+				pubnub.setUUID(response)
+				this.userUUID=response
+			}
 		)
+		this.channelInit = pubnub.init({
+			publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
+			subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72',
+			userUUID: this.userUUID
+		});
 	}
 
 	ngOnInit() {
 		this.channelSubscribe([this.channel]);
-		this.channelHistory(this.channel);	
+		this.channelHistory(this.channel);
+		this.userFullName = this.userService.getUserName();
 		this.pubnub.hereNow(
 			{
 				channels: [this.channel],
@@ -51,15 +64,16 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 				includeState: true
 			},
 			function (status, response) {
-				console.log(status);
-				console.log(response);
+				// console.log(status);
+				// console.log(response);
 			}
 		);
+		
 	}
 	
 	getUuid(){
 		this.chatService.getUuid().subscribe(
-			(response) => console.log(response)
+			(response) => console.log('getUUID',response)
 		)
 	}
 
@@ -91,7 +105,7 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 			stringifiedTimeToken: true, // false is the default
 		},
 			function (status, response) {
-
+				console.log(response);
 				that.renderMessages(response);
 			}
 		);
@@ -100,7 +114,9 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	channelPublish = function(msg){
 		return this.pubnub.publish({
 			message: {
-				text: msg
+				text: msg,
+				name: this.userFullName,
+				userId: this.userUUID
 			},
 			channel: this.channel,
 			storeInHistory: true,
@@ -119,15 +135,16 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	sendMessage = function (formData: NgForm) {
 		let message = formData.value.message
 		this.chatMsg = formData.value.message;
-		console.log("publish Response");
 		let msgToken;
 		this.channelPublish(message)
 						.then((res) => {
-							console.log(res);
+							console.log("publishres",res);
 							//PUSHING MSG
 							var obj = {
 								entry:{
-									text:message
+									text:message,
+									name: this.userFullName,
+									userId: this.userUUID
 								},
 								timetoken: res.timetoken
 							}
@@ -140,7 +157,6 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	}
 
 	renderMessages = function (messageData) {
-		console.log(messageData);
 		this.allMessages = messageData.messages;
 	}
 

@@ -18,17 +18,17 @@ export class UserService {
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.options.headers.append('Authorization','JWT ' + currentUser.token);
 
-        console.log("In COnstructor");
-        console.log(this.options);
      }
  
     getAll() {
         return this.http.get('/users').map((response: Response) => response.json());
     }
  
-    // getById(_id: string) {
-    //     return this.http.get('/users/' + _id).map((response: Response) => response.json());
-    // }
+    getUserName():String {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let fullName = currentUser.user.first_name +' '+ currentUser.user.last_name
+        return fullName;
+    }
  
     create(user: User) {
         return this.http.post('/users/register', user);

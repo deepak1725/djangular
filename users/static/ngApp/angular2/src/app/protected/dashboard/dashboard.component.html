@@ -25,9 +25,12 @@
 							<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
 						</div>
 						<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
-							<div>
-								<b>Name{{index+1}}</b>
-								<small>{{ this.getReadableTime(message.timetoken) }}</small>
+							<div fxLayout="row" fxLayoutAlign="space-between end" >
+								<div><b>{{ message.entry.name }}</b></div> 
+								<div *ngIf="message.entry.userId == this.userUUID" >
+									"You"
+								</div>
+								<div fxFlexAlign="end">{{ this.getReadableTime(message.timetoken) }}</div>
 							</div>
 							<div>
 								{{ message.entry.text}}
