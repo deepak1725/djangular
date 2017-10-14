@@ -1,56 +1,96 @@
-<div fxLayout="row" class="dashboard-container">
-	<div #sidenav class="side-bar">
-		<mat-list *ngFor = "let n of rakeArray; let index = index">
-			<mat-list-item class="online-name">
+<mat-grid-list cols="5" rowHeight="74px">
+  	<mat-grid-tile>
+		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
+			<div class=" channel-title">{{this.channelGroup}}</div>
+			<div fxLayoutAlign="start center" fxLayout="row">
 				<mat-icon class="online">
 					fiber_manual_record
 				</mat-icon>
-				Online {{index+1}}
-			</mat-list-item>
-		</mat-list>
-	</div>
-
-	<div fxFlex fxLayoutAlign="start stretch" fxLayout="column" fxFlexOffset="15" class="">
-		<!-- Channel Heading -->
-		<div class="channel-heading">
-			<strong>#{{this.channel}}</strong>
+				<div fxLayoutAlign="start center" fxLayout="column">
+					<strong>
+						{{this.userFullName}}
+					</strong>
+					<small>{{this.userUUID}}</small>
+				</div>								
+			</div>
 		</div>
-		<!-- Message Box -->		
-		<div class="all-messages">
-			<div fxLayout="column" #scrollMe [scrollTop]="scrollMe.scrollHeight" fxLayoutAlign="start stretch" fxLayoutGap="10px" class="message-boxx" >
-				
+	</mat-grid-tile>
+
+	<!-- HEADER -->
+  	<mat-grid-tile colspan="4">
+		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column">
+			<div fxLayout="row" class="channel-title">
+				<strong>#{{this.channel}}</strong>
+			</div>
+			<div fxLayout="row" class="channel-title">
+				<span>
+					<small> Online: {{this.occupancy}} </small> | <small> Fav </small>
+				</span>
+			</div>
+		</div>
+	</mat-grid-tile>
+
+	<!-- SIDEBAR -->
+	<mat-grid-tile rowspan="7">
+		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
+			<mat-list *ngFor = "let n of rakeArray; let index = index">
+				<mat-list-item class="online-name">
+					<mat-icon class="online">
+						fiber_manual_record
+					</mat-icon>
+					Online {{index+1}}
+				</mat-list-item>
+			</mat-list>
+		</div>
+	</mat-grid-tile>
+
+	<!-- MessageContainer -->
+  	<mat-grid-tile rowspan="7" colspan="4">
+		<div class="msg-container">
+			<div fxLayout="column" #scrollMe [scrollTop]="scrollMe.scrollHeight" fxLayoutAlign="start stretch" 
+				fxLayoutGap="10px" class="content-container message-container" >
 				<div *ngFor = "let message of allMessages let index = index">
 					<div fxLayout="row" class="message-text">
 						<div fxFlex="5">
 							<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
 						</div>
-						<div fxLayout="column" fxLayoutAlign="space-evenly stretch">
-							<div fxLayout="row" fxLayoutAlign="space-between end" >
-								<div><b>{{ message.entry.name }}</b></div> 
-								<div *ngIf="message.entry.userId == this.userUUID" >
-									"You"
+						<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
+							<div fxLayout="row" fxLayoutAlign="space-between center" >
+								<span>
+									<b>{{ message.entry.name }}</b>
+									<small class="dull">@{{message.entry.userId}}</small>
+								</span> 
+								<div fxFlex class="time" fxFlexAlign="center">
+									{{ this.getReadableTime(message.timetoken) }}
 								</div>
-								<div fxFlexAlign="end">{{ this.getReadableTime(message.timetoken) }}</div>
 							</div>
-							<div>
-								{{ message.entry.text}}
-							</div>							
+							<div>{{ message.entry.text}}</div>							
 						</div>
 					</div>
-				</div>	
+				</div>
+			</div>
+		</div>
+	</mat-grid-tile>
 
-			</div>
+
+  	<mat-grid-tile>
+		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column">				
+			<small>By Deepak Sharma <br/>
+		  		under MIT Licence.
+			</small>
 		</div>
-	
-		<!-- Reply Box -->
-		<div class="bottom">
-			<div class="reply-box">
-				<form autocomplete="off" #replyForm="ngForm" (ngSubmit)="sendMessage(replyForm)">
-					<mat-form-field fxFill>
-						<input tabindex="1" name="message" [(ngModel)]="message" matInput placeholder="Message">
-					</mat-form-field>
-				</form>
-			</div>
+	</mat-grid-tile>
+
+	<!-- SEND MESSAGE -->
+  	<mat-grid-tile colspan="4">
+		<div fxLayoutAlign="center center" fxLayout="column">
+			<form autocomplete="off" #replyForm="ngForm" (ngSubmit)="sendMessage(replyForm)" class="reply-form">
+				<mat-form-field  class="msg-input" fxFill floatPlaceholder="never">
+					<input tabindex="1" resizeToFitContent name="message" [(ngModel)]="message" matInput placeholder="Message">
+					<mat-hint align="end"> Press Enter to Send</mat-hint>
+				</mat-form-field>
+			</form>
 		</div>
-	</div>
-</div>
+	</mat-grid-tile>
+
+</mat-grid-list>

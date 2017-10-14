@@ -20,22 +20,21 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 	
 	title = 'Dashboard';
-	channel = 'hello_world'
-	rakeArray = new Array(1);
-	channelInit: object;
+	channel = ['hello_world']
+	channelGroup = "Djangular"
+	rakeArray = new Array(90);
 	pubnub: PubNubAngular;
-	chatMsg: string;
 	allMessages: any;
-	publishResponse: Observable<Array<string>>;
 	userFullName: String
 	userUUID: String
-
+	occupancy: number
 	// -------------- Chat -------------------
 
 	constructor(
 		pubnub: PubNubAngular, 
 		public chatService: ChatService,
 		public userService: UserService,
+		
 	) {
 		
 		this.pubnub = pubnub;
@@ -45,30 +44,80 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 				this.userUUID=response
 			}
 		)
-		this.channelInit = pubnub.init({
+		pubnub.init({
 			publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
 			subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72',
 			userUUID: this.userUUID
 		});
+
+		pubnub.channelGroups.addChannels(
+			{
+				channels: this.channel,
+				channelGroup: this.channelGroup
+			}, 
+			function(status) {
+				if (status.error) {
+					console.log("operation failed w/ status: ");
+				} else {
+					console.log(status,"operation done!")
+				}
+			}
+		);
+		pubnub.channelGroups.listChannels(
+			{
+				channelGroup: "djangular"
+			}, 
+			function (status, response) {
+				if (status.error) {
+					console.log("operation failed w/ error:", status);
+					return;
+				}
+				 
+				console.log(response,"listing push channel for device")
+				response.channels.forEach( function (channel) {
+					console.log(channel)
+				})
+			}
+		);
 	}
 
 	ngOnInit() {
+		this.channelListener();
 		this.channelSubscribe([this.channel]);
-		this.channelHistory(this.channel);
+		this.channelHistory(this.channel[0]);
 		this.userFullName = this.userService.getUserName();
-		this.pubnub.hereNow(
-			{
-				channels: [this.channel],
-				// channelGroups : ["my_channelGroup"],
-				includeUUIDs: true,
-				includeState: true
+		this.channelHerenow()
+	}
+
+	channelListener = function(){
+		let that = this; 
+		this.pubnub.addListener({
+			status: function(st) {
+				if (st.category === "PNUnknownCategory") {
+					var newState = {new: 'error'};
+					this.pubnub.setState({
+						state: newState
+					},
+					function (status) {
+						console.log(st.errorData.message);
+					});
+				}
 			},
-			function (status, response) {
-				// console.log(status);
-				// console.log(response);
+			message: function(response) {
+				//PUSHING MSG
+				var obj = {
+					entry:{
+						text:response.message.text,
+						name: response.message.name,
+						userId: response.message.userId
+					},
+					timetoken: response.timetoken
+				}
+				that.allMessages.push(obj);
+
+				console.log(response);
 			}
-		);
-		
+		});
 	}
 	
 	getUuid(){
@@ -91,9 +140,10 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	channelSubscribe = function (channelArray = null): any {
 		this.pubnub.subscribe({
 			channels: channelArray,
-			withPresence: true
+			withPresence: true,
 		}),
 			function (status, response) {
+				console.log(response);
 			};
 	}
 	channelHistory = function (channelName: string) {
@@ -111,6 +161,19 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 		);
 	}
 
+	channelHerenow = function(){
+		let that = this;
+		this.pubnub.hereNow(
+			{
+				channels: this.channel,
+				includeUUIDs: true,
+				includeState: true
+			},
+			function (status, response) {
+				that.occupancy = response.channels.hello_world.occupancy
+			}
+		);
+	}
 	channelPublish = function(msg){
 		return this.pubnub.publish({
 			message: {
@@ -135,20 +198,9 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	sendMessage = function (formData: NgForm) {
 		let message = formData.value.message
 		this.chatMsg = formData.value.message;
-		let msgToken;
 		this.channelPublish(message)
 						.then((res) => {
 							console.log("publishres",res);
-							//PUSHING MSG
-							var obj = {
-								entry:{
-									text:message,
-									name: this.userFullName,
-									userId: this.userUUID
-								},
-								timetoken: res.timetoken
-							}
-							this.allMessages.push(obj);
 						}).catch((error) => {
 							console.log(error)
 						})
@@ -157,6 +209,7 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	}
 
 	renderMessages = function (messageData) {
+		console.log(messageData);
 		this.allMessages = messageData.messages;
 	}
 

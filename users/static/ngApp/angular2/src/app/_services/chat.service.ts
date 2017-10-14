@@ -33,7 +33,8 @@ export class ChatService {
             .map((response: Response) => { 
                 let res = response.json()
                 localStorage.setItem('userUuid', JSON.stringify(res.uuid))
-                return res.uuid
+                let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                return currentUser.user.username
             }
 
         );
