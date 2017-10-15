@@ -60,11 +60,7 @@ export class LoginComponent implements OnInit{
 		this.authenticationService.login(adduser.username, adduser.password)
 			.subscribe(
 				function(response){
-					that.chatService.setUuid().subscribe(
-						function(response){
-							console.log(response);
-						}
-					)
+					
 					that.openSnackBar("Successfully logged in.")							
 				},
 				function(response){ 
