@@ -2,13 +2,32 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
  
 import { User } from '../_models/user';
- 
+import { PubNubAngular } from 'pubnub-angular2';
+import {DashboardComponent} from '../protected/dashboard/dashboard.component';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+
+
 @Injectable()
 export class ChatService {
     headers: Headers;
     options: RequestOptions;
+    username : string;
+    allMessages: any[] = [];
+    occupancy: number;
+    fullName: string;
+    channelList: string[] = [];
+    channelInput: string = 'general';
+    channelGroup = "Djangular"
+    totalChannel: number;
+    totalOnline: number;
 
-    constructor(private http: Http) {
+
+    constructor(
+        private http: Http, 
+        public pubnub: PubNubAngular,
+        private route: ActivatedRoute,
+    ) {
+        
         this.options = new RequestOptions ();
 
         if (this.options.headers == null) {
@@ -16,13 +35,20 @@ export class ChatService {
         }
 
         this.options.headers.append('Content-Type', 'application/json');
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.username = currentUser.user.username;
+        this.fullName = currentUser.user.first_name +' ' + currentUser.user.last_name;
+        
         if (currentUser && currentUser.token) {
             this.options.headers.append('Authorization','JWT ' + currentUser.token);
         }else{
             this.options.headers.append('Authorization','JWT ' + "currentUser.token");
 
-        }
+        
+
+        
+      
+    }
 
      }
  
@@ -60,4 +86,180 @@ export class ChatService {
             return apiresponse;
         });
     }
+
+// ------------********----  PUBNUB -----**********-------------------
+
+
+    chatInit(){
+        this.pubnub.init({
+            publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
+            subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72',
+            userUUID: this.username
+        });
+    };
+
+    channelAdd(channelGroup, channel){
+        console.log("In Chanel Add");
+        this.pubnub.channelGroups.addChannels(
+            {
+                channels: [channel],
+                channelGroup: channelGroup
+            }, 
+            function(status) {
+                if (status.error) {
+                    console.log("operation failed w/ status: ");
+                }else{
+                    console.log("Operation add channel Done");
+                } 
+            }
+        );
+    };
+
+    listChannels(channelGroup){
+        var that = this;
+        console.log("List Chanel");
+		this.pubnub.channelGroups.listChannels(
+			{
+				channelGroup: channelGroup
+			}, 
+			function (status, response) {
+				if (status.error) {
+					console.log("operation failed w/ error:", status);
+					return;
+				}
+				response.channels.forEach( function (channel) {
+                    that.channelList.push(channel);
+                    that.channelSubscribe(channel);
+                })
+                console.log("ChannelList",that.channelList);
+                
+                
+                if (that.channelList.includes(that.route.snapshot.paramMap.get('channel'))) {
+                    that.channelInput = that.route.snapshot.paramMap.get('channel')
+                    that.channelHistory(that.channelInput);
+                }
+                
+                
+			}
+		);
+    }
+
+    channelSubscribe = function (channel = this.channelInput){
+        console.log("Subscrivb",channel);
+        
+        if (channel) {
+            this.pubnub.subscribe({
+                channels: [channel],
+                withPresence: true,
+            }), 
+            function (status, response) {
+            };
+        }
+        
+    }
+    
+    channelHistory = function (channel) {
+        console.log("History", channel);
+        this.pubnub.history({
+            channel: channel,
+            reverse: false, // false is the default
+            count: 100, // 100 is the default
+            stringifiedTimeToken: true, // false is the default
+        }).then((response,fd) => { 
+            this.allMessages = response.messages;
+            this.channelInput = this.route.snapshot.paramMap.get('channel');
+            this.channelHerenow(channel);
+        });
+
+
+    }
+    
+    
+    
+    channelHerenow = function(channel){
+		let that = this;
+		this.pubnub.hereNow(
+			{
+                includeUUIDs: true,
+                includeState: true,
+                channel: "channel",
+			},
+			function (status, response) {  
+                console.log("response", response);              
+                that.occupancy = response.channels[channel].occupancy;
+                that.totalChannel = response.totalChannels;
+			}
+		);
+    }
+    
+    channelPublish = function(message, channel){
+		return this.pubnub.publish({
+			message: {
+				text: message,
+				name: this.fullName,
+				username: this.username
+			},
+			channel: channel,
+			storeInHistory: true,
+			ttl: 10
+        })
+        .then((res) => {
+        }).catch((status, error) => {
+            console.log(error)
+        })
+    }
+    
+    channelListen = function(){
+		let that = this; 
+		this.pubnub.addListener({
+			status: function(st) {
+				if (st.category === "PNUnknownCategory") {
+					var newState = {new: 'error'};
+					this.pubnub.setState({
+						state: newState
+					},
+					function (status) {
+						console.log(st.errorData.message);
+					});
+				}
+			},
+			message: function(response) {
+				//PUSHING MSG
+				var obj = {
+					entry:{
+						text:response.message.text,
+						name: response.message.name,
+						username: response.message.username
+					},
+					timetoken: response.timetoken
+                }
+				that.allMessages.push(obj);
+
+			}
+		});
+	}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

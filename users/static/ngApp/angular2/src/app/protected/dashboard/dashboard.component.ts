@@ -1,4 +1,9 @@
-import { Component, ViewEncapsulation, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, 
+	OnInit, AfterViewChecked, 
+	ElementRef, ViewChild, 
+	OnChanges, SimpleChanges,
+	AfterViewInit
+} from '@angular/core';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { NgForm } from '@angular/forms';
 import { PubNubAngular } from 'pubnub-angular2';
@@ -6,7 +11,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import {UserService} from '../../_services/user.service'
-
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
 	selector: 'app-dashboard',
@@ -16,7 +21,7 @@ import {UserService} from '../../_services/user.service'
 	// encapsulation: ViewEncapsulation.None,
 
 })
-export class DashboardComponent implements OnInit, AfterViewChecked {
+export class DashboardComponent implements OnInit {
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 	
 	title = 'Dashboard';
@@ -82,53 +87,23 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	}
 
 	ngOnInit() {
-		this.channelListener();
-		this.channelSubscribe([this.channel]);
-		this.channelHistory(this.channel[0]);
-		this.userFullName = this.userService.getUserName();
-		this.channelHerenow()
+		this.chatService.chatInit();
+		this.chatService.listChannels(this.channelGroup);
+		this.chatService.channelListen();
+		this.chatService.channelSubscribe();
+		// this.chatService.channelHerenow(this.channelGroup)
+		// console.log(channelInput);
+		// console.log(this.chatService.channelList);
+
+		
+		// this.chatService.channelAdd(this.channelGroup, "general")        
+		
 	}
 
-	channelListener = function(){
-		let that = this; 
-		this.pubnub.addListener({
-			status: function(st) {
-				if (st.category === "PNUnknownCategory") {
-					var newState = {new: 'error'};
-					this.pubnub.setState({
-						state: newState
-					},
-					function (status) {
-						console.log(st.errorData.message);
-					});
-				}
-			},
-			message: function(response) {
-				//PUSHING MSG
-				var obj = {
-					entry:{
-						text:response.message.text,
-						name: response.message.name,
-						userId: response.message.userId
-					},
-					timetoken: response.timetoken
-				}
-				that.allMessages.push(obj);
-
-				console.log(response);
-			}
-		});
-	}
-	
-	getUuid(){
-		this.chatService.getUuid().subscribe(
-			(response) => console.log('getUUID',response)
-		)
-	}
 
 	ngAfterViewChecked() {
 		// console.log("View Checked");        
-        this.scrollToBottom();        
+		this.scrollToBottom();
 	}
 
 	scrollToBottom(): void {
@@ -198,24 +173,20 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 	sendMessage = function (formData: NgForm) {
 		let message = formData.value.message
 		this.chatMsg = formData.value.message;
-		this.channelPublish(message)
-						.then((res) => {
-							console.log("publishres",res);
-						}).catch((error) => {
-							console.log(error)
-						})
+
+		this.chatService.channelPublish(message, this.chatService.channelInput)
+						
 
 		formData.reset()
-	}
-
-	renderMessages = function (messageData) {
-		console.log(messageData);
-		this.allMessages = messageData.messages;
 	}
 
 	getReadableTime(unixTime) {
 		var date = new Date(unixTime / 1e4)
 		let now = moment(date).fromNow();
 		return now;
+	}
+	channelClicked(channel){
+		console.log(channel);
+		this.chatService.channelHistory(channel);
 	}
 }

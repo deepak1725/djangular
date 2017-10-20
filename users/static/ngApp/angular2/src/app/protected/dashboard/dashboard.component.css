@@ -45,5 +45,13 @@ mat-grid-tile {
 }
 .dull{
   color: #717274;
-  
+}
+.text-align-c{
+  text-align: center;
+}
+.text-align-r{
+  text-align: right;
+}
+.padding-bottom{
+  padding-bottom: 10px;
 }

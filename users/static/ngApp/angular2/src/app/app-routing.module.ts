@@ -21,8 +21,9 @@ export const APPROUTES : Routes = [
     { 
         path: '', component: ProtectedComponent, canActivate: [AuthGuard], children:
         [
-            { path: '', component: DashboardComponent },
-            { path: 'dashboard', component: DashboardComponent },
+            { path: 'messages/:channel', component: DashboardComponent },
+            { path: 'messages', redirectTo: 'messages/general', pathMatch: 'full' },
+            { path: '', redirectTo: 'messages/general', pathMatch: 'full' },
         ]  
     },
     { 

@@ -1,18 +1,22 @@
 <mat-grid-list cols="5" rowHeight="74px">
   	<mat-grid-tile>
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
-			<div class=" channel-title">{{this.channelGroup}}</div>
-			<div fxLayoutAlign="start center" fxLayout="row">
-				<mat-icon class="online">
-					fiber_manual_record
-				</mat-icon>
+				<div class=" channel-title">
+					<strong>{{this.channelGroup}}</strong>
+				</div>		
 				<div fxLayoutAlign="start center" fxLayout="column">
-					<strong>
-						{{this.userFullName}}
-					</strong>
-					<small>{{this.userUUID}}</small>
+					<div>
+						<mat-icon class="online">
+							fiber_manual_record
+						</mat-icon>
+						<span>
+							{{this.chatService.fullName}}
+						</span>
+					</div>
+					<div>
+						<small class="dull">@{{this.chatService.username}}</small>
+					</div>
 				</div>								
-			</div>
 		</div>
 	</mat-grid-tile>
 
@@ -20,36 +24,45 @@
   	<mat-grid-tile colspan="4">
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column">
 			<div fxLayout="row" class="channel-title">
-				<strong>#{{this.channel}}</strong>
+				<strong>#{{this.chatService.channelInput}}</strong>
 			</div>
 			<div fxLayout="row" class="channel-title">
 				<span>
-					<small> Online: {{this.occupancy}} </small> | <small> Fav </small>
+					<small> Online: {{this.chatService.occupancy}} </small> | <small> Fav </small>
 				</span>
 			</div>
 		</div>
 	</mat-grid-tile>
 
-	<!-- SIDEBAR -->
-	<mat-grid-tile rowspan="7">
+	<!-- ONLINE LIST -->
+	<mat-grid-tile rowspan="5">
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
-			<mat-list *ngFor = "let n of rakeArray; let index = index">
-				<mat-list-item class="online-name">
-					<mat-icon class="online">
-						fiber_manual_record
-					</mat-icon>
-					Online {{index+1}}
-				</mat-list-item>
+			<mat-list>
+					<h3 mat-subheader>Direct Messages</h3>
+					<mat-divider></mat-divider>
+					<mat-list-item class="online-name" matLine *ngFor = "let n of fakeArray; let index = index">
+						<a mat-list-item href="/{{index}}" fxLayout="row" fxLayoutAlign="start stretch">
+							<mat-icon mat-list-icon class="online">
+								fiber_manual_record
+							</mat-icon>
+							<div>
+								Online {{index+1}}
+							</div>
+						</a>
+						
+					</mat-list-item>
 			</mat-list>
 		</div>
 	</mat-grid-tile>
 
+	
+
 	<!-- MessageContainer -->
-  	<mat-grid-tile rowspan="7" colspan="4">
+  	<mat-grid-tile rowspan="7" colspan="4" >
 		<div class="msg-container">
-			<div fxLayout="column" #scrollMe [scrollTop]="scrollMe.scrollHeight" fxLayoutAlign="start stretch" 
+			<div fxLayout="column" fxLayoutAlign="start stretch" 
 				fxLayoutGap="10px" class="content-container message-container" >
-				<div *ngFor = "let message of allMessages let index = index">
+				<div *ngFor = "let message of this.chatService.allMessages let index = index">
 					<div fxLayout="row" class="message-text">
 						<div fxFlex="5">
 							<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
@@ -58,7 +71,7 @@
 							<div fxLayout="row" fxLayoutAlign="space-between center" >
 								<span>
 									<b>{{ message.entry.name }}</b>
-									<small class="dull">@{{message.entry.userId}}</small>
+									<small class="dull">@{{message.entry.username}}</small>
 								</span> 
 								<div fxFlex class="time" fxFlexAlign="center">
 									{{ this.getReadableTime(message.timetoken) }}
@@ -72,14 +85,32 @@
 		</div>
 	</mat-grid-tile>
 
-
-  	<mat-grid-tile>
-		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column">				
-			<small>By Deepak Sharma <br/>
-		  		under MIT Licence.
-			</small>
+	<!-- GROUP -->
+	<mat-grid-tile rowspan="3">
+	
+		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
+			<mat-list dense >
+				<div fxLayoutAlign="space-between center" fxLayout="row">
+					<h3 mat-subheader>Channel</h3>
+					<h3 mat-subheader>{{this.chatService.totalChannel}}</h3>
+				</div>
+				<mat-divider></mat-divider>
+				<mat-list-item class="online-name" matLine *ngFor = "let channel of this.chatService.channelList; let index = index">
+					
+					<a mat-list-item (click)=channelClicked(channel) routerLink="../{{channel}}" fxLayout="row" fxLayoutAlign="start stretch">
+						<mat-icon mat-list-icon class="online">
+							fiber_manual_record
+						</mat-icon>
+						<div>
+								{{channel}}
+						</div>
+					</a>
+					
+				</mat-list-item>
+			</mat-list>
 		</div>
 	</mat-grid-tile>
+
 
 	<!-- SEND MESSAGE -->
   	<mat-grid-tile colspan="4">
