@@ -37,21 +37,31 @@
 	<!-- ONLINE LIST -->
 	<mat-grid-tile rowspan="5">
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
-			<mat-list>
-					<h3 mat-subheader>Direct Messages</h3>
-					<mat-divider></mat-divider>
-					<mat-list-item class="online-name" matLine *ngFor = "let n of fakeArray; let index = index">
-						<a mat-list-item href="/{{index}}" fxLayout="row" fxLayoutAlign="start stretch">
-							<mat-icon mat-list-icon class="online">
-								fiber_manual_record
-							</mat-icon>
-							<div>
-								Online {{index+1}}
-							</div>
-						</a>
-						
-					</mat-list-item>
-			</mat-list>
+			<mat-nav-list dense >
+				<div fxLayoutAlign="space-between center" fxLayout="row">
+					<h3 mat-subheader>Direct Message</h3>
+					<h3 mat-subheader>{{this.chatService.groupOccupants.length}}</h3>
+				</div>
+				<mat-divider></mat-divider>
+
+				<a mat-list-item (click)=channelClicked(channel) 
+					routerLinkActive="active-link" class="online-name" matLine 
+					[routerLinkActiveOptions]="{exact: true}"
+					*ngFor = "let occupant of this.chatService.groupOccupants; let index = index"
+					routerLink="../{{index}}"
+					>
+					
+					<div fxLayout="row" fxLayoutAlign="start center">
+						<mat-icon mat-list-icon class="online">
+							fiber_manual_record
+						</mat-icon>
+						<div>
+							Online{{channel}}
+						</div>
+					</div>
+					
+				</a>
+			</mat-nav-list>
 		</div>
 	</mat-grid-tile>
 
@@ -89,25 +99,29 @@
 	<mat-grid-tile rowspan="3">
 	
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
-			<mat-list dense >
+			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
 					<h3 mat-subheader>Channel</h3>
 					<h3 mat-subheader>{{this.chatService.totalChannel}}</h3>
 				</div>
 				<mat-divider></mat-divider>
-				<mat-list-item class="online-name" matLine *ngFor = "let channel of this.chatService.channelList; let index = index">
+
+				<a mat-list-item (click)=channelClicked(channel) 
+					routerLink="../{{channel}}" 
+					routerLinkActive #rla="routerLinkActive" 
+					active="rla.isActive"
+					class="online-name" matLine 
+					*ngFor = "let channel of this.chatService.channelList">
 					
-					<a mat-list-item (click)=channelClicked(channel) routerLink="../{{channel}}" fxLayout="row" fxLayoutAlign="start stretch">
-						<mat-icon mat-list-icon class="online">
-							fiber_manual_record
-						</mat-icon>
+					<div fxLayout="row" fxLayoutAlign="start center">
+						# &nbsp;
 						<div>
-								{{channel}}
+							{{channel}}
 						</div>
-					</a>
+					</div>
 					
-				</mat-list-item>
-			</mat-list>
+				</a>
+			</mat-nav-list>
 		</div>
 	</mat-grid-tile>
 

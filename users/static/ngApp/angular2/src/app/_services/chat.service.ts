@@ -19,7 +19,8 @@ export class ChatService {
     channelInput: string = 'general';
     channelGroup = "Djangular"
     totalChannel: number;
-    totalOnline: number;
+    groupOccupancy: number;
+    groupOccupants: any[] = [];
 
 
     constructor(
@@ -99,7 +100,6 @@ export class ChatService {
     };
 
     channelAdd(channelGroup, channel){
-        console.log("In Chanel Add");
         this.pubnub.channelGroups.addChannels(
             {
                 channels: [channel],
@@ -117,7 +117,6 @@ export class ChatService {
 
     listChannels(channelGroup){
         var that = this;
-        console.log("List Chanel");
 		this.pubnub.channelGroups.listChannels(
 			{
 				channelGroup: channelGroup
@@ -129,9 +128,8 @@ export class ChatService {
 				}
 				response.channels.forEach( function (channel) {
                     that.channelList.push(channel);
-                    that.channelSubscribe(channel);
+                    // that.channelSubscribe(channel);
                 })
-                console.log("ChannelList",that.channelList);
                 
                 
                 if (that.channelList.includes(that.route.snapshot.paramMap.get('channel'))) {
@@ -145,21 +143,19 @@ export class ChatService {
     }
 
     channelSubscribe = function (channel = this.channelInput){
-        console.log("Subscrivb",channel);
-        
-        if (channel) {
-            this.pubnub.subscribe({
-                channels: [channel],
+            console.log("In Subscribe");
+            return this.pubnub.subscribe({
+                channelGroups: [this.channelGroup],
                 withPresence: true,
             }), 
             function (status, response) {
+                console.log(status);
+                console.log(response);
             };
-        }
         
     }
     
     channelHistory = function (channel) {
-        console.log("History", channel);
         this.pubnub.history({
             channel: channel,
             reverse: false, // false is the default
@@ -168,7 +164,6 @@ export class ChatService {
         }).then((response,fd) => { 
             this.allMessages = response.messages;
             this.channelInput = this.route.snapshot.paramMap.get('channel');
-            this.channelHerenow(channel);
         });
 
 
@@ -176,18 +171,32 @@ export class ChatService {
     
     
     
-    channelHerenow = function(channel){
+    channelHerenow = function(channel=this.channelInput){
 		let that = this;
 		this.pubnub.hereNow(
 			{
                 includeUUIDs: true,
                 includeState: true,
-                channel: "channel",
 			},
 			function (status, response) {  
-                console.log("response", response);              
+                console.log("Here Now response", response);              
+                var occupants:object[] = [];
+                var map:any[] = [];
+
+                for (var key in response.channels) {
+                    if (response.channels.hasOwnProperty(key)) {
+                        var element = response.channels[key];
+                        element.occupants.map((occupant) => {
+                            occupants.push(occupant)
+                        })
+                    }
+                }
+                
                 that.occupancy = response.channels[channel].occupancy;
                 that.totalChannel = response.totalChannels;
+                console.log(occupants);                
+                return that.groupOccupants = that.groupOccupants;
+                           
 			}
 		);
     }
