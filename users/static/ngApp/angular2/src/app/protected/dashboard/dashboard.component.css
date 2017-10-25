@@ -14,7 +14,7 @@ mat-grid-tile {
   width: 90%;
 }
 .sidebar-container{
-  overflow: scroll;
+  overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
 }
@@ -23,7 +23,7 @@ mat-grid-tile {
   display: block !important;
 }
 .content-container{
-  overflow: scroll;
+  overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
   padding: 10px;  
@@ -38,6 +38,8 @@ mat-grid-tile {
 
 .msg-container{
   height: 100%;
+  overflow-y: scroll;
+  
 }
 .f-s-40{
   font-size: 40px !important;

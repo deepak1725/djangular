@@ -70,9 +70,9 @@
 
 	<!-- MessageContainer -->
   	<mat-grid-tile rowspan="8" colspan="4" >
-		<div class="msg-container">
-			<div fxLayout="column" fxLayoutAlign="start stretch" 
-				fxLayoutGap="10px" class="content-container message-container" >
+			<div #scrollMe style="overflow-y: scroll"
+				fxLayout="column" fxLayoutAlign="start stretch" 
+				fxLayoutGap="10px" class="content-container" fxFlexAlign="baseline">
 				<div *ngFor = "let message of this.chatService.allMessages let index = index">
 					<div fxLayout="row" class="message-text">
 						<div fxFlex="5">
@@ -93,7 +93,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</mat-grid-tile>
 
 	<!-- SIDEBAR: GROUP -->

@@ -43,12 +43,7 @@ export class ChatService {
         if (currentUser && currentUser.token) {
             this.options.headers.append('Authorization','JWT ' + currentUser.token);
         }else{
-            this.options.headers.append('Authorization','JWT ' + "currentUser.token");
-
-        
-
-        
-      
+            this.options.headers.append('Authorization','JWT ' + "currentUser.token");   
     }
 
      }
@@ -95,8 +90,9 @@ export class ChatService {
         this.pubnub.init({
             publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
             subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72',
-            userUUID: this.username
+            uuid: this.username
         });
+        this.pubnub.setUUID(this.username);
     };
 
     channelAdd(channelGroup, channel){
@@ -125,7 +121,8 @@ export class ChatService {
 				if (status.error) {
 					console.log("operation failed w/ error:", status);
 					return;
-				}
+                }
+                console.log("List Channels", response);
 				response.channels.forEach( function (channel) {
                     that.channelList.push(channel);
                     // that.channelSubscribe(channel);
@@ -144,7 +141,7 @@ export class ChatService {
 
     channelSubscribe = function (channel = this.channelInput){
             console.log("In Subscribe");
-            return this.pubnub.subscribe({
+            this.pubnub.subscribe({
                 channelGroups: [this.channelGroup],
                 withPresence: true,
             }), 
@@ -165,11 +162,7 @@ export class ChatService {
             this.allMessages = response.messages;
             this.channelInput = this.route.snapshot.paramMap.get('channel');
         });
-
-
     }
-    
-    
     
     channelHerenow = function(channel=this.channelInput){
 		let that = this;
@@ -177,24 +170,14 @@ export class ChatService {
 			{
                 includeUUIDs: true,
                 includeState: true,
+                channels : [channel], 
 			},
 			function (status, response) {  
-                console.log("Here Now response", response);              
-                var occupants:object[] = [];
-                var map:any[] = [];
-
-                for (var key in response.channels) {
-                    if (response.channels.hasOwnProperty(key)) {
-                        var element = response.channels[key];
-                        element.occupants.map((occupant) => {
-                            occupants.push(occupant)
-                        })
-                    }
-                }
+                // console.log("Here Now response", response);              
                 
-                that.occupancy = response.channels[channel].occupancy;
+                that.occupancy = 2;
                 that.totalChannel = response.totalChannels;
-                console.log(occupants);                
+                // console.log(occupants);                
                 return that.groupOccupants = that.groupOccupants;
                            
 			}
@@ -219,21 +202,18 @@ export class ChatService {
     }
     
     channelListen = function(){
-		let that = this; 
+        let that = this; 
+        console.log("In Listen");
 		this.pubnub.addListener({
 			status: function(st) {
+                console.log("In Listen, Status", st);
 				if (st.category === "PNUnknownCategory") {
-					var newState = {new: 'error'};
-					this.pubnub.setState({
-						state: newState
-					},
-					function (status) {
-						console.log(st.errorData.message);
-					});
+					that.setState();
 				}
 			},
 			message: function(response) {
-				//PUSHING MSG
+                //PUSHING MSG
+                console.log("In Listen, response");                
 				var obj = {
 					entry:{
 						text:response.message.text,
@@ -244,9 +224,61 @@ export class ChatService {
                 }
 				that.allMessages.push(obj);
 
-			}
+            },
+            presence: function(presenceEvent) {
+                console.log("In Listen, presence");                
+                console.log('presence event came in: ', presenceEvent)
+            } 
 		});
-	}
+    }
+    
+    channelWhereNow = function(){
+        let uuid = this.pubnub.getUUID();
+        let that = this;
+        this.pubnub.whereNow(
+            {
+                uuid: this.username
+            },
+            function (status, response) {
+                console.log("WhereNow", response);
+                response.channels.forEach(channel => {
+                    that.channelHerenow(channel);
+                    // console.log('WhereNowCallback', element);
+                });
+            }
+        );
+    }
+
+    setState = function(){
+        var newState = {
+            new: 'state'
+        };
+        this.pubnub.setState(
+            {
+                state: {
+                    state : newState
+                },
+                uuid: this.username,
+                channels: ['my_channel']
+            },
+            function (status, state) {
+                console.log("SetState", state);
+                // handle state setting response
+            }
+        );
+    }
+    getState = function(){
+        this.pubnub.getState(
+            {
+                uuid: this.username,
+                channels: ['my_channel']
+            },
+            function (status, state) {
+                console.log("GETState",state);
+                // handle state setting response
+            }
+        );
+    }
     
 
 

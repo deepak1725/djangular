@@ -10,7 +10,6 @@ import { PubNubAngular } from 'pubnub-angular2';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
-import {UserService} from '../../_services/user.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -33,7 +32,6 @@ export class DashboardComponent implements OnInit {
 
 	constructor(
 		public chatService: ChatService,
-		public userService: UserService,
 		
 	) {
 	}
@@ -43,7 +41,11 @@ export class DashboardComponent implements OnInit {
 		this.chatService.listChannels(this.channelGroup);
 		this.chatService.channelListen();
 		this.chatService.channelSubscribe();
-		this.chatService.channelHerenow();
+		// this.chatService.channelHerenow();
+		this.chatService.channelWhereNow();
+		this.chatService.setState();
+		this.chatService.getState();
+		this.scrollToBottom();
 		
 		// this.chatService.channelHerenow(this.channelGroup)
 		// console.log(channelInput);
@@ -69,9 +71,13 @@ export class DashboardComponent implements OnInit {
 
 	sendMessage = function (formData: NgForm) {
 		let message = formData.value.message
-		this.chatMsg = formData.value.message;
+		if (message) {
+			message = message.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
-		this.chatService.channelPublish(message, this.chatService.channelInput)
+			if (message) {
+				this.chatService.channelPublish(message, this.chatService.channelInput)
+			}
+		}
 						
 
 		formData.reset()
