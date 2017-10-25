@@ -1,4 +1,5 @@
-<mat-grid-list cols="5" rowHeight="74px">
+<mat-grid-list cols="5" rowHeight="fit">
+	<!-- SIDEBAR : TITLE -->
   	<mat-grid-tile>
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
 				<div class=" channel-title">
@@ -34,8 +35,8 @@
 		</div>
 	</mat-grid-tile>
 
-	<!-- ONLINE LIST -->
-	<mat-grid-tile rowspan="5">
+	<!-- SIDEBAR: DIRECT MESSAGES -->
+	<mat-grid-tile rowspan="6">
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
@@ -68,7 +69,7 @@
 	
 
 	<!-- MessageContainer -->
-  	<mat-grid-tile rowspan="7" colspan="4" >
+  	<mat-grid-tile rowspan="8" colspan="4" >
 		<div class="msg-container">
 			<div fxLayout="column" fxLayoutAlign="start stretch" 
 				fxLayoutGap="10px" class="content-container message-container" >
@@ -95,13 +96,13 @@
 		</div>
 	</mat-grid-tile>
 
-	<!-- GROUP -->
+	<!-- SIDEBAR: GROUP -->
 	<mat-grid-tile rowspan="3">
 	
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
-					<h3 mat-subheader>Channel</h3>
+					<h3 mat-subheader>Groups</h3>
 					<h3 mat-subheader>{{this.chatService.totalChannel}}</h3>
 				</div>
 				<mat-divider></mat-divider>

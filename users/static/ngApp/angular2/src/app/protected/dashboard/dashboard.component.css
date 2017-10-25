@@ -54,3 +54,7 @@ mat-grid-tile {
 .padding-bottom{
   padding-bottom: 10px;
 }
+
+mat-grid-list {
+  height: 100%;
+}
