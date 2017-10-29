@@ -11,7 +11,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {rootReducer, ChatAppState } from '../../_store/store';
+import {rootReducer, ChatAppState } from '../../_models/store';
 import { NgRedux, select } from '@angular-redux/store';
 import { CounterActions } from '../../_models/actions';
 
