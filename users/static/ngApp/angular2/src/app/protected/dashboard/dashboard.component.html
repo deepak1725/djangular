@@ -40,8 +40,11 @@
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
-					<h3 mat-subheader>Direct Message</h3>
-					<h3 mat-subheader>{{this.chatService.groupOccupants.length}}</h3>
+					<h3 mat-subheader>UNICAST</h3>
+					<button mat-subheader (click)="increment()">+</button>
+					<button mat-subheader (click)="dec()">-</button>
+
+					<h3 mat-subheader>{{count$ | async }}</h3>
 				</div>
 				<mat-divider></mat-divider>
 
@@ -101,7 +104,7 @@
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
-					<h3 mat-subheader>Groups</h3>
+					<h3 mat-subheader>MULTICAST</h3>
 					<h3 mat-subheader>{{this.chatService.totalChannel}}</h3>
 				</div>
 				<mat-divider></mat-divider>

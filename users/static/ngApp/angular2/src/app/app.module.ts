@@ -12,6 +12,7 @@ import { AuthGuard }                from './auth-guard.service';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import {DashboardComponent} from './protected/dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
+import {ProtectedModule } from './protected/protected.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { FormsModule } from '@angular/forms';
 		HttpModule,
 		FlexLayoutModule,
 		MainRouterModule,
-		FormsModule
+		FormsModule,
+		ProtectedModule
 		
 		],
 	providers: [UserService, AuthenticationService, AuthGuard],

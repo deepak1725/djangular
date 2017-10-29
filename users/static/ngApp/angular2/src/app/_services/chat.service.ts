@@ -95,17 +95,17 @@ export class ChatService {
         this.pubnub.setUUID(this.username);
     };
 
-    channelAdd(channelGroup, channel){
+    channelAdd(channel = this.username, group = this.channelGroup){
         this.pubnub.channelGroups.addChannels(
             {
                 channels: [channel],
-                channelGroup: channelGroup
+                channelGroup: group
             }, 
             function(status) {
                 if (status.error) {
                     console.log("operation failed w/ status: ");
                 }else{
-                    console.log("Operation add channel Done");
+                    console.log("channel added to group Done");
                 } 
             }
         );
@@ -123,10 +123,11 @@ export class ChatService {
 					return;
                 }
                 console.log("List Channels", response);
-				response.channels.forEach( function (channel) {
-                    that.channelList.push(channel);
+                that.channelList = response.channels;
+				// response.channels.forEach( function (channel) {
+                    // that.channelList.push(channel);
                     // that.channelSubscribe(channel);
-                })
+                // })
                 
                 
                 if (that.channelList.includes(that.route.snapshot.paramMap.get('channel'))) {
@@ -141,11 +142,16 @@ export class ChatService {
 
     channelSubscribe = function (channel = this.channelInput){
             console.log("In Subscribe");
+            
             this.pubnub.subscribe({
+                restore: true,
                 channelGroups: [this.channelGroup],
                 withPresence: true,
+                triggerEvents: ['message', 'presence', 'status'],
+
             }), 
             function (status, response) {
+                console.log("Callback subscribe");
                 console.log(status);
                 console.log(response);
             };
@@ -156,10 +162,11 @@ export class ChatService {
         this.pubnub.history({
             channel: channel,
             reverse: false, // false is the default
-            count: 100, // 100 is the default
+            count: 50, // 100 is the default
             stringifiedTimeToken: true, // false is the default
         }).then((response,fd) => { 
             this.allMessages = response.messages;
+            // To CHANGE CHANNAL NAME
             this.channelInput = this.route.snapshot.paramMap.get('channel');
         });
     }
@@ -177,7 +184,13 @@ export class ChatService {
                 
                 that.occupancy = 2;
                 that.totalChannel = response.totalChannels;
-                // console.log(occupants);                
+                // console.log(occupants);
+                if (status.error) {
+                    console.log("operation failed w/ error:", status)
+                }
+                else {
+                    console.log("ONLINE NOW: ", response)
+                }                
                 return that.groupOccupants = that.groupOccupants;
                            
 			}
@@ -193,9 +206,10 @@ export class ChatService {
 			},
 			channel: channel,
 			storeInHistory: true,
-			ttl: 10
+            ttl: 10,                
         })
         .then((res) => {
+            console.log("MEssgae Succesfully sent");
         }).catch((status, error) => {
             console.log(error)
         })
@@ -226,11 +240,50 @@ export class ChatService {
 
             },
             presence: function(presenceEvent) {
-                console.log("In Listen, presence");                
-                console.log('presence event came in: ', presenceEvent)
+                console.log('Friends Presence: ', presenceEvent)
             } 
 		});
     }
+
+    presenceChannel = function(){
+        console.log("Presence Group");                        
+        return this.pubnub.getPresence(this.channelGroup, function(pse) {
+            console.log("pse", pse);
+        });
+        // return this.pubnub.subscribe({
+        //     channelGroups:[this.channelGroup +"-pnpres"]
+        // })
+    }
+     removeChannel = function(channel){
+        this.pubnub.channelGroups.removeChannels(
+            {
+                channels: [channel],
+                channelGroup: this.channelGroup
+            },
+            function (status) {
+                if (status.error) {
+                    console.log("operation failed w/ error:", status);
+                } else {
+                    console.log("operation done!");
+                }
+            }
+        );
+     }
+
+     removeGroup = function(){
+        this.pubnub.channelGroups.deleteGroup(
+            {
+                channelGroup: this.channelGroup+'-pnres'
+            },
+            function (status) {
+                if (status.error) {
+                    console.log("operation failed w/ error:", status);
+                } else {
+                    console.log("operation done!");
+                }
+            }
+        );
+     }
     
     channelWhereNow = function(){
         let uuid = this.pubnub.getUUID();

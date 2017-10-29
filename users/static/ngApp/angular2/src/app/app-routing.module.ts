@@ -57,4 +57,4 @@ export const APPROUTES : Routes = [
     ]
 })
 export class MainRouterModule{}
-export const routingMethods = [AppComponent,PublicComponent, ProtectedComponent, AuthMethods, DashboardComponent, PageNotFoundComponent];
+export const routingMethods = [AppComponent,PublicComponent, ProtectedComponent, AuthMethods, PageNotFoundComponent];

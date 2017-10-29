@@ -11,6 +11,10 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {rootReducer, ChatAppState } from '../../_store/store';
+import { NgRedux, select } from '@angular-redux/store';
+import { CounterActions } from '../../_models/actions';
+
 
 @Component({
 	selector: 'app-dashboard',
@@ -27,24 +31,28 @@ export class DashboardComponent implements OnInit {
 	channelGroup = "Djangular"
 	rakeArray = new Array(90);
 	allMessages: any;
-
-
+	@select() readonly count$: Observable<number>;
+	subscription;
 
 	constructor(
 		public chatService: ChatService,
-		
-	) {
-	}
+		private ngRedux: NgRedux<ChatAppState>,
+		private actions: CounterActions
+	) {}
 
 	ngOnInit() {
 		this.chatService.chatInit();
 		this.chatService.listChannels(this.channelGroup);
 		this.chatService.channelListen();
 		this.chatService.channelSubscribe();
-		// this.chatService.channelHerenow();
+		// this.chatService.channelAdd('general');
 		this.chatService.channelWhereNow();
-		this.chatService.setState();
-		this.chatService.getState();
+		this.chatService.presenceChannel();
+		// this.chatService.getState();
+		// this.chatService.listChannels(this.channelGroup);
+		// this.chatService.removeChannel('ch-deepak-present');
+		// this.chatService.removeGroup();
+		
 		this.scrollToBottom();
 		
 		// this.chatService.channelHerenow(this.channelGroup)
@@ -62,6 +70,7 @@ export class DashboardComponent implements OnInit {
 		this.scrollToBottom();
 	}
 
+	
 	scrollToBottom(): void {
         try {
             this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
@@ -82,6 +91,14 @@ export class DashboardComponent implements OnInit {
 
 		formData.reset()
 	}
+
+	increment(){
+		this.ngRedux.dispatch(this.actions.increment());
+	}
+
+	dec(){
+		this.ngRedux.dispatch(this.actions.decrement());		
+	}  	
 
 	getReadableTime(unixTime) {
 		var date = new Date(unixTime / 1e4)
