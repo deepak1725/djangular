@@ -13,7 +13,8 @@ import { ChatService} from '../../_services/chat.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {rootReducer, ChatAppState } from '../../_models/store';
 import { NgRedux, select } from '@angular-redux/store';
-import { CounterActions } from '../../_models/actions';
+import { AppActions } from '../../_models/actions';
+import { Action } from 'redux';
 
 
 @Component({
@@ -37,7 +38,6 @@ export class DashboardComponent implements OnInit {
 	constructor(
 		public chatService: ChatService,
 		private ngRedux: NgRedux<ChatAppState>,
-		private actions: CounterActions
 	) {}
 
 	ngOnInit() {
@@ -92,12 +92,12 @@ export class DashboardComponent implements OnInit {
 		formData.reset()
 	}
 
-	increment(){
-		this.ngRedux.dispatch(this.actions.increment());
+	increment(): Action {
+		return this.ngRedux.dispatch({ type: AppActions.INCREMENT });
 	}
 
-	dec(){
-		this.ngRedux.dispatch(this.actions.decrement());		
+	dec(): Action{
+		return this.ngRedux.dispatch({ type: AppActions.DECREMENT });		
 	}  	
 
 	getReadableTime(unixTime) {

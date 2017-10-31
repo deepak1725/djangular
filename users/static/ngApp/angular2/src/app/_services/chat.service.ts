@@ -124,11 +124,6 @@ export class ChatService {
                 }
                 console.log("List Channels", response);
                 that.channelList = response.channels;
-				// response.channels.forEach( function (channel) {
-                    // that.channelList.push(channel);
-                    // that.channelSubscribe(channel);
-                // })
-                
                 
                 if (that.channelList.includes(that.route.snapshot.paramMap.get('channel'))) {
                     that.channelInput = that.route.snapshot.paramMap.get('channel')

@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { CounterActions } from '../_models/actions';
+import { AppActions } from '../_models/actions';
 
 
 
@@ -16,8 +16,17 @@ export const INITIAL_STATE : ChatAppState = {
 
 export function rootReducer(state : ChatAppState, action) : ChatAppState {
     switch (action.type){
-        case CounterActions.INCREMENT : return { count : state.count + 1};
-        case CounterActions.DECREMENT : return { count : state.count - 1};
-        default: return {count: state.count };
+        
+        case AppActions.INCREMENT :
+            return { count : state.count + 1};
+
+        case AppActions.DECREMENT : 
+            return { count : state.count - 1};
+
+        case AppActions.CHANNELLIST : 
+            return { count : state.count - 1};
+        
+        default: 
+            return {count: state.count };
     }
 }

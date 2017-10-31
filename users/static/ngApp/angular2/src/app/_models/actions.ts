@@ -3,15 +3,11 @@ import { Action } from 'redux';
 
 
 @Injectable()
-export class CounterActions {
+export class AppActions {
   static INCREMENT = 'INCREMENT';
   static DECREMENT = 'DECREMENT';
+  static CHANNELLIST = 'channelList';
 
-  increment(): Action {
-    return { type: CounterActions.INCREMENT };
-  }
 
-  decrement(): Action {
-    return { type: CounterActions.DECREMENT };
-  }
+
 }
