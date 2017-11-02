@@ -6,14 +6,14 @@ import { Component, ViewEncapsulation,
 } from '@angular/core';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { NgForm } from '@angular/forms';
-import { PubNubAngular } from 'pubnub-angular2';
+// import { PubNubAngular } from 'pubnub-angular2';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {rootReducer, ChatAppState } from '../../_models/store';
+import {rootReducer, ChatAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppActions } from '../../_models/actions';
+import { AppActions } from '../../_store/actions';
 import { Action } from 'redux';
 
 
@@ -21,7 +21,7 @@ import { Action } from 'redux';
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.css'],
-	providers: [PubNubAngular, ChatService ]
+	providers: [ ChatService ]
 	// encapsulation: ViewEncapsulation.None,
 
 })

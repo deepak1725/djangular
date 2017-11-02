@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { PubNubAngular } from 'pubnub-angular2';
-import {MyOwnCustomMaterialModule} from '../material.module';
+import { MyOwnCustomMaterialModule} from '../material.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { NgReduxModule, NgRedux,DevToolsExtension } from '@angular-redux/store';
-import {rootReducer, ChatAppState, INITIAL_STATE } from '../_models/store';
+import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
+import { rootReducer, IAppState } from '../_store/store';
+import { Constants } from '../_store/constants';
 import { RouterModule, Routes }      from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { CounterActions } from '../_models/actions';
 
 
 @NgModule({
@@ -23,20 +23,20 @@ import { CounterActions } from '../_models/actions';
     FormsModule,
     FlexLayoutModule
   ],
-  providers: [PubNubAngular, CounterActions],
+  providers: [PubNubAngular],
 })
 
 
 export class ProtectedModule { 
   constructor(
-    ngRedux: NgRedux<ChatAppState>,
+    ngRedux: NgRedux<IAppState>,
     devTools: DevToolsExtension
   ) {
     const storeEnhancers = devTools.isEnabled() ? 
     [ devTools.enhancer() ] :
     [];
 
-    ngRedux.configureStore(rootReducer,INITIAL_STATE, [], storeEnhancers)
+    ngRedux.configureStore(rootReducer,{}, [], storeEnhancers)
   }
 }
 
