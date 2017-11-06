@@ -31,6 +31,6 @@ export function messageReducer(state: IMessageState = INITIAL_STATE, action): IM
 
         
         default:
-            return;
+            return state;
     }
 }

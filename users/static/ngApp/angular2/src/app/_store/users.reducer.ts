@@ -32,6 +32,6 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
             return { groupId: state.groupId + 1 };
 
         default:
-            return;
+            return state;
     }
 }

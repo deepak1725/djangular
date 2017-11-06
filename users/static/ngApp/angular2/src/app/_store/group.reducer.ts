@@ -32,6 +32,6 @@ export function groupReducer(state: IGroupState = INITIAL_STATE, action): IGroup
             return { groupId: state.groupId + 1 };
 
         default:
-            return;
+            return state;
     }
 }

@@ -11,11 +11,10 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {rootReducer, ChatAppState } from '../../_store/store';
+import {rootReducer,IAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
-import { AppActions } from '../../_store/actions';
 import { Action } from 'redux';
-
+import {Constants} from '../../_store/constants'
 
 @Component({
 	selector: 'app-dashboard',
@@ -37,7 +36,7 @@ export class DashboardComponent implements OnInit {
 
 	constructor(
 		public chatService: ChatService,
-		private ngRedux: NgRedux<ChatAppState>,
+		private ngRedux: NgRedux<IAppState>,
 	) {}
 
 	ngOnInit() {
@@ -55,7 +54,7 @@ export class DashboardComponent implements OnInit {
 		
 		this.scrollToBottom();
 		
-		// this.chatService.channelHerenow(this.channelGroup)
+		this.chatService.channelHerenow()
 		// console.log(channelInput);
 		// console.log(this.chatService.channelList);
 
@@ -93,11 +92,12 @@ export class DashboardComponent implements OnInit {
 	}
 
 	increment(): Action {
-		return this.ngRedux.dispatch({ type: AppActions.INCREMENT });
+		return this.ngRedux.dispatch({ type: Constants.INCREMENT });
 	}
 
-	dec(): Action{
-		return this.ngRedux.dispatch({ type: AppActions.DECREMENT });		
+	dec() {
+		console.log("Dev");
+		// return this.ngRedux.dispatch({ type: Constants.DECREMENT });		
 	}  	
 
 	getReadableTime(unixTime) {

@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
- 
+import { Constants } from '../_store/constants'
+
 import { User } from '../_models/user';
 import { PubNubAngular } from 'pubnub-angular2';
 import {DashboardComponent} from '../protected/dashboard/dashboard.component';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { NgRedux, select } from '@angular-redux/store';
+import { rootReducer, IAppState } from '../_store/store';
 
 
 @Injectable()
@@ -27,6 +30,7 @@ export class ChatService {
         private http: Http, 
         public pubnub: PubNubAngular,
         private route: ActivatedRoute,
+        private ngRedux: NgRedux<IAppState>,
     ) {
         
         this.options = new RequestOptions ();
@@ -101,7 +105,7 @@ export class ChatService {
                 channels: [channel],
                 channelGroup: group
             }, 
-            function(status) {
+            (status) => {
                 if (status.error) {
                     console.log("operation failed w/ status: ");
                 }else{
@@ -112,31 +116,37 @@ export class ChatService {
     };
 
     listChannels(channelGroup){
-        var that = this;
 		this.pubnub.channelGroups.listChannels(
 			{
 				channelGroup: channelGroup
 			}, 
-			function (status, response) {
+			(status, response) => {
 				if (status.error) {
 					console.log("operation failed w/ error:", status);
 					return;
                 }
                 console.log("List Channels", response);
-                that.channelList = response.channels;
+                this.channelList = response.channels;
                 
-                if (that.channelList.includes(that.route.snapshot.paramMap.get('channel'))) {
-                    that.channelInput = that.route.snapshot.paramMap.get('channel')
-                    that.channelHistory(that.channelInput);
+                if (this.channelList.includes(this.route.snapshot.paramMap.get('channel'))) {
+                    this.channelInput = this.route.snapshot.paramMap.get('channel')
+                    this.channelHistory(this.channelInput);
                 }
                 
+                // this.makeArray(response.channels);
                 
 			}
 		);
     }
 
-    channelSubscribe = function (channel = this.channelInput){
-            console.log("In Subscribe");
+    makeArray = (channels) => {
+        channels.map((channel) => {
+            this.channelHistory(channel);
+        })
+    }
+
+
+    channelSubscribe = (channel = this.channelInput) => {
             
             this.pubnub.subscribe({
                 restore: true,
@@ -145,15 +155,12 @@ export class ChatService {
                 triggerEvents: ['message', 'presence', 'status'],
 
             }), 
-            function (status, response) {
-                console.log("Callback subscribe");
-                console.log(status);
-                console.log(response);
+            (status, response) => {
             };
         
     }
     
-    channelHistory = function (channel) {
+    channelHistory = (channel) => {
         this.pubnub.history({
             channel: channel,
             reverse: false, // false is the default
@@ -166,33 +173,35 @@ export class ChatService {
         });
     }
     
-    channelHerenow = function(channel=this.channelInput){
-		let that = this;
+    channelHerenow = (channel=this.channelInput) => {
 		this.pubnub.hereNow(
 			{
                 includeUUIDs: true,
                 includeState: true,
-                channels : [channel], 
 			},
-			function (status, response) {  
-                // console.log("Here Now response", response);              
+			(status, response) => {  
                 
-                that.occupancy = 2;
-                that.totalChannel = response.totalChannels;
-                // console.log(occupants);
+                this.occupancy = 2;
+                this.totalChannel = response.totalChannels;
                 if (status.error) {
                     console.log("operation failed w/ error:", status)
                 }
                 else {
                     console.log("ONLINE NOW: ", response)
+                    var arr: string[] = Object.keys(response.channels).map((key, index) => {
+                        return { ...response.channels[key], ...{ id: index + 1 } }
+                    });
+                    console.log("arr", arr)
+                    return this.ngRedux.dispatch({ type: Constants.CHANNELADD, name: arr });
+
                 }                
-                return that.groupOccupants = that.groupOccupants;
+                return this.groupOccupants = this.groupOccupants;
                            
 			}
 		);
     }
     
-    channelPublish = function(message, channel){
+    channelPublish = (message, channel) => {
 		return this.pubnub.publish({
 			message: {
 				text: message,
@@ -210,17 +219,15 @@ export class ChatService {
         })
     }
     
-    channelListen = function(){
-        let that = this; 
-        console.log("In Listen");
+    channelListen = () => {
 		this.pubnub.addListener({
-			status: function(st) {
+			status: (st) => {
                 console.log("In Listen, Status", st);
 				if (st.category === "PNUnknownCategory") {
-					that.setState();
+					this.setState();
 				}
 			},
-			message: function(response) {
+			message: (response) =>  {
                 //PUSHING MSG
                 console.log("In Listen, response");                
 				var obj = {
@@ -231,31 +238,28 @@ export class ChatService {
 					},
 					timetoken: response.timetoken
                 }
-				that.allMessages.push(obj);
+				this.allMessages.push(obj);
 
             },
-            presence: function(presenceEvent) {
+            presence: (presenceEvent) => {
                 console.log('Friends Presence: ', presenceEvent)
             } 
 		});
     }
 
-    presenceChannel = function(){
-        console.log("Presence Group");                        
+    presenceChannel = () => {
         return this.pubnub.getPresence(this.channelGroup, function(pse) {
             console.log("pse", pse);
         });
-        // return this.pubnub.subscribe({
-        //     channelGroups:[this.channelGroup +"-pnpres"]
-        // })
     }
-     removeChannel = function(channel){
+
+    removeChannel = (channel) => {
         this.pubnub.channelGroups.removeChannels(
             {
                 channels: [channel],
                 channelGroup: this.channelGroup
             },
-            function (status) {
+             (status) => {
                 if (status.error) {
                     console.log("operation failed w/ error:", status);
                 } else {
@@ -265,12 +269,12 @@ export class ChatService {
         );
      }
 
-     removeGroup = function(){
+    removeGroup = () => {
         this.pubnub.channelGroups.deleteGroup(
             {
-                channelGroup: this.channelGroup+'-pnres'
+                channelGroup: this.channelGroup
             },
-            function (status) {
+             (status) => {
                 if (status.error) {
                     console.log("operation failed w/ error:", status);
                 } else {
@@ -278,26 +282,24 @@ export class ChatService {
                 }
             }
         );
-     }
+    }
     
-    channelWhereNow = function(){
-        let uuid = this.pubnub.getUUID();
-        let that = this;
+    channelWhereNow = () => {
         this.pubnub.whereNow(
             {
                 uuid: this.username
             },
-            function (status, response) {
+             (status, response) => {
                 console.log("WhereNow", response);
                 response.channels.forEach(channel => {
-                    that.channelHerenow(channel);
+                    // this.channelHerenow(channel);
                     // console.log('WhereNowCallback', element);
                 });
             }
         );
     }
 
-    setState = function(){
+    setState = () => {
         var newState = {
             new: 'state'
         };
@@ -309,19 +311,19 @@ export class ChatService {
                 uuid: this.username,
                 channels: ['my_channel']
             },
-            function (status, state) {
+             (status, state) => {
                 console.log("SetState", state);
                 // handle state setting response
             }
         );
     }
-    getState = function(){
+    getState = (channel) => {
         this.pubnub.getState(
             {
                 uuid: this.username,
-                channels: ['my_channel']
+                channels: [channel]
             },
-            function (status, state) {
+             (status, state) => {
                 console.log("GETState",state);
                 // handle state setting response
             }

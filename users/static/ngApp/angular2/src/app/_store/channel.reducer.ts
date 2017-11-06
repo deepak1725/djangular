@@ -2,15 +2,11 @@ import { Constants } from './constants';
 
 
 export interface IChannelState {
-    id?: number;
-    name?: string;
-    groupId?: number;
-    online?: number;
-    userId?:number;
+    name?: string[];
 }
 
 export const INITIAL_STATE: IChannelState = {
-    id: 0
+    name: null
 } 
 
 export function channelReducer(state: IChannelState = INITIAL_STATE, action): IChannelState {
@@ -18,21 +14,21 @@ export function channelReducer(state: IChannelState = INITIAL_STATE, action): IC
     switch (action.type) {
 
         case Constants.CHANNELLIST:
-            return { groupId: state.groupId + 1 };
+            return { name: state.name };
 
         case Constants.CHANNELDETAILS:
-            return { groupId: state.groupId + 1 };
+            return { name: state.name};
 
         case Constants.CHANNELADD:
-            return { groupId: state.groupId + 1 };
+            return { ...{name: state.name}, ...{name: action.name} };
 
         case Constants.CHANNELEDIT:
-            return { groupId: state.groupId + 1 };
+            return { name: state.name};
 
         case Constants.CHANNELREMOVE:
-            return { groupId: state.groupId + 1 };
+            return { name: state.name };
 
         default:
-            return;
+            return state;
     }
 }
