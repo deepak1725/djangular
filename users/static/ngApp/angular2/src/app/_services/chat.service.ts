@@ -173,7 +173,7 @@ export class ChatService {
         });
     }
     
-    channelHerenow = (channel=this.channelInput) => {
+    channelHerenow = (channel = this.channelInput) => {
 		this.pubnub.hereNow(
 			{
                 includeUUIDs: true,
@@ -181,20 +181,19 @@ export class ChatService {
 			},
 			(status, response) => {  
                 
-                this.occupancy = 2;
                 this.totalChannel = response.totalChannels;
                 if (status.error) {
                     console.log("operation failed w/ error:", status)
+                    return;
                 }
-                else {
-                    console.log("ONLINE NOW: ", response)
-                    var arr: string[] = Object.keys(response.channels).map((key, index) => {
-                        return { ...response.channels[key], ...{ id: index + 1 } }
-                    });
-                    console.log("arr", arr)
-                    return this.ngRedux.dispatch({ type: Constants.CHANNELADD, name: arr });
+                
+                console.log("ONLINE NOW: ", response)
+                var arr: any[] = Object.keys(response.channels).map((key, index) => {
+                    console.log("arr", response.channels[key]);
+                    return this.ngRedux.dispatch({ type: Constants.CHANNELADD, name: [response.channels[key]] })
+                });
 
-                }                
+                                
                 return this.groupOccupants = this.groupOccupants;
                            
 			}
@@ -293,7 +292,7 @@ export class ChatService {
                 console.log("WhereNow", response);
                 response.channels.forEach(channel => {
                     // this.channelHerenow(channel);
-                    // console.log('WhereNowCallback', element);
+                    console.log('WhereNowCallback', channel);
                 });
             }
         );

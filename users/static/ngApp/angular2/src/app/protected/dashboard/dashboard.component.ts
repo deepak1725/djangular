@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit {
 		this.scrollToBottom();
 		
 		this.chatService.channelHerenow()
+		this.chatService.channelWhereNow()
 		// console.log(channelInput);
 		// console.log(this.chatService.channelList);
 

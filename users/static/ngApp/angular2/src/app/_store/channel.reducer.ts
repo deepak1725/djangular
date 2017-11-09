@@ -6,7 +6,7 @@ export interface IChannelState {
 }
 
 export const INITIAL_STATE: IChannelState = {
-    name: null
+    name: []
 } 
 
 export function channelReducer(state: IChannelState = INITIAL_STATE, action): IChannelState {
@@ -20,7 +20,15 @@ export function channelReducer(state: IChannelState = INITIAL_STATE, action): IC
             return { name: state.name};
 
         case Constants.CHANNELADD:
-            return { ...{name: state.name}, ...{name: action.name} };
+            let lastId = 0
+
+            if (state.name && state.name.length) {
+                lastId = state.name.length
+            }
+
+            action.name[0] = {...action.name[0], ...{ id: lastId+1 } }
+
+            return {name: [ ...state.name, ...action.name ] };
 
         case Constants.CHANNELEDIT:
             return { name: state.name};

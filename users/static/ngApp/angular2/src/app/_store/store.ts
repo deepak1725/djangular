@@ -26,19 +26,3 @@ export const rootReducer = combineReducers<IAppState>({
     users: users.userReducer,
     message: messages.messageReducer
 });
-
-
-
-// export function rootReducer(state : ChatAppState, action) : ChatAppState {
-//     switch (action.type){
-        
-//         case Constants.INCREMENT :
-//             return { count : state.count + 1};
-
-//         case Constants.CHANNELLIST : 
-//             return { count : state.count - 1};
-        
-//         default: 
-//             return {count: state.count };
-//     }
-// }
