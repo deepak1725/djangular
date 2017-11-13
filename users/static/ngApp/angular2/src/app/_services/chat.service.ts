@@ -25,8 +25,9 @@ export class ChatService {
     groupOccupancy: number;
     groupOccupants: any[] = [];
     channelInfo:any;
+    subscribedChannels:Observable<any[]>;
     @select('channel') readonly channel$: Observable<any[]>;
-    @select('message') message$: Observable<any[]>;
+    @select('message') readonly message$: Observable<any[]>;
 
 
     constructor(
@@ -53,8 +54,6 @@ export class ChatService {
         }else{
             this.options.headers.append('Authorization','JWT ' + "currentUser.token");   
         }
-
-      
 
      }
  
@@ -97,18 +96,18 @@ export class ChatService {
     callStack = () => {
         this.chatInit();
         // this.listChannels(this.channelGroup);
-        this.channelHistory(this.channelInput);
         this.channelListen();
         this.channelSubscribe();
+        this.channelHistory(this.channelInput);
         // this.channelAdd('general');
-        this.channelWhereNow();
+        // this.channelWhereNow();
+        this.channelGrant();
         // this.presenceChannel();
         // this.getState();
         // this.listChannels(this.channelGroup);
         // this.removeChannel('ch-deepak-present');
         // this.removeGroup();
         
-
 		// this.channelHerenow()
 		// this.channelWhereNow()
 		// console.log(channelInput);
@@ -120,7 +119,8 @@ export class ChatService {
         this.pubnub.init({
             publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
             subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72',
-            uuid: this.username
+            uuid: this.username,
+            secretKey:'sec-c-YjJlYTA1ODctNGNjNi00N2Y1LTg3MGQtNGM4YTM5ZDEyMzE4',
         });
         this.pubnub.setUUID(this.username);
     };
@@ -142,7 +142,6 @@ export class ChatService {
     };
 
     getChannelDetails = (Inputchannel = this.channelInput) => {
-        console.log("Getting Channel Details", Inputchannel);
         return this.channel$.subscribe(
             (channels: any) => {
                 this.channelInfo = channels.all.find(channel => channel.name == Inputchannel)
@@ -182,6 +181,7 @@ export class ChatService {
 
             }), 
             (status, response) => {
+                console.log('sta',status);
             };
         
     }
@@ -201,7 +201,9 @@ export class ChatService {
             this.channelInput = this.route.snapshot.paramMap.get('channel');
         });
     }
-    
+
+ 
+
     channelHerenow = async (channel = this.channelInput) => {
 		this.pubnub.hereNow(
 			{
@@ -227,6 +229,22 @@ export class ChatService {
 		);
     }
     
+    channelGrant = (channels = this.subscribedChannels) => {
+        console.log("In Grant", channels);
+        return this.pubnub.grant(
+            {
+                // channels: channels,
+                channelGroups: [this.channelGroup],
+                read: true,
+                write: true,
+                ttl: 5,
+            },
+            function (status) {
+                // console.log("Permission Granted");
+            }
+        );
+    }
+
     channelPublish = (message, channel) => {
 		return this.pubnub.publish({
 			message: {
@@ -271,6 +289,8 @@ export class ChatService {
             },
             presence: (presenceEvent) => {
                 console.log('Friends Presence: ', presenceEvent)
+                // this.getSubscribedChannels(presenceEvent.channel);
+                this.channelHerenow(presenceEvent.channel);
             } 
 		});
     }
@@ -312,21 +332,25 @@ export class ChatService {
         );
     }
     
-    channelWhereNow = () => {
-        this.pubnub.whereNow(
-            {
-                uuid: this.username
-            },
-            (status, response) => {
-                response.channels.forEach(channel => {
-                    this.channelHerenow(channel);
-                });
-                console.log("WHere Now Called", response.channels);
-                this.getChannelDetails()
-                return 'chanel';
-            }
-        );
-    }
+    // channelWhereNow = () => {
+    //     this.pubnub.whereNow(
+    //         {
+    //             uuid: this.username
+    //         },
+    //         (status, response) => {
+    //             console.log("WhereNow", response);
+    //             this.subscribedChannels = Observable.create(function (observer) {
+    //                 observer.next(response.channels);
+    //             });
+    //             this.subscribedChannels.subscribe((res) => console.log("SC", res));
+                
+    //             response.channels.forEach(channel => {
+    //                 this.channelHerenow(channel);
+    //             });
+    //             this.getChannelDetails()
+    //         }
+    //     );
+    // }
 
     setState = () => {
         var newState = {
