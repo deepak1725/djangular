@@ -77,8 +77,6 @@ export class DashboardComponent implements OnInit {
 
 	channelClicked(channel){
 		this.chatService.channelHistory(channel);
-		console.log("Clicked",this.chatService.channelInfo);
 		this.chatService.getChannelDetails(channel);
-		// this.chatService.channel$.subscribe(data => console.log("data",data)).unsubscribe();
 	}
 }

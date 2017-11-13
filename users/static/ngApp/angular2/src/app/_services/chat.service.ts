@@ -54,13 +54,7 @@ export class ChatService {
             this.options.headers.append('Authorization','JWT ' + "currentUser.token");   
         }
 
-        this.message$.subscribe((res: any) => {
-            if (res && res.all.length) {
-                this.channelInfo = { ...this.channelInfo, ...{ 'history': res.all } }
-                console.log("CI II", this.channelInfo);
-
-            }
-        })
+      
 
      }
  
@@ -113,13 +107,7 @@ export class ChatService {
         // this.listChannels(this.channelGroup);
         // this.removeChannel('ch-deepak-present');
         // this.removeGroup();
-        this.message$.subscribe((res: any) => {
-            if (res && res.all.length) {
-                this.channelInfo = { ...this.channelInfo, ...{ 'history': res.all } }
-                console.log("CI II", this.channelInfo);
-
-            }
-        })
+        
 
 		// this.channelHerenow()
 		// this.channelWhereNow()
@@ -160,7 +148,6 @@ export class ChatService {
                 this.channelInfo = channels.all.find(channel => channel.name == Inputchannel)
                
                 
-                console.log("CI", this.channelInfo);
                 return this.channelInfo
             }
         );        
@@ -176,7 +163,6 @@ export class ChatService {
 					console.log("operation failed w/ error:", status);
 					return;
                 }
-                // console.log("List Channels", response);
                 this.channelList = response.channels;
                 
                 if (this.channelList.includes(this.channelInput)) {
@@ -208,15 +194,10 @@ export class ChatService {
             count: 50, // 100 is the default
             stringifiedTimeToken: true, // false is the default
         }).then((response,fd) => {
-            console.log("History is called", response); 
-            // this.allMessages = response.messages;
-            // if (this.channelInfo && this.channelInfo.id) {
-                // console.log("Id",this.channelInfo.id);
+            
                 this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, all: [] })            
                 this.ngRedux.dispatch({ type: Constants.MESSAGEADD, all: response.messages })
-            // }
             
-            // To CHANGE CHANNAL NAME
             this.channelInput = this.route.snapshot.paramMap.get('channel');
         });
     }
