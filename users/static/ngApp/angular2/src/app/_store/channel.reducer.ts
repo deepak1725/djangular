@@ -2,11 +2,11 @@ import { Constants } from './constants';
 
 
 export interface IChannelState {
-    name?: string[];
+    all?: any[];
 }
 
 export const INITIAL_STATE: IChannelState = {
-    name: []
+    all: []
 } 
 
 export function channelReducer(state: IChannelState = INITIAL_STATE, action): IChannelState {
@@ -14,27 +14,28 @@ export function channelReducer(state: IChannelState = INITIAL_STATE, action): IC
     switch (action.type) {
 
         case Constants.CHANNELLIST:
-            return { name: state.name };
+            return { all: state.all };
 
         case Constants.CHANNELDETAILS:
-            return { name: state.name};
+            
+            return { all: state.all};
 
         case Constants.CHANNELADD:
             let lastId = 0
 
-            if (state.name && state.name.length) {
-                lastId = state.name.length
+            if (state.all && state.all.length) {
+                lastId = state.all.length
             }
 
-            action.name[0] = {...action.name[0], ...{ id: lastId+1 } }
+            action.all[0] = {...action.all[0], ...{ id: lastId+1, history: [] } }
 
-            return {name: [ ...state.name, ...action.name ] };
+            return {all: [ ...state.all, ...action.all ] };
 
         case Constants.CHANNELEDIT:
-            return { name: state.name};
+            return { all: state.all};
 
         case Constants.CHANNELREMOVE:
-            return { name: state.name };
+            return { all: state.all };
 
         default:
             return state;

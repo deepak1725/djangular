@@ -28,11 +28,7 @@ export class DashboardComponent implements OnInit {
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 	
 	title = 'Dashboard';
-	channelGroup = "Djangular"
 	rakeArray = new Array(90);
-	allMessages: any;
-	@select() readonly count$: Observable<number>;
-	subscription;
 
 	constructor(
 		public chatService: ChatService,
@@ -40,33 +36,13 @@ export class DashboardComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.chatService.chatInit();
-		this.chatService.listChannels(this.channelGroup);
-		this.chatService.channelListen();
-		this.chatService.channelSubscribe();
-		// this.chatService.channelAdd('general');
-		this.chatService.channelWhereNow();
-		this.chatService.presenceChannel();
-		// this.chatService.getState();
-		// this.chatService.listChannels(this.channelGroup);
-		// this.chatService.removeChannel('ch-deepak-present');
-		// this.chatService.removeGroup();
-		
+		this.chatService.callStack();
+		this.channelClicked(this.chatService.channelInput)
 		this.scrollToBottom();
-		
-		this.chatService.channelHerenow()
-		this.chatService.channelWhereNow()
-		// console.log(channelInput);
-		// console.log(this.chatService.channelList);
-
-		
-		// this.chatService.channelAdd(this.channelGroup, "general")        
-		
 	}
 
 
 	ngAfterViewChecked() {
-		// console.log("View Checked");        
 		this.scrollToBottom();
 	}
 
@@ -78,8 +54,8 @@ export class DashboardComponent implements OnInit {
 	}
 
 
-	sendMessage = function (formData: NgForm) {
-		let message = formData.value.message
+	sendMessage = function (form: NgForm) {
+		let message = form.value.message
 		if (message) {
 			message = message.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 
@@ -89,25 +65,20 @@ export class DashboardComponent implements OnInit {
 		}
 						
 
-		formData.reset()
+		form.reset()
 	}
 
-	increment(): Action {
-		return this.ngRedux.dispatch({ type: Constants.INCREMENT });
-	}
-
-	dec() {
-		console.log("Dev");
-		// return this.ngRedux.dispatch({ type: Constants.DECREMENT });		
-	}  	
 
 	getReadableTime(unixTime) {
 		var date = new Date(unixTime / 1e4)
 		let now = moment(date).fromNow();
 		return now;
 	}
+
 	channelClicked(channel){
-		console.log(channel);
 		this.chatService.channelHistory(channel);
+		console.log("Clicked",this.chatService.channelInfo);
+		this.chatService.getChannelDetails(channel);
+		// this.chatService.channel$.subscribe(data => console.log("data",data)).unsubscribe();
 	}
 }

@@ -2,12 +2,12 @@ import { Constants } from './constants';
 
 
 export interface IMessageState {
-    id?: number;
-    message?: string;
-    channelId?: number;
+    all?: object[];
+    // message?: string;
+    // channelId?: number;
 }
 export const INITIAL_STATE: IMessageState = {
-    id: 0
+    all: []
 }
 
 export function messageReducer(state: IMessageState = INITIAL_STATE, action): IMessageState {
@@ -15,19 +15,30 @@ export function messageReducer(state: IMessageState = INITIAL_STATE, action): IM
     switch (action.type) {
 
         case Constants.MESSAGELIST:
-            return { channelId: state.channelId + 1 };
+            return { all: state.all };
             
         case Constants.MESSAGEDETAILS:
-            return { channelId: state.channelId + 1 };
+            return { all: state.all };
         
         case Constants.MESSAGEADD:
-            return { channelId: state.channelId + 1 };
+            let lastId = 0
+            
+            action.all.forEach(element => { 
+                lastId +=1;
+                if (state.all && state.all.length) {
+                    lastId = state.all.length + 1
+                }
+                action.all = [{ ...element, ...{ id: lastId} }]
+                state.all = [ ...state.all, ...action.all ]
+            });
+
+            return { all: state.all };
         
         case Constants.MESSAGEEDIT:
-            return { channelId: state.channelId + 1 };
+            return { all: state.all };
 
         case Constants.MESSAGEREMOVE:
-            return { channelId: state.channelId + 1 };
+            return { all: []};
 
         
         default:

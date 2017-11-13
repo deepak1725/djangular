@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Constants } from '../_store/constants'
-
+import { Observable } from 'rxjs/Observable';
 import { User } from '../_models/user';
 import { PubNubAngular } from 'pubnub-angular2';
 import {DashboardComponent} from '../protected/dashboard/dashboard.component';
@@ -19,11 +19,14 @@ export class ChatService {
     occupancy: number;
     fullName: string;
     channelList: string[] = [];
-    channelInput: string = 'general';
+    channelInput: string = this.route.snapshot.paramMap.get('channel');
     channelGroup = "Djangular"
     totalChannel: number;
     groupOccupancy: number;
     groupOccupants: any[] = [];
+    channelInfo:any;
+    @select('channel') readonly channel$: Observable<any[]>;
+    @select('message') message$: Observable<any[]>;
 
 
     constructor(
@@ -39,6 +42,7 @@ export class ChatService {
             this.options.headers = new Headers();
         }
 
+        
         this.options.headers.append('Content-Type', 'application/json');
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.username = currentUser.user.username;
@@ -48,7 +52,15 @@ export class ChatService {
             this.options.headers.append('Authorization','JWT ' + currentUser.token);
         }else{
             this.options.headers.append('Authorization','JWT ' + "currentUser.token");   
-    }
+        }
+
+        this.message$.subscribe((res: any) => {
+            if (res && res.all.length) {
+                this.channelInfo = { ...this.channelInfo, ...{ 'history': res.all } }
+                console.log("CI II", this.channelInfo);
+
+            }
+        })
 
      }
  
@@ -62,7 +74,6 @@ export class ChatService {
                 let currentUser = JSON.parse(localStorage.getItem('currentUser'));
                 return currentUser.user.username
             }
-
         );
     }
  
@@ -89,6 +100,33 @@ export class ChatService {
 
 // ------------********----  PUBNUB -----**********-------------------
 
+    callStack = () => {
+        this.chatInit();
+        // this.listChannels(this.channelGroup);
+        this.channelHistory(this.channelInput);
+        this.channelListen();
+        this.channelSubscribe();
+        // this.channelAdd('general');
+        this.channelWhereNow();
+        // this.presenceChannel();
+        // this.getState();
+        // this.listChannels(this.channelGroup);
+        // this.removeChannel('ch-deepak-present');
+        // this.removeGroup();
+        this.message$.subscribe((res: any) => {
+            if (res && res.all.length) {
+                this.channelInfo = { ...this.channelInfo, ...{ 'history': res.all } }
+                console.log("CI II", this.channelInfo);
+
+            }
+        })
+
+		// this.channelHerenow()
+		// this.channelWhereNow()
+		// console.log(channelInput);
+		// console.log(this.channelList);
+		// this.channelAdd(this.channelGroup, "general")        
+    }
 
     chatInit(){
         this.pubnub.init({
@@ -115,6 +153,19 @@ export class ChatService {
         );
     };
 
+    getChannelDetails = (Inputchannel = this.channelInput) => {
+        console.log("Getting Channel Details", Inputchannel);
+        return this.channel$.subscribe(
+            (channels: any) => {
+                this.channelInfo = channels.all.find(channel => channel.name == Inputchannel)
+               
+                
+                console.log("CI", this.channelInfo);
+                return this.channelInfo
+            }
+        );        
+    }
+
     listChannels(channelGroup){
 		this.pubnub.channelGroups.listChannels(
 			{
@@ -125,26 +176,15 @@ export class ChatService {
 					console.log("operation failed w/ error:", status);
 					return;
                 }
-                console.log("List Channels", response);
+                // console.log("List Channels", response);
                 this.channelList = response.channels;
                 
-                if (this.channelList.includes(this.route.snapshot.paramMap.get('channel'))) {
-                    this.channelInput = this.route.snapshot.paramMap.get('channel')
+                if (this.channelList.includes(this.channelInput)) {
                     this.channelHistory(this.channelInput);
-                }
-                
-                // this.makeArray(response.channels);
-                
+                }                
 			}
 		);
     }
-
-    makeArray = (channels) => {
-        channels.map((channel) => {
-            this.channelHistory(channel);
-        })
-    }
-
 
     channelSubscribe = (channel = this.channelInput) => {
             
@@ -161,23 +201,33 @@ export class ChatService {
     }
     
     channelHistory = (channel) => {
+        
         this.pubnub.history({
             channel: channel,
             reverse: false, // false is the default
             count: 50, // 100 is the default
             stringifiedTimeToken: true, // false is the default
-        }).then((response,fd) => { 
-            this.allMessages = response.messages;
+        }).then((response,fd) => {
+            console.log("History is called", response); 
+            // this.allMessages = response.messages;
+            // if (this.channelInfo && this.channelInfo.id) {
+                // console.log("Id",this.channelInfo.id);
+                this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, all: [] })            
+                this.ngRedux.dispatch({ type: Constants.MESSAGEADD, all: response.messages })
+            // }
+            
             // To CHANGE CHANNAL NAME
             this.channelInput = this.route.snapshot.paramMap.get('channel');
         });
     }
     
-    channelHerenow = (channel = this.channelInput) => {
+    channelHerenow = async (channel = this.channelInput) => {
 		this.pubnub.hereNow(
 			{
                 includeUUIDs: true,
                 includeState: true,
+                channels: [channel],
+                grochannelGroups: this.channelGroup
 			},
 			(status, response) => {  
                 
@@ -187,13 +237,9 @@ export class ChatService {
                     return;
                 }
                 
-                console.log("ONLINE NOW: ", response)
                 var arr: any[] = Object.keys(response.channels).map((key, index) => {
-                    console.log("arr", response.channels[key]);
-                    return this.ngRedux.dispatch({ type: Constants.CHANNELADD, name: [response.channels[key]] })
+                    return this.ngRedux.dispatch({ type: Constants.CHANNELADD, all: [response.channels[key]] })
                 });
-
-                                
                 return this.groupOccupants = this.groupOccupants;
                            
 			}
@@ -205,7 +251,8 @@ export class ChatService {
 			message: {
 				text: message,
 				name: this.fullName,
-				username: this.username
+                username: this.username,
+                channelId: this.channelInfo.id
 			},
 			channel: channel,
 			storeInHistory: true,
@@ -228,7 +275,7 @@ export class ChatService {
 			},
 			message: (response) =>  {
                 //PUSHING MSG
-                console.log("In Listen, response");                
+                console.log("In Listen, response");
 				var obj = {
 					entry:{
 						text:response.message.text,
@@ -237,7 +284,8 @@ export class ChatService {
 					},
 					timetoken: response.timetoken
                 }
-				this.allMessages.push(obj);
+                this.ngRedux.dispatch({ type: Constants.MESSAGEADD, all: [obj] })
+				// this.allMessages.push(obj);
 
             },
             presence: (presenceEvent) => {
@@ -288,12 +336,13 @@ export class ChatService {
             {
                 uuid: this.username
             },
-             (status, response) => {
-                console.log("WhereNow", response);
+            (status, response) => {
                 response.channels.forEach(channel => {
-                    // this.channelHerenow(channel);
-                    console.log('WhereNowCallback', channel);
+                    this.channelHerenow(channel);
                 });
+                console.log("WHere Now Called", response.channels);
+                this.getChannelDetails()
+                return 'chanel';
             }
         );
     }

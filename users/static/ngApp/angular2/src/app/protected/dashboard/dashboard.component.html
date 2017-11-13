@@ -25,11 +25,15 @@
   	<mat-grid-tile colspan="4">
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column">
 			<div fxLayout="row" class="channel-title">
-				<strong>#{{this.chatService.channelInput}}</strong>
+				<div *ngIf="this.chatService.channelInfo">
+					<strong>#{{this.chatService.channelInfo.name}}</strong>
+				</div>
 			</div>
 			<div fxLayout="row" class="channel-title">
 				<span>
-					<small> Online: {{this.chatService.occupancy}} </small> | <small> Fav </small>
+					<div *ngIf="this.chatService.channelInfo">
+						<small> Online: {{this.chatService.channelInfo.occupancy}} </small> | <small> Fav </small>
+					</div>	
 				</span>
 			</div>
 		</div>
@@ -41,10 +45,7 @@
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
 					<h3 mat-subheader>UNICAST</h3>
-					<button mat-subheader (click)="increment()">+</button>
-					<button mat-subheader (click)="dec()">-</button>
-
-					<h3 mat-subheader>{{count$ | async }}</h3>
+					<h3 mat-subheader>{{this.chatService.channel$.all | async }}</h3>
 				</div>
 				<mat-divider></mat-divider>
 
@@ -76,25 +77,29 @@
 			<div #scrollMe style="overflow-y: scroll"
 				fxLayout="column" fxLayoutAlign="start stretch" 
 				fxLayoutGap="10px" class="content-container" fxFlexAlign="baseline">
-				<div *ngFor = "let message of this.chatService.allMessages let index = index">
-					<div fxLayout="row" class="message-text">
-						<div fxFlex="5">
-							<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
-						</div>
-						<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
-							<div fxLayout="row" fxLayoutAlign="space-between center" >
-								<span>
-									<b>{{ message.entry.name }}</b>
-									<small class="dull">@{{message.entry.username}}</small>
-								</span> 
-								<div fxFlex class="time" fxFlexAlign="center">
-									{{ this.getReadableTime(message.timetoken) }}
-								</div>
+
+
+					<div *ngFor = "let message of (this.chatService.message$ | async ).all let index = index">
+						<div fxLayout="row" class="message-text">
+							<div fxFlex="5">
+								<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
 							</div>
-							<div>{{ message.entry.text}}</div>							
+							<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
+								<div fxLayout="row" fxLayoutAlign="space-between center" >
+									<span>
+										<b>{{ message.entry.name }}</b>
+										<small class="dull">@{{message.entry.username}}</small>
+									</span> 
+									<div fxFlex class="time" fxFlexAlign="center">
+										{{ this.getReadableTime(message.timetoken) }}
+									</div>
+								</div>
+								<div>{{ message.entry.text}}</div>							
+							</div>
 						</div>
 					</div>
-				</div>
+				
+
 			</div>
 	</mat-grid-tile>
 
@@ -105,21 +110,20 @@
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
 					<h3 mat-subheader>MULTICAST</h3>
-					<h3 mat-subheader>{{this.chatService.totalChannel}}</h3>
 				</div>
 				<mat-divider></mat-divider>
 
-				<a mat-list-item (click)=channelClicked(channel) 
-					routerLink="../{{channel}}" 
+				<a mat-list-item (click)=channelClicked(channel.name) 
+					routerLink="../{{channel.name}}" 
 					routerLinkActive #rla="routerLinkActive" 
 					active="rla.isActive"
 					class="online-name" matLine 
-					*ngFor = "let channel of this.chatService.channelList">
+					*ngFor = "let channel of (this.chatService.channel$ | async).all">
 					
 					<div fxLayout="row" fxLayoutAlign="start center">
 						# &nbsp;
 						<div>
-							{{channel}}
+							{{channel.name}}
 						</div>
 					</div>
 					
