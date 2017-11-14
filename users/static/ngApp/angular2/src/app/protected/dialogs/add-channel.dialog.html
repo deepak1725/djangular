@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Add Channel</h1>
+
+<form #addChannel="ngForm">
+    <div mat-dialog-content>
+
+        <mat-form-field fxFlexFill>
+            <input matInput tabindex="1" placeholder="Channel Name" required [(ngModel)]="channel" name="name">
+            <mat-error>Channel Name is invalid</mat-error>
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+        <button mat-button [mat-dialog-close]="channel" tabindex="2" [disabled]="!addChannel.form.valid" >OK</button>
+        <button mat-button (click)="onNoClick()" tabindex="-1">CANCEL</button>
+    </div>
+</form>

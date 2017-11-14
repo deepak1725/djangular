@@ -1,6 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import {MatGridListModule} from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { 
   MatButtonModule, 
@@ -67,6 +68,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     MatTabsModule,
     MatToolbarModule,
     MatGridListModule,
+    MatDialogModule
   ]
 })
 export class MyOwnCustomMaterialModule { }

@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation,
 	OnInit, AfterViewChecked, 
 	ElementRef, ViewChild, 
 	OnChanges, SimpleChanges,
-	AfterViewInit
+	AfterViewInit, Inject
 } from '@angular/core';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { NgForm } from '@angular/forms';
@@ -15,6 +15,13 @@ import {rootReducer,IAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
 import { Action } from 'redux';
 import {Constants} from '../../_store/constants'
+// import { FormGroup, FormBuilder, FormControl, Validators  } from '@angular/forms';
+import {Channel} from '../../_models/channel'
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {AddChannelDialog} from '../dialogs/add-channel.dialog'
+import {RemoveChannelDialog} from '../dialogs/remove-channel.dialog'
+import { MatSnackBar } from '@angular/material';
+
 
 @Component({
 	selector: 'app-dashboard',
@@ -29,10 +36,14 @@ export class DashboardComponent implements OnInit {
 	
 	title = 'Dashboard';
 	rakeArray = new Array(90);
+	newChannel: string = '';
 
 	constructor(
 		public chatService: ChatService,
 		private ngRedux: NgRedux<IAppState>,
+		public dialog: MatDialog,
+		
+
 	) {}
 
 	ngOnInit() {
@@ -78,5 +89,37 @@ export class DashboardComponent implements OnInit {
 	channelClicked(channel){
 		this.chatService.channelHistory(channel);
 		this.chatService.getChannelDetails(channel);
+	}
+
+	addChannel():void{
+		
+		let dialogRef = this.dialog.open(AddChannelDialog, {
+			width: '300px',
+			data: { name: this.newChannel }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			result = result.replace(/\s/g, '')
+			if (result) {
+				this.newChannel = result;
+				this.chatService.channelAdd(result)
+				console.log('result', result);
+			}
+		});
+	}
+
+	removeChannel():void{
+		let dialogRef = this.dialog.open(RemoveChannelDialog, {
+			width: '300px',
+			data: { name: this.newChannel }
+		});
+
+		dialogRef.afterClosed().subscribe(() => {
+				console.log('Remove Channel');
+				this.chatService.removeChannel(this.chatService.channelInfo.name)
+				 
+
+
+		});
 	}
 }

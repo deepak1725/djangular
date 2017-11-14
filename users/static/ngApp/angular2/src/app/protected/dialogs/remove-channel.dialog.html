@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Remove Channel</h1>
+
+<form #addChannel="ngForm">
+    <div mat-dialog-content>
+        <p>Are you sure..?</p>
+    </div>
+    <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+        <button mat-button [mat-dialog-close]="channel" tabindex="2">OK</button>
+        <button mat-button (click)="onNoClick()" tabindex="-1">CANCEL</button>
+    </div>
+</form>

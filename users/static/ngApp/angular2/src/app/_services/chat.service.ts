@@ -8,6 +8,7 @@ import {DashboardComponent} from '../protected/dashboard/dashboard.component';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { NgRedux, select } from '@angular-redux/store';
 import { rootReducer, IAppState } from '../_store/store';
+import { MatSnackBar } from '@angular/material';
 
 
 @Injectable()
@@ -35,6 +36,8 @@ export class ChatService {
         public pubnub: PubNubAngular,
         private route: ActivatedRoute,
         private ngRedux: NgRedux<IAppState>,
+        private router: Router,
+        public snackBar: MatSnackBar,
     ) {
         
         this.options = new RequestOptions ();
@@ -134,9 +137,11 @@ export class ChatService {
             (status) => {
                 if (status.error) {
                     console.log("operation failed w/ status: ");
-                }else{
-                    console.log("channel added to group Done");
-                } 
+                    return;
+                }   
+                console.log("channel added to group Done");
+                this.channelSubscribe(channel)
+                 
             }
         );
     };
@@ -145,7 +150,7 @@ export class ChatService {
         return this.channel$.subscribe(
             (channels: any) => {
                 this.channelInfo = channels.all.find(channel => channel.name == Inputchannel)
-               
+                console.log(this.channelInfo);
                 
                 return this.channelInfo
             }
@@ -176,6 +181,7 @@ export class ChatService {
             this.pubnub.subscribe({
                 restore: true,
                 channelGroups: [this.channelGroup],
+                channels:[channel],
                 withPresence: true,
                 triggerEvents: ['message', 'presence', 'status'],
 
@@ -230,7 +236,7 @@ export class ChatService {
     }
     
     channelGrant = (channels = this.subscribedChannels) => {
-        console.log("In Grant", channels);
+        // console.log("In Grant", channels);
         return this.pubnub.grant(
             {
                 // channels: channels,
@@ -310,9 +316,12 @@ export class ChatService {
              (status) => {
                 if (status.error) {
                     console.log("operation failed w/ error:", status);
-                } else {
-                    console.log("operation done!");
+                    return
                 }
+                this.router.navigate(['dashboard']);
+                this.snackBar.open("Channel deleted successfully", " ", {
+                    duration: 2000,
+                }); 
             }
         );
      }

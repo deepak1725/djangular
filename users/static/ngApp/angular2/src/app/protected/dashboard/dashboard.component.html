@@ -3,7 +3,7 @@
   	<mat-grid-tile>
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
 				<div class=" channel-title">
-					<strong>{{this.channelGroup}}</strong>
+					<strong>{{this.chatService.channelGroup}}</strong>
 				</div>		
 				<div fxLayoutAlign="start center" fxLayout="column">
 					<div>
@@ -23,20 +23,29 @@
 
 	<!-- HEADER -->
   	<mat-grid-tile colspan="4">
-		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column">
-			<div fxLayout="row" class="channel-title">
-				<div *ngIf="this.chatService.channelInfo">
-					<strong>#{{this.chatService.channelInfo.name}}</strong>
+		<div fxFlexFill fxLayoutAlign="space-around center">
+			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
+				<div fxLayout="row" class="channel-title">
+					<div *ngIf="this.chatService.channelInfo">
+						<strong>#{{this.chatService.channelInfo.name}}</strong>
+					</div>
+				</div>
+				<div fxLayout="row" class="channel-title">
+					<span>
+						<div *ngIf="this.chatService.channelInfo">
+							<small> Online: {{this.chatService.channelInfo.occupancy}} </small> | 
+							<small> Fav </small>
+						</div>	
+					</span>
 				</div>
 			</div>
-			<div fxLayout="row" class="channel-title">
-				<span>
-					<div *ngIf="this.chatService.channelInfo">
-						<small> Online: {{this.chatService.channelInfo.occupancy}} </small> | <small> Fav </small>
-					</div>	
-				</span>
+			<div fxFlex fxLayoutAlign="center center" fxLayout="column">
+				<button mat-raised-button (click)="removeChannel()">
+					<mat-icon class="dull">delete</mat-icon>
+				</button>
 			</div>
 		</div>
+		
 	</mat-grid-tile>
 
 	<!-- SIDEBAR: DIRECT MESSAGES -->
@@ -45,7 +54,12 @@
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
 					<h3 mat-subheader>UNICAST</h3>
-					<h3 mat-subheader>{{this.chatService.channel$.all | async }}</h3>
+					<div>
+					<button mat-raised-button (click)="addChannel()">
+						<mat-icon class="dull">add_circle_outline</mat-icon>
+					</button>
+					</div>
+
 				</div>
 				<mat-divider></mat-divider>
 
@@ -110,6 +124,11 @@
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
 					<h3 mat-subheader>MULTICAST</h3>
+					<div>
+						<button mat-raised-button (click)="addChannel()">
+							<mat-icon class="dull">add_circle_outline</mat-icon>
+						</button>
+					</div>
 				</div>
 				<mat-divider></mat-divider>
 
