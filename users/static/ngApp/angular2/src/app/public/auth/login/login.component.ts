@@ -5,7 +5,6 @@ import {UserService} from '../../../_services/user.service';
 import { NgForm } from '@angular/forms';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
-// import {ChatService} from '../../../_services/chat.service';
 
 
 @Component({
