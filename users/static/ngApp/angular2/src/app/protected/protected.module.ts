@@ -13,7 +13,6 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatDialog } from '@angular/material/dialog';
 
-
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -26,7 +25,7 @@ import { MatDialog } from '@angular/material/dialog';
     NgReduxModule,
     RouterModule,
     FormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   providers: [PubNubAngular, MatDialog],
   bootstrap: [AddChannelDialog, RemoveChannelDialog],

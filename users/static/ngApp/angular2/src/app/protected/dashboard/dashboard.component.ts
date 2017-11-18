@@ -21,16 +21,16 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {AddChannelDialog} from '../dialogs/add-channel.dialog'
 import {RemoveChannelDialog} from '../dialogs/remove-channel.dialog'
 import { MatSnackBar } from '@angular/material';
+import { ChatEngineService} from '../../_services/chat-engine.service'
 
 
 @Component({
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.css'],
-	providers: [ ChatService ]
-	// encapsulation: ViewEncapsulation.None,
-
+	providers: [ ChatService, ChatEngineService ]
 })
+
 export class DashboardComponent implements OnInit {
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 	
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
 	constructor(
 		public chatService: ChatService,
 		private ngRedux: NgRedux<IAppState>,
-		public dialog: MatDialog,
+		public dialog: MatDialog
 		
 
 	) {}
