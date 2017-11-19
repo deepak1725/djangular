@@ -1,10 +1,35 @@
 version: "3.0"
 
 services:
+  nginx:
+    image: nginx:latest
+    container_name: ng01
+    ports:
+      - "8000:80"
+    links:
+        - web
+    command: [nginx-debug, '-g', 'daemon off;']
+    volumes:
+      - .:/usr/share/nginx/html
+    depends_on:
+      - web
+
+  db:
+    image: "postgres:alpine"
+    container_name: ps01
+  
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    container_name: dg01
     volumes:
       - .:/code
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=8000
+
+    command: bash -c "gunicorn crudapi.wsgi -b 0.0.0.0:8000"
+    depends_on:
+      - db
+  

@@ -3,4 +3,5 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
 COPY . /code/
+COPY . /usr/share/nginx/html
 RUN pip install -r requirements.txt

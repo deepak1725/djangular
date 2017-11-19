@@ -114,11 +114,11 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'crudapi',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD':'ucodesoft',
-        'HOST':'localhost',
-        'PORT': '',
+        'PASSWORD':'123456',
+        'HOST':'db',
+        'PORT': '5432',
     }
 }
 

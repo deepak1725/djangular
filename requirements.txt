@@ -12,6 +12,7 @@ django-debug-toolbar==1.8
 django-rest-auth==0.9.1
 djangorestframework==3.6.3
 djangorestframework-jwt==1.11.0
+docker-compose
 gunicorn==19.6.0
 idna==2.5
 isort==4.2.15
