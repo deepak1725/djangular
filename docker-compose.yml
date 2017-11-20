@@ -6,19 +6,19 @@ services:
     image: nginx:latest
     container_name: ng01
     ports:
-      - "8001:8000"
-    expose:
-      - "8001"
+      - "8000:8000"
+    
     links:
         - django
-    command: [nginx-debug, '-g', 'daemon off;']
     volumes:
-      - .:/usr/share/nginx/html
+      - .:/code
+      - ./config/nginx:/etc/nginx/conf.d
+      - /my_cdn:/my_cdn
     depends_on:
       - django
 
   db:
-    image: "postgres:alpine"
+    image: "postgres:latest"
     container_name: ps01
   
   django:
@@ -26,10 +26,12 @@ services:
     container_name: dg01
     volumes:
       - .:/code
-
-    ports:
-      - "8000:8000"
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && ./start.sh"  
+      - /my_cdn:/my_cdn
+    expose: 
+      - "8000"
+    entrypoint: ./start.sh
+    links:
+      - db  
     depends_on:
       - db
   

@@ -24,7 +24,6 @@ class HomePageView(LoginRequiredMixin,generic.TemplateView):
     def get_context_data(self, **kwargs):
         self.request.session['foo'] = 'xbar'
         context = super(HomePageView, self).get_context_data(**kwargs)
-        context['latest_articles'] = Users.objects.all()[:5]
         return context
 
 # SIGNUP
