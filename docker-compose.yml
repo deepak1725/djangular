@@ -1,69 +1,73 @@
 version: "3.0"
 # CONTAINERS
+
+volumes:
+  postgres_data: {}
+  postgres_backup: {}
+
+
 services:
 
 
   db:
-    image: "postgres:latest"
-    container_name: ps01
+    build: ./docker_config/postgres/
+    container_name: postgres01
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backup:/var/lib/postgresql/data
     environment:
      POSTGRES_PASSWORD: 123456
      POSTGRES_USER: postgres
 
+
+
   node:
-    image: node:6-slim
+    build: ./docker_config/node/    
     container_name: node01
     volumes:
       - /usr/src/app
     expose: 
       - "7777"
+    ports:
+      - "7777:7777"
+    links:
+      - django
+    depends_on:
+      - django
+  
+
 
   django:
-    build: .
-    container_name: dg01
+    build: ./docker_config/django/Development
+    container_name: dango01
     volumes:
       - .:/code
       - /my_cdn:/my_cdn
     expose: 
       - "8000"
-    entrypoint: ./start.sh
+    ports:
+      - "8000:8000"
+    env_file: .env
+    entrypoint: ./docker_config/django/Development/start.sh
     environment:
       DEBUG: 'true'
     links:
-      - db
-      - node
+      - db      
     depends_on:
       - db
-      - node
   
 
   nginx:
     image: nginx:latest
-    container_name: ng01
-    deploy:
-      replicas: 5
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+    container_name: nginx_server
     ports:
-      - "8000:8000"
-    domainname: foo.com
-    hostname: foo
+      - "0.0.0.0:8005:8005"
     links:
         - django
     volumes:
       - .:/code
-      - ./config/nginx:/etc/nginx/conf.d
+      - ./docker_config/nginx:/etc/nginx/conf.d
       - /my_cdn:/my_cdn
     depends_on:
       - django
-    networks:
-      - webnet
-  
-  
-  networks:
-    webnet:
+
