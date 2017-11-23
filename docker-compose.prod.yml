@@ -1,5 +1,8 @@
-version: "3.0"
-# CONTAINERS
+version: "3.4"
+# CONTAINERS PRODUCTION
+# TO DEPLOY: 
+  # docker-compose  -f docker-compose.prod.yml up -d
+
 services:
 
 
@@ -11,6 +14,10 @@ services:
     environment:
      POSTGRES_PASSWORD: 123456
      POSTGRES_USER: postgres
+
+  cache:
+    environment:
+      TTL: '500'
 
   node:
     image: node:6-slim
@@ -29,21 +36,21 @@ services:
     expose: 
       - "8000"
     entrypoint: ./start.sh
-    environment:
-      DEBUG: 'true'
     links:
       - db
       - node
     depends_on:
       - db
       - node
+    environment:
+      PRODUCTION: 'true'
+      DEBUG: 'false'
   
 
   nginx:
     image: nginx:latest
     container_name: ng01
     deploy:
-      replicas: 5
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -61,9 +68,3 @@ services:
       - /my_cdn:/my_cdn
     depends_on:
       - django
-    networks:
-      - webnet
-  
-  
-  networks:
-    webnet:
