@@ -14,13 +14,17 @@ services:
       - .:/code
       - ./config/nginx:/etc/nginx/conf.d
       - /my_cdn:/my_cdn
+  
     depends_on:
       - django
 
   db:
     image: "postgres:latest"
     container_name: ps01
-  
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+
   django:
     build: .
     container_name: dg01
