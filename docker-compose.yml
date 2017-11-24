@@ -45,8 +45,6 @@ services:
       - /my_cdn:/my_cdn
     expose: 
       - "8000"
-    ports:
-      - "8000:8000"
     env_file: .env
     entrypoint: ./docker_config/django/Development/start.sh
     environment:
@@ -61,7 +59,7 @@ services:
     image: nginx:latest
     container_name: nginx_server
     ports:
-      - "0.0.0.0:8005:8005"
+      - "0.0.0.0:8000:8000"
     links:
         - django
     volumes:
