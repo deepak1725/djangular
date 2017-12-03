@@ -44,8 +44,15 @@ services:
     volumes:
       - .:/code
     command: "/n_start.sh"
-
     ports:
       - "3000:3000"
     depends_on:
       - django
+
+  myadminer:
+    image: adminer
+    container_name: adminer01
+    ports:
+      - "9000:8080"
+    links:
+      - db
