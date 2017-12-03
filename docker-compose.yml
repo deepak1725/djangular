@@ -29,12 +29,10 @@ services:
       - static:/my_cdn
     expose: 
       - "8000"
+    ports:
+      - "8000:8000"
     env_file: .env
     entrypoint: "./docker_config/django/development/d_start.sh"
-    command: "./docker_config/node/development/n_start.sh"
-    env_file: .env
-    links:
-      - db      
     depends_on:
       - db
   
@@ -51,19 +49,3 @@ services:
       - "3000:3000"
     depends_on:
       - django
-
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx_server
-    ports:
-      - "0.0.0.0:80:80"
-    links:
-        - django
-    
-    volumes:
-      - ./docker_config/nginx:/etc/nginx/conf.d
-      - /my_cdn:/my_cdn
-    depends_on:
-      - django
-
