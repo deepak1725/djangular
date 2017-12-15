@@ -10,12 +10,15 @@ import { NgForm } from '@angular/forms';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
+import { NewchatService } from '../../_services/newchat.service'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {rootReducer,IAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
 import { Action } from 'redux';
 import {Constants} from '../../_store/constants'
 // import { FormGroup, FormBuilder, FormControl, Validators  } from '@angular/forms';
+import * as ChatEngineCore from 'chat-engine';
+
 import {Channel} from '../../_models/channel'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {AddChannelDialog} from '../dialogs/add-channel.dialog'
@@ -27,7 +30,7 @@ import { MatSnackBar } from '@angular/material';
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.css'],
-	providers: [ ChatService ]
+	providers: [NewchatService ]
 	// encapsulation: ViewEncapsulation.None,
 
 })
@@ -37,19 +40,23 @@ export class DashboardComponent implements OnInit {
 	title = 'Dashboard';
 	rakeArray = new Array(90);
 	newChannel: string = '';
+	ChatEngine
 
 	constructor(
-		public chatService: ChatService,
+		public chatService: NewchatService,
 		private ngRedux: NgRedux<IAppState>,
 		public dialog: MatDialog,
 		
 
-	) {}
+	) {
+		
+	}
 
 	ngOnInit() {
 		this.chatService.callStack();
-		this.channelClicked(this.chatService.channelInput)
+		// this.channelClicked(this.chatService.channelInput)
 		this.scrollToBottom();
+		
 	}
 
 
@@ -67,12 +74,11 @@ export class DashboardComponent implements OnInit {
 
 	sendMessage = function (form: NgForm) {
 		let message = form.value.message
+		message = message.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+		console.log(message)
 		if (message) {
-			message = message.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-
-			if (message) {
-				this.chatService.channelPublish(message, this.chatService.channelInput)
-			}
+			console.log("Ready to Publish")			
+			this.chatService.publish(message)
 		}
 						
 
@@ -87,8 +93,8 @@ export class DashboardComponent implements OnInit {
 	}
 
 	channelClicked(channel){
-		this.chatService.channelHistory(channel);
-		this.chatService.getChannelDetails(channel);
+		// this.chatService.channelHistory(channel);
+		// this.chatService.getChannelDetails(channel);
 	}
 
 	addChannel():void{
@@ -102,8 +108,8 @@ export class DashboardComponent implements OnInit {
 			result = result.replace(/\s/g, '')
 			if (result) {
 				this.newChannel = result;
-				this.chatService.channelAdd(result)
-				console.log('result', result);
+				// this.chatService.channelAdd(result)
+				// console.log('result', result);
 			}
 		});
 	}
@@ -115,8 +121,8 @@ export class DashboardComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(() => {
-				console.log('Remove Channel');
-				this.chatService.removeChannel(this.chatService.channelInfo.name)
+				// console.log('Remove Channel');
+				// this.chatService.removeChannel(this.chatService.channelInfo.name)
 				 
 
 

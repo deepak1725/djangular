@@ -120,10 +120,10 @@ export class ChatService {
 
     chatInit(){
         this.pubnub.init({
-            publishKey: 'pub-c-3aef0945-de13-4a67-9b27-cbbee629b4bf',
-            subscribeKey: 'sub-c-868bb34a-a77d-11e7-b28d-d2281ea74b72',
+            publishKey: '#',
+            subscribeKey: '#',
             uuid: this.username,
-            secretKey:'sec-c-YjJlYTA1ODctNGNjNi00N2Y1LTg3MGQtNGM4YTM5ZDEyMzE4',
+            secretKey:'#',
         });
         this.pubnub.setUUID(this.username);
     };
@@ -136,10 +136,10 @@ export class ChatService {
             }, 
             (status) => {
                 if (status.error) {
-                    console.log("operation failed w/ status: ");
+                    // console.log("operation failed w/ status: ");
                     return;
                 }   
-                console.log("channel added to group Done");
+                // console.log("channel added to group Done");
                 this.channelSubscribe(channel)
                  
             }
@@ -150,7 +150,7 @@ export class ChatService {
         return this.channel$.subscribe(
             (channels: any) => {
                 this.channelInfo = channels.all.find(channel => channel.name == Inputchannel)
-                console.log(this.channelInfo);
+                // console.log(this.channelInfoo);
                 
                 return this.channelInfo
             }
@@ -164,7 +164,7 @@ export class ChatService {
 			}, 
 			(status, response) => {
 				if (status.error) {
-					console.log("operation failed w/ error:", status);
+					// console.log("operation failed w/ error:", status);
 					return;
                 }
                 this.channelList = response.channels;
@@ -187,7 +187,7 @@ export class ChatService {
 
             }), 
             (status, response) => {
-                console.log('sta',status);
+                // console.log('sta',status);
             };
         
     }
@@ -222,7 +222,7 @@ export class ChatService {
                 
                 this.totalChannel = response.totalChannels;
                 if (status.error) {
-                    console.log("operation failed w/ error:", status)
+                    // console.log("operation failed w/ error:", status)
                     return;
                 }
                 
@@ -264,23 +264,23 @@ export class ChatService {
             ttl: 10,                
         })
         .then((res) => {
-            console.log("MEssgae Succesfully sent");
+            // console.log("MEssgae Succesfully sent");
         }).catch((status, error) => {
-            console.log(error)
+            // console.log(error)
         })
     }
     
     channelListen = () => {
 		this.pubnub.addListener({
 			status: (st) => {
-                console.log("In Listen, Status", st);
+                // console.log("In Listen, Status", st);
 				if (st.category === "PNUnknownCategory") {
 					this.setState();
 				}
 			},
 			message: (response) =>  {
                 //PUSHING MSG
-                console.log("In Listen, response");
+                // console.log("In Listen, response");
 				var obj = {
 					entry:{
 						text:response.message.text,
@@ -294,7 +294,7 @@ export class ChatService {
 
             },
             presence: (presenceEvent) => {
-                console.log('Friends Presence: ', presenceEvent)
+                // console.log('Friends Presence: ', presenceEvent)
                 // this.getSubscribedChannels(presenceEvent.channel);
                 this.channelHerenow(presenceEvent.channel);
             } 
@@ -303,7 +303,7 @@ export class ChatService {
 
     presenceChannel = () => {
         return this.pubnub.getPresence(this.channelGroup, function(pse) {
-            console.log("pse", pse);
+            // console.log("pse", pse);
         });
     }
 
@@ -315,7 +315,7 @@ export class ChatService {
             },
              (status) => {
                 if (status.error) {
-                    console.log("operation failed w/ error:", status);
+                    // console.log("operation failed w/ error:", status);
                     return
                 }
                 this.router.navigate(['dashboard']);
@@ -333,9 +333,9 @@ export class ChatService {
             },
              (status) => {
                 if (status.error) {
-                    console.log("operation failed w/ error:", status);
+                    // console.log("operation failed w/ error:", status);
                 } else {
-                    console.log("operation done!");
+                    // console.log("operation done!");
                 }
             }
         );
@@ -374,7 +374,7 @@ export class ChatService {
                 channels: ['my_channel']
             },
              (status, state) => {
-                console.log("SetState", state);
+                // console.log("SetState", state);
                 // handle state setting response
             }
         );
@@ -386,7 +386,7 @@ export class ChatService {
                 channels: [channel]
             },
              (status, state) => {
-                console.log("GETState",state);
+                // console.log("GETState",state);
                 // handle state setting response
             }
         );

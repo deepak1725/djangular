@@ -36,18 +36,18 @@ services:
     depends_on:
       - db
   
-  node:
-    build:
-      context: .
-      dockerfile: ./docker_config/node/development/Dockerfile
-    container_name: node_server
-    volumes:
-      - .:/code
-    command: "/n_start.sh"
-    ports:
-      - "3000:3000"
-    depends_on:
-      - django
+  # node:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker_config/node/development/Dockerfile
+  #   container_name: node_server
+  #   volumes:
+  #     - .:/code
+  #   command: "/n_start.sh"
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - django
 
   myadminer:
     image: adminer

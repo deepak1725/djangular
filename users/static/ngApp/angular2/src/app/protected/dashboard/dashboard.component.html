@@ -3,7 +3,7 @@
   	<mat-grid-tile>
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
 				<div class=" channel-title">
-					<strong>{{this.chatService.channelGroup}}</strong>
+					<strong>Group</strong>
 				</div>		
 				<div fxLayoutAlign="start center" fxLayout="column">
 					<div>
@@ -26,14 +26,14 @@
 		<div fxFlexFill fxLayoutAlign="space-around center">
 			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
 				<div fxLayout="row" class="channel-title">
-					<div *ngIf="this.chatService.channelInfo">
-						<strong>#{{this.chatService.channelInfo.name}}</strong>
+					<div>
+						<strong>#</strong>
 					</div>
 				</div>
 				<div fxLayout="row" class="channel-title">
 					<span>
-						<div *ngIf="this.chatService.channelInfo">
-							<small> Online: {{this.chatService.channelInfo.occupancy}} </small> | 
+						<div >
+							<small> Online: </small> | 
 							<small> Fav </small>
 						</div>	
 					</span>
@@ -63,20 +63,16 @@
 				</div>
 				<mat-divider></mat-divider>
 
-				<a mat-list-item (click)=channelClicked(channel) 
+				<a mat-list-item (click)=channelClicked()
 					routerLinkActive="active-link" class="online-name" matLine 
 					[routerLinkActiveOptions]="{exact: true}"
-					*ngFor = "let occupant of this.chatService.groupOccupants; let index = index"
-					routerLink="../{{index}}"
 					>
 					
 					<div fxLayout="row" fxLayoutAlign="start center">
 						<mat-icon mat-list-icon class="online">
 							fiber_manual_record
 						</mat-icon>
-						<div>
-							Online{{channel}}
-						</div>
+						
 					</div>
 					
 				</a>
@@ -93,7 +89,7 @@
 				fxLayoutGap="10px" class="content-container" fxFlexAlign="baseline">
 
 
-					<div *ngFor = "let message of (this.chatService.message$ | async ).all let index = index">
+					<div>
 						<div fxLayout="row" class="message-text">
 							<div fxFlex="5">
 								<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
@@ -101,14 +97,10 @@
 							<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
 								<div fxLayout="row" fxLayoutAlign="space-between center" >
 									<span>
-										<b>{{ message.entry.name }}</b>
-										<small class="dull">@{{message.entry.username}}</small>
 									</span> 
 									<div fxFlex class="time" fxFlexAlign="center">
-										{{ this.getReadableTime(message.timetoken) }}
 									</div>
 								</div>
-								<div>{{ message.entry.text}}</div>							
 							</div>
 						</div>
 					</div>
@@ -132,21 +124,7 @@
 				</div>
 				<mat-divider></mat-divider>
 
-				<a mat-list-item (click)=channelClicked(channel.name) 
-					routerLink="../{{channel.name}}" 
-					routerLinkActive #rla="routerLinkActive" 
-					active="rla.isActive"
-					class="online-name" matLine 
-					*ngFor = "let channel of (this.chatService.channel$ | async).all">
-					
-					<div fxLayout="row" fxLayoutAlign="start center">
-						# &nbsp;
-						<div>
-							{{channel.name}}
-						</div>
-					</div>
-					
-				</a>
+
 			</mat-nav-list>
 		</div>
 	</mat-grid-tile>
@@ -157,7 +135,7 @@
 		<div fxLayoutAlign="center center" fxLayout="column">
 			<form autocomplete="off" #replyForm="ngForm" (ngSubmit)="sendMessage(replyForm)" class="reply-form">
 				<mat-form-field  class="msg-input" fxFill floatPlaceholder="never">
-					<input tabindex="1" resizeToFitContent name="message" [(ngModel)]="message" matInput placeholder="Message">
+					<input tabindex="1" resizeToFitContent name="message" matInput placeholder="Message" ngModel>
 					<mat-hint align="end"> Press Enter to Send</mat-hint>
 				</mat-form-field>
 			</form>
