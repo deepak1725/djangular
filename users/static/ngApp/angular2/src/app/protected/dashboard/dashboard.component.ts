@@ -41,7 +41,6 @@ export class DashboardComponent implements OnInit {
 	rakeArray = new Array(90);
 	newChannel: string = '';
 	ChatEngine
-	objectKeys = Object.keys
 
 	constructor(
 		public chatService: NewchatService,
