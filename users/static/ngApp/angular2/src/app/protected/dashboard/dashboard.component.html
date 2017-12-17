@@ -3,7 +3,7 @@
   	<mat-grid-tile>
 		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
 				<div class=" channel-title">
-					<strong>Group</strong>
+					<strong>{{this.chatService.globalChannel}}</strong>
 				</div>		
 				<div fxLayoutAlign="start center" fxLayout="column">
 					<div>
@@ -27,7 +27,7 @@
 			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
 				<div fxLayout="row" class="channel-title">
 					<div>
-						<strong>#</strong>
+						<strong>{{this.chatService.currentChannel}} </strong>
 					</div>
 				</div>
 				<div fxLayout="row" class="channel-title">
@@ -63,16 +63,20 @@
 				</div>
 				<mat-divider></mat-divider>
 
-				<a mat-list-item (click)=channelClicked()
-					routerLinkActive="active-link" class="online-name" matLine 
-					[routerLinkActiveOptions]="{exact: true}"
-					>
+				<a mat-list-item 
+				routerLinkActive="active-link" class="online-name" 
+				matLine [routerLinkActiveOptions]="{exact: true}"
+				 *ngFor="let occupant of this.chatService.allUsers; let index = index" 
+				 routerLink="../{{occupant.uuid}}">
 					
 					<div fxLayout="row" fxLayoutAlign="start center">
 						<mat-icon mat-list-icon class="online">
 							fiber_manual_record
 						</mat-icon>
-						
+						<div>
+							{{ occupant.state.fullName }}  
+							<small class="dull">@{{ occupant.uuid}} </small>
+						</div>
 					</div>
 					
 				</a>
@@ -84,29 +88,29 @@
 
 	<!-- MessageContainer -->
   	<mat-grid-tile rowspan="8" colspan="4" >
-			<div #scrollMe style="overflow-y: scroll"
-				fxLayout="column" fxLayoutAlign="start stretch" 
-				fxLayoutGap="10px" class="content-container" fxFlexAlign="baseline">
+			
 
-
-					<div>
-						<div fxLayout="row" class="message-text">
-							<div fxFlex="5">
-								<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
-							</div>
-							<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
-								<div fxLayout="row" fxLayoutAlign="space-between center" >
-									<span>
-									</span> 
-									<div fxFlex class="time" fxFlexAlign="center">
-									</div>
-								</div>
+			<div *ngFor="let message of (this.chatService).message let index = index">
+				<div fxLayout="row" class="message-text">
+					<div fxFlex="5">
+						<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
+					</div>
+					<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
+						<div fxLayout="row" fxLayoutAlign="space-between center">
+							<span>
+								<b>{{ message.sender.state.fullName }}</b>
+								<small class="dull">@{{message.sender.uuid}}</small>
+							</span>
+							<div fxFlex class="time" fxFlexAlign="center">
+								{{ this.getReadableTime(message.data.date) }}
 							</div>
 						</div>
+						<div>{{ message.data.text }}</div>
 					</div>
+				</div>
+			</div>
 				
 
-			</div>
 	</mat-grid-tile>
 
 	<!-- SIDEBAR: GROUP -->

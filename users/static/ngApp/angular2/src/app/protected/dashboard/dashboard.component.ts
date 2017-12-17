@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit {
 	rakeArray = new Array(90);
 	newChannel: string = '';
 	ChatEngine
+	objectKeys = Object.keys
 
 	constructor(
 		public chatService: NewchatService,
@@ -86,9 +87,8 @@ export class DashboardComponent implements OnInit {
 	}
 
 
-	getReadableTime(unixTime) {
-		var date = new Date(unixTime / 1e4)
-		let now = moment(date).fromNow();
+	getReadableTime(userTime) {
+		let now = moment(userTime).fromNow();
 		return now;
 	}
 
