@@ -27,6 +27,8 @@ export class NewchatService {
     message: any = [];
     globalChannel:string = 'Maruti'
     currentChannel: string;
+    me:any;
+
 
     constructor(
     ) {
@@ -62,26 +64,54 @@ export class NewchatService {
 
         //Setting up Socket
         this.ChatEngine.on('$.ready', (data) => {
-            let me = data.me;
-            me.update({
-                lastOnline: new Date(),
-                nickName: this.username,
-                fullName: this.fullName
-            });
-            // this.myOwn = new (this.ChatEngine).User(this.username);            
-            this.myChat = new (this.ChatEngine).User(this.username, true);
+            let me = this.me = data.me;
+            this.updateUserState(me);
+            this.listenDirectMessage(me);
+            
+            this.myChat = new (this.ChatEngine).Chat(this.room);
             this.subscribe()
+            this.getInvite()
             console.log("Ready to Go");
-            let channel = this.myChat.direct.channel ? '@'+this.username : this.myChat.channel.split(".")[1];
-            console.log('channel', channel);
-            this.currentChannel = channel;
-            // channel = channel.split(".")[1];
 
+        });   
+    }
 
+    getInvite = () => {
+        console.log("Get Invite");
+        this.me.direct.on('$.invite', (payload) => {
+            console.log("You got an Invite", payload);
+            let secretChat = new (this.ChatEngine).Chat(payload.data.channel);
         });
+    }
+    
+    sendInvite = (invitedUuid) => {
+        console.log("InvitedUuid", invitedUuid);
+        
+        let secretChat = new (this.ChatEngine).Chat(invitedUuid);
+        secretChat.invite(invitedUuid);
+        console.log(secretChat);
+        console.log("You sent an Invite");
+        
+    }
 
-        
-        
+    updateUserState = (me) => {
+        me.update({
+            lastOnline: new Date(),
+            nickName: this.username,
+            fullName: this.fullName
+        });
+    }
+
+    listenDirectMessage = (me) => {
+        me.direct.on('message', (payload) => {
+            console.log(payload.sender.uuid, 'sent your a game invite on the map', payload.data.map);
+        });
+    }
+
+
+    publishDirectMessage = (uuid) => {
+            let receiver = new (this.ChatEngine).User(uuid);            
+            receiver.direct.emit('message', { map: 'de_dust' });
     }
 
     global = () => {
@@ -129,17 +159,35 @@ export class NewchatService {
         
         (this.myChat).on('$.online.*', (data) => {
             console.log('data', data.user);
+            let IndividualChat = new (this.ChatEngine).Chat(data.user.uuid);
+            
             this.allUsers.push(data.user);
+
         });
-        console.log(this.ChatEngine.users);
+        var objjj = this.ChatEngine.chats;
+        console.log("ALL CHATS", objjj);
+
+        for (const iterator in this.ChatEngine.chats) {
+            console.log("my", iterator); 
+            
+        }
+        // objjj.forEach(element => {
+        // });
+        // for (const element in this.ChatEngine.chats) {
+            // console.log("Element", element);
+        // }
+        // let OWNPROP = Object.getOwnPropertyNames(obj);
+        // console.log("OWNPROP", OWNPROP);
+        // let channool = Array.from(channels, channel => channel.split('#'))
+        // console.log("Splitter", channool);
         let allUsers = Object.keys(this.ChatEngine.users);
 
         // for (let element in allUsers) {
         //     console.log(element);
         // }
-        console.log('allasd',allUsers);
+        // console.log('allasd',allUsers);
         
-        console.log('Global', this.ChatEngine);
+        // console.log('Global', this.ChatEngine);
     }
     offlineUsers = () => {
         (this.myChat).on('$.offline.*', (data) => {

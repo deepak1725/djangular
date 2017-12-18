@@ -79,6 +79,7 @@ export class DashboardComponent implements OnInit {
 		if (message) {
 			console.log("Ready to Publish")			
 			this.chatService.publish(message)
+			this.chatService.publishDirectMessage('deepak')
 		}
 						
 
