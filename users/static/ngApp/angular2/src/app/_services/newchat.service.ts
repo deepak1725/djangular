@@ -11,7 +11,6 @@ import { DashboardComponent } from '../protected/dashboard/dashboard.component';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { NgRedux, select } from '@angular-redux/store';
 import { rootReducer, IAppState } from '../_store/store';
-import { MatSnackBar } from '@angular/material';
 import * as ChatEngineCore from 'chat-engine';
 import { environment } from '../../environments/environment';
 
@@ -71,7 +70,6 @@ export class NewchatService {
             this.myChat = new (this.ChatEngine).Chat(this.room);
             this.subscribe()
             this.getInvite()
-            console.log("Ready to Go");
 
         });   
     }
@@ -88,7 +86,7 @@ export class NewchatService {
         console.log("InvitedUuid", invitedUuid);
         
         let secretChat = new (this.ChatEngine).Chat(invitedUuid);
-        secretChat.invite(invitedUuid);
+        // secretChat.invite(invitedUuid);
         console.log(secretChat);
         console.log("You sent an Invite");
         
@@ -138,75 +136,49 @@ export class NewchatService {
     history = () => {
         // wait for our chat to connect
         this.myChat.on('$.connected', () => {
-            // search for 50 old `message` events
             this.myChat.search({
                 reverse: true,
                 event: 'message',
                 limit: 50
             }).on('message', (data) => {
-                // when messages are returned, render them like normal messages
-                // renderMessage(data);
-                this.message.push(data);
+                this.renderMessage(data);
             
-                console.log("Chat is connected");
             });
         });
-        this.onlineUsers();
-        
+        this.onlineUsers();        
     }
 
+    
     onlineUsers = () => {
+        let user = this.ChatEngine.global.users
+        console.log('AllUser', user);
         
         (this.myChat).on('$.online.*', (data) => {
-            console.log('data', data.user);
             let IndividualChat = new (this.ChatEngine).Chat(data.user.uuid);
-            
             this.allUsers.push(data.user);
-
         });
+
         var objjj = this.ChatEngine.chats;
-        console.log("ALL CHATS", objjj);
-
-        for (const iterator in this.ChatEngine.chats) {
-            console.log("my", iterator); 
-            
-        }
-        // objjj.forEach(element => {
-        // });
-        // for (const element in this.ChatEngine.chats) {
-            // console.log("Element", element);
-        // }
-        // let OWNPROP = Object.getOwnPropertyNames(obj);
-        // console.log("OWNPROP", OWNPROP);
-        // let channool = Array.from(channels, channel => channel.split('#'))
-        // console.log("Splitter", channool);
-        let allUsers = Object.keys(this.ChatEngine.users);
-
-        // for (let element in allUsers) {
-        //     console.log(element);
-        // }
-        // console.log('allasd',allUsers);
+        console.log("ALL CHATS", objjj[0]);
         
-        // console.log('Global', this.ChatEngine);
+        let allUsers = Object.keys(this.ChatEngine.users);
     }
+
+
     offlineUsers = () => {
         (this.myChat).on('$.offline.*', (data) => {
             console.log("SomeOne got offline");
-            // $('#people-list ul').find('#' + data.user.uuid).remove();
         });
     }
 
     publish = (message="") => {
-            // store my new user as `me`
-            // create a new ChatEngine Chat
-
-           
+          
             (this.myChat).emit('message', {
                 text: message,
+                nickName: this.username,
+                fullName: this.fullName,
                 date: new Date()
             });
-
-            
     }
         
     
