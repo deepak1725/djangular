@@ -30,6 +30,7 @@ export class NewchatService {
 
 
     constructor(
+        private ngRedux: NgRedux<IAppState>
     ) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.username = currentUser.user.username;
@@ -75,7 +76,6 @@ export class NewchatService {
     }
 
     getInvite = () => {
-        console.log("Get Invite");
         this.me.direct.on('$.invite', (payload) => {
             console.log("You got an Invite", payload);
             let secretChat = new (this.ChatEngine).Chat(payload.data.channel);
@@ -150,18 +150,21 @@ export class NewchatService {
 
     
     onlineUsers = () => {
-        let user = this.ChatEngine.global.users
+        let user = this.ChatEngine.users
         console.log('AllUser', user);
         
         (this.myChat).on('$.online.*', (data) => {
             let IndividualChat = new (this.ChatEngine).Chat(data.user.uuid);
             this.allUsers.push(data.user);
         });
-
-        var objjj = this.ChatEngine.chats;
-        console.log("ALL CHATS", objjj[0]);
+        console.log("All Users in Array", Object.keys(user));
+        console.log("First User", user[0]);
         
-        let allUsers = Object.keys(this.ChatEngine.users);
+        let allUsers = Object.keys(user);
+        this.ngRedux.dispatch({ type: Constants.USERADD, all: [] })
+        this.ngRedux.dispatch({ type: Constants.USERADD, all: user })
+
+
     }
 
 
