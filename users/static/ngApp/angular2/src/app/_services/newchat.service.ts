@@ -30,7 +30,9 @@ export class NewchatService {
     publicChats:any = [];
     privateChats:any = [];
     privateDirectChats:any = [];
-
+    @select(['public_channel','payload']) readonly publicChats$: Observable<any[]>;
+    @select(['private_channel','payload']) readonly privateChats$: Observable<any[]>;
+    @select(['direct_channel','payload']) readonly directChats$: Observable<any[]>;
 
     constructor(
         private ngRedux: NgRedux<IAppState>
@@ -69,14 +71,14 @@ export class NewchatService {
         this.ChatEngine.on('$.ready', (data) => {
             let me = this.me = data.me;
             this.updateUserState(me);
-            this.listenDirectMessage(me);
+            // this.listenDirectMessage(me);
             
             this.myChat = new (this.ChatEngine).Chat(this.room);
             let privateCha = new (this.ChatEngine).Chat('privateChat', true);
             this.subscribe()
             this.eventListerners()
             this.publicChannelListing()
-
+            
         });   
     }
 
@@ -86,18 +88,17 @@ export class NewchatService {
             console.log('Chat was created', chat);
             this.fetchChannel(chat.channel);
         });
+
+        (this.me).direct.on('message', (payload) => {
+            console.log(payload.sender.uuid, 'sent your a game invite on the map', payload.data.map);
+        });
     }
+
     updateUserState = (me) => {
         me.update({
             lastOnline: new Date(),
             nickName: this.username,
             fullName: this.fullName
-        });
-    }
-
-    listenDirectMessage = (me) => {
-        me.direct.on('message', (payload) => {
-            console.log(payload.sender.uuid, 'sent your a game invite on the map', payload.data.map);
         });
     }
 
@@ -129,14 +130,19 @@ export class NewchatService {
 
         if (chat[2] == 'public.') {
             this.publicChats.push(chat[3]);
+            this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: chat[3] })
+
         }
 
         if (chat[2] == 'private.') {
             this.privateChats.push(chat[3]);
+            this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: chat[3] })    
         }
 
         if (chat[4] == 'direct') {
             this.privateDirectChats.push(chat[2]);
+            this.ngRedux.dispatch({ type: Constants.DIRECTCHANNELADD, payload: chat[2] })    
+            
         }
     }
 

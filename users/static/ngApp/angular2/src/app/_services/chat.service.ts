@@ -227,7 +227,7 @@ export class ChatService {
                 }
                 
                 var arr: any[] = Object.keys(response.channels).map((key, index) => {
-                    return this.ngRedux.dispatch({ type: Constants.CHANNELADD, all: [response.channels[key]] })
+                    return this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, all: [response.channels[key]] })
                 });
                 return this.groupOccupants = this.groupOccupants;
                            
