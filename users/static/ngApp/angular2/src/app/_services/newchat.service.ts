@@ -24,9 +24,12 @@ export class NewchatService {
     myChat:any;
     allUsers: any = [];
     message: any = [];
-    globalChannel:string = 'Maruti'
+    globalChannel:string = 'Dominaar'
     currentChannel: string;
     me:any;
+    publicChats:any = [];
+    privateChats:any = [];
+    privateDirectChats:any = [];
 
 
     constructor(
@@ -69,29 +72,21 @@ export class NewchatService {
             this.listenDirectMessage(me);
             
             this.myChat = new (this.ChatEngine).Chat(this.room);
+            let privateCha = new (this.ChatEngine).Chat('privateChat', true);
             this.subscribe()
-            this.getInvite()
+            this.eventListerners()
+            this.publicChannelListing()
 
         });   
     }
 
-    getInvite = () => {
-        this.me.direct.on('$.invite', (payload) => {
-            console.log("You got an Invite", payload);
-            let secretChat = new (this.ChatEngine).Chat(payload.data.channel);
+    eventListerners = () => {
+        console.log("In Event ");
+        this.ChatEngine.on('$.created.chat', (data, chat) => {
+            console.log('Chat was created', chat);
+            this.fetchChannel(chat.channel);
         });
     }
-    
-    sendInvite = (invitedUuid) => {
-        console.log("InvitedUuid", invitedUuid);
-        
-        let secretChat = new (this.ChatEngine).Chat(invitedUuid);
-        // secretChat.invite(invitedUuid);
-        console.log(secretChat);
-        console.log("You sent an Invite");
-        
-    }
-
     updateUserState = (me) => {
         me.update({
             lastOnline: new Date(),
@@ -112,10 +107,37 @@ export class NewchatService {
             receiver.direct.emit('message', { map: 'de_dust' });
     }
 
-    global = () => {
-        this.ChatEngine.global.on('$.state', (payload) => {
-            console.log(payload.user + ' updated state: ' + payload.state);
-        });
+   
+
+    publicChannelListing = () => {
+        console.log("In Public ");
+        
+        let allChannels = this.ChatEngine.chats
+        console.log('All Chats Before', allChannels)        
+        
+        for (const element in allChannels) {
+            this.fetchChannel(element);
+        }
+        console.log('Public Chat', this.publicChats)
+        console.log('Private Chat', this.privateChats)        
+        console.log('Direct Chat', this.privateDirectChats)        
+        
+    }
+
+    fetchChannel = (element) => {
+        let chat = element.split("#");
+
+        if (chat[2] == 'public.') {
+            this.publicChats.push(chat[3]);
+        }
+
+        if (chat[2] == 'private.') {
+            this.privateChats.push(chat[3]);
+        }
+
+        if (chat[4] == 'direct') {
+            this.privateDirectChats.push(chat[2]);
+        }
     }
 
     subscribe = (channel="") => {
@@ -150,19 +172,25 @@ export class NewchatService {
 
     
     onlineUsers = () => {
-        let user = this.ChatEngine.users
-        console.log('AllUser', user);
+        
         
         (this.myChat).on('$.online.*', (data) => {
-            let IndividualChat = new (this.ChatEngine).Chat(data.user.uuid);
+            let IndividualChat = new (this.ChatEngine).Chat('Private Direct Chat', true);
             this.allUsers.push(data.user);
         });
-        console.log("All Users in Array", Object.keys(user));
-        console.log("First User", user[0]);
+
+
+        // console.log('AllUser', user);
+        // let user = this.ChatEngine.users
+        // let chats = this.ChatEngine.chats
+        // console.log('AllChats', chats);
         
-        let allUsers = Object.keys(user);
-        this.ngRedux.dispatch({ type: Constants.USERADD, all: [] })
-        this.ngRedux.dispatch({ type: Constants.USERADD, all: user })
+        // console.log("All Users in Array", Object.keys(user));
+        // console.log("First User", user[0]);
+        
+        // let allUsers = Object.keys(user);
+        // this.ngRedux.dispatch({ type: Constants.USERADD, all: [] })
+        // this.ngRedux.dispatch({ type: Constants.USERADD, all: user })
 
 
     }
@@ -174,6 +202,24 @@ export class NewchatService {
         });
     }
 
+
+    getInvite = () => {
+        this.me.direct.on('$.invite', (payload) => {
+            console.log("You got an Invite", payload);
+            let secretChat = new (this.ChatEngine).Chat(payload.data.channel);
+        });
+    }
+
+    sendInvite = (invitedUuid) => {
+        console.log("InvitedUuid", invitedUuid);
+
+        let secretChat = new (this.ChatEngine).Chat(invitedUuid);
+        // secretChat.invite(invitedUuid);
+        console.log(secretChat);
+        console.log("You sent an Invite");
+
+    }
+
     publish = (message="") => {
           
             (this.myChat).emit('message', {
@@ -182,6 +228,12 @@ export class NewchatService {
                 fullName: this.fullName,
                 date: new Date()
             });
+    }
+
+    global = () => {
+        this.ChatEngine.global.on('$.state', (payload) => {
+            console.log(payload.user + ' updated state: ' + payload.state);
+        });
     }
         
     
