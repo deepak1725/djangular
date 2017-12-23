@@ -25,6 +25,14 @@ export function PrivateChannelReducer(state: IPrivateChannelState = INITIAL_STAT
             return { payload: state.payload };
 
         case Constants.PRIVATECHANNELADD:
+            //If Channel Exists
+            if (state.payload.indexOf(action.payload) > -1) {
+                return {
+                    type: action.type,
+                    payload: [...state.payload],
+                    error: false
+                }
+            } 
             return {
                 type: action.type,
                 payload: [...state.payload, ...action.payload],

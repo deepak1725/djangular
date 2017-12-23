@@ -25,6 +25,16 @@ export function PublicChannelReducer(state: IPublicChannelState = INITIAL_STATE,
             return { payload: state.payload };
 
         case Constants.PUBLICCHANNELADD:
+            
+            //If Channel Exists
+            if (state.payload.indexOf(action.payload) > -1){
+                return {
+                    type: action.type,
+                    payload: [...state.payload],
+                    error: false
+                }
+            }    
+        
             return {
                 type: action.type,
                 payload: [...state.payload, ...action.payload],

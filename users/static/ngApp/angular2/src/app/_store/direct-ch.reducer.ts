@@ -25,6 +25,14 @@ export function DirectChannelReducer(state: IDirectChannelState = INITIAL_STATE,
             return { payload: state.payload};
 
         case Constants.DIRECTCHANNELADD:
+        
+            if (state.payload.indexOf(action.payload) > -1) {
+                return {
+                    type: action.type,
+                    payload: [...state.payload],
+                    error: false
+                }
+            }
             return {
                 type: action.type,
                 payload: [...state.payload, ...action.payload],

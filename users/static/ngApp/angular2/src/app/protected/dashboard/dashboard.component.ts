@@ -11,7 +11,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { NewchatService } from '../../_services/newchat.service'
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, Event, NavigationStart, NavigationEnd } from '@angular/router';
 import {rootReducer,IAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
 import { Action } from 'redux';
@@ -26,6 +26,8 @@ import {RemoveChannelDialog} from '../dialogs/remove-channel.dialog'
 import { MatSnackBar } from '@angular/material';
 
 
+
+
 @Component({
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
@@ -34,6 +36,8 @@ import { MatSnackBar } from '@angular/material';
 	// encapsulation: ViewEncapsulation.None,
 
 })
+
+
 export class DashboardComponent implements OnInit {
     @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 	
@@ -41,21 +45,25 @@ export class DashboardComponent implements OnInit {
 	rakeArray = new Array(90);
 	newChannel: string = '';
 	ChatEngine
+	chatObjectForView: IChatObjectForView = {
+		room : "no",
+		online: 0
+	}
+
 
 	constructor(
 		public chatService: NewchatService,
 		private ngRedux: NgRedux<IAppState>,
 		public dialog: MatDialog,
-		
-
+		private router: Router,
+		private route: ActivatedRoute,
 	) {
-		
 	}
 
 	ngOnInit() {
 		this.chatService.callStack();
-		// this.channelClicked(this.chatService.channelInput)
 		this.scrollToBottom();
+		this.events(NavigationEnd);
 		
 	}
 
@@ -65,6 +73,7 @@ export class DashboardComponent implements OnInit {
 	}
 
 	
+
 	scrollToBottom(): void {
         try {
             this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
@@ -75,11 +84,9 @@ export class DashboardComponent implements OnInit {
 	sendMessage = function (form: NgForm) {
 		let message = form.value.message
 		message = message.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-		console.log(message)
 		if (message) {
-			console.log("Ready to Publish")			
 			this.chatService.publish(message)
-			this.chatService.publishDirectMessage('deepak')
+			// this.chatService.publishDirectMessage('deepak')
 		}
 						
 
@@ -90,11 +97,6 @@ export class DashboardComponent implements OnInit {
 	getReadableTime(userTime) {
 		let now = moment(userTime).fromNow();
 		return now;
-	}
-
-	channelClicked(channel){
-		// this.chatService.channelHistory(channel);
-		// this.chatService.getChannelDetails(channel);
 	}
 
 	addChannel():void{
@@ -123,9 +125,32 @@ export class DashboardComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(() => {
 				// console.log('Remove Channel');
 				// this.chatService.removeChannel(this.chatService.channelInfo.name)
-				 
-
-
 		});
 	}
+
+	fetchChannelNameFromString = (channel:string):string => {
+		if (channel) {	
+			let ar = channel.split("#");
+			return ar.pop();
+		}	
+	}
+	events = (naviStart) => {
+		this.router.events.subscribe(
+			 (event: Event) => {
+				 if (event instanceof naviStart) {
+					 let channelInput: string = this.route.snapshot.paramMap.get('channel');
+					 this.chatService.channelInput = channelInput;
+					 this.chatService.updateChatObject();
+					 this.chatService.shiftChannel(channelInput);
+				 }
+			 }
+		)
+	}
+
+
+}
+
+export interface IChatObjectForView {
+	room: string,
+	online: number
 }

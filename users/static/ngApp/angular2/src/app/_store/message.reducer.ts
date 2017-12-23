@@ -2,12 +2,16 @@ import { Constants } from './constants';
 
 
 export interface IMessageState {
-    all?: object[];
+    type:string,
+    payload: Array<object>,
+    error:boolean
     // message?: string;
     // channelId?: number;
 }
 export const INITIAL_STATE: IMessageState = {
-    all: []
+    type: null,
+    payload: [],
+    error: false
 }
 
 export function messageReducer(state: IMessageState = INITIAL_STATE, action): IMessageState {
@@ -15,30 +19,55 @@ export function messageReducer(state: IMessageState = INITIAL_STATE, action): IM
     switch (action.type) {
 
         case Constants.MESSAGELIST:
-            return { all: state.all };
+            return { 
+                type: action.type,
+                payload:[],
+                error: false
+            };
             
         case Constants.MESSAGEDETAILS:
-            return { all: state.all };
+            return {
+                type: action.type,
+                payload: [],
+                error: false
+            };
+
         
         case Constants.MESSAGEADD:
-            let lastId = 0
+            let emptyArray = [];
+            let id = state.payload.length + 1
+            let edited = false;
             
-            action.all.forEach(element => { 
-                lastId +=1;
-                if (state.all && state.all.length) {
-                    lastId = state.all.length + 1
-                }
-                action.all = [{ ...element, ...{ id: lastId} }]
-                state.all = [ ...state.all, ...action.all ]
-            });
+            let object = {
+                id : id,
+                edited: edited,
+                message: action.message
+            }
+            emptyArray.push(object);
+            state.payload = [ ...state.payload, ...emptyArray ]
 
-            return { all: state.all };
+            return {
+                type: action.type,
+                payload: state.payload,
+                error: false
+            };
+
         
         case Constants.MESSAGEEDIT:
-            return { all: state.all };
+            return {
+                type: action.type,
+                payload: [],
+                error: false
+            };
+
 
         case Constants.MESSAGEREMOVE:
-            return { all: []};
+            return {
+                type: action.type,
+                payload: [],
+                error: false
+            };
+
 
         
         default:
