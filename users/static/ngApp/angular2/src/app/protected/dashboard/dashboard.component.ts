@@ -165,7 +165,6 @@ export class DashboardComponent implements OnInit {
 
 	channelClicked = (channel, isPrivate) => {
 		 this.chatService.channelInput = channel;
-		 console.log("When CLicked", channel, isPrivate);
 		this.chatService.updateChatObject(channel, isPrivate);
 		this.chatService.shiftChannel(channel, isPrivate);
 	}

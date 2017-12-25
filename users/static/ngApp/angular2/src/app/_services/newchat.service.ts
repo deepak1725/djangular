@@ -156,6 +156,7 @@ export class NewchatService {
 
         this.me.direct.on('$.invite', (payload) => {
             console.log("You got annn Invite", payload);
+            // this.subscribe();
         });
 
         this.currentChatObject.on('$.online.*', (data) => {
@@ -255,6 +256,8 @@ export class NewchatService {
         let user = this.ChatEngine.global.users[invitedUuid];
         secretChat.invite(user);
         console.log("You sent an Invite");
+        this.subscribe(secretChat);
+
         this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: secretChat })    
 
         return secretChat;
