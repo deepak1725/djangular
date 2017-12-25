@@ -25,7 +25,7 @@ export class NewchatService {
     basicRooms:any;
     allUsers: any = [];
     // message: any = [];
-    globalChannel:string = 'Vd44'
+    globalChannel:string = 'Bhai'
     me:any;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
     
@@ -80,21 +80,24 @@ export class NewchatService {
                 this.createRoom(room);
             });
 
-            this.updateChatObject();
+            // this.updateChatObject();
             
-            this.eventListerners()
             this.publicChannelListing()
-            // this.currentChannel();
+            this.eventListerners()
         });
     }
 
     createRoom = (room, isPrivate=false) => {
         
         this.basicRooms = new (this.ChatEngine).Chat(room, isPrivate);
+        
+        if (this.isChannelCurrent(room)) {
+            this.currentChatObject = this.basicRooms;
+        }
         this.subscribe(this.basicRooms)   
     }
 
-    updateChatObject = (channel = this.channelInput, isPrivate = false) => {
+    updateChatObject = (channel, isPrivate = false) => {
         this.currentChatObject = new (this.ChatEngine).Chat(channel, isPrivate);
         this.history(this.currentChatObject)
     }
@@ -133,6 +136,8 @@ export class NewchatService {
 
     eventListerners = () => {
         this.ChatEngine.on('$.created.chat', (data, chat) => {
+            console.log('A Chat is Created', chat);
+            
             this.fetchChannel(chat.channel);
         });
 
@@ -145,7 +150,20 @@ export class NewchatService {
         });
 
         this.ChatEngine.on('$.created.user', (data, user) => {
-            // console.log('User Chat was created');
+            this.ngRedux.dispatch({ type: Constants.USERADD, payload:[user] })    
+            
+        });
+
+        this.me.direct.on('$.invite', (payload) => {
+            console.log("You got annn Invite", payload);
+        });
+
+        this.currentChatObject.on('$.online.*', (data) => {
+            this.allUsers.push(data.user);
+        });
+
+        (this.currentChatObject).on('$.offline.*', (data) => {
+            console.log("SomeOne got offline");
         });
     }
 
@@ -189,7 +207,14 @@ export class NewchatService {
         }
 
         if (chat[4] == 'direct') {
-            this.ngRedux.dispatch({ type: Constants.DIRECTCHANNELADD, payload: chat[2] })    
+            let payload = {
+                channel : chat[2],
+                uuid: chat[2]
+            }
+            if ((this.ChatEngine.chats).hasOwnProperty(element)) {
+                element = this.ChatEngine.chats[element];
+            }
+            this.ngRedux.dispatch({ type: Constants.DIRECTCHANNELADD, payload: payload })    
             isCurrentChannel = this.isChannelCurrent(chat[2]);
         }
 
@@ -211,43 +236,28 @@ export class NewchatService {
         return false;
     }
 
-    onlineUsers = (currentChatObject) => {
+    shiftChannel = (channel: string, isPrivate: boolean) => {
+        let channelAdd = null;
+        
+        if (isPrivate){
+            channelAdd = this.sendInvite(channel)
+            // this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: secretChat })    
             
-        currentChatObject.on('$.online.*', (data) => {
-            this.allUsers.push(data.user);
-        });
+        }else{
 
-
-        let user = this.ChatEngine.users
+            channelAdd = (this.ChatEngine).Chat(channel);
+        }
     }
 
-    shiftChannel = (channel) => {
-        let cc = (this.ChatEngine).Chat(channel);
-        this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: cc })    
-    }
-
-
-    offlineUsers = () => {
-        (this.currentChatObject).on('$.offline.*', (data) => {
-            console.log("SomeOne got offline");
-        });
-    }
-
-
-    getInvite = () => {
-        this.me.direct.on('$.invite', (payload) => {
-            console.log("You got an Invite", payload);
-            // let secretChat = new (this.ChatEngine).Chat(payload.data.channel);
-        });
-    }
 
     sendInvite = (invitedUuid) => {
-        console.log("InvitedUuid", invitedUuid);
-
-        // let secretChat = new (this.ChatEngine).Chat(invitedUuid);
-        // secretChat.invite(invitedUuid);
-        // console.log(secretChat);
+        let secretChat = (this.ChatEngine).Chat(invitedUuid, true);
+        let user = this.ChatEngine.global.users[invitedUuid];
+        secretChat.invite(user);
         console.log("You sent an Invite");
+        this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: secretChat })    
+
+        return secretChat;
 
     }
 

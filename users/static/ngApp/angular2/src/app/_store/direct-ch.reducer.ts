@@ -25,14 +25,25 @@ export function DirectChannelReducer(state: IDirectChannelState = INITIAL_STATE,
             return { payload: state.payload};
 
         case Constants.DIRECTCHANNELADD:
-        
-            if (state.payload.indexOf(action.payload) > -1) {
-                return {
-                    type: action.type,
-                    payload: [...state.payload],
-                    error: false
-                }
-            }
+            
+            // if Channel Exist
+            state.payload.map((element) => {
+                if (element.channel == action.payload.channel){
+                    return {
+                        type: action.type,
+                        payload: [...state.payload],
+                        error: false
+                    }
+                } 
+            })
+            // if (state.payload.indexOf(action.payload) > -1) {
+            //     return {
+            //         type: action.type,
+            //         payload: [...state.payload],
+            //         error: false
+            //     }
+            // }
+
             return {
                 type: action.type,
                 payload: [...state.payload, ...action.payload],

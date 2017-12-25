@@ -27,7 +27,7 @@
 			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
 				<div fxLayout="row" class="channel-title">
 					<div *ngIf="this.chatService.room">
-						<strong>#{{ fetchChannelNameFromString( ( (this.chatService).currentChannel$ | async )?.channel )  }}</strong>
+						<strong>#{{ fetchChannelNameFromString( ((this.chatService).currentChannel$ | async )?.channel )  }}</strong>
 					</div>
 				</div>
 				<div fxLayout="row" class="channel-title">
@@ -64,19 +64,21 @@
 				<mat-divider></mat-divider>
 
 				<a mat-list-item 
-					(click)="this.chatService.sendInvite(occupant.uuid)"
-					routerLinkActive="active-link" class="online-name" 
-					matLine [routerLinkActiveOptions]="{exact: true}"
-				 	*ngFor="let occupant of this.chatService.directChats$ | async; let index = index" 
-				 	>
-					
+					routerLinkActive="active-link" 
+					class="online-name" 
+					matLine 
+					[routerLinkActiveOptions]="{exact: true}"
+					routerLink="/messages/{{occupant.uuid}}"
+					 (click)="channelClicked(occupant.channel, true)"
+				 	*ngFor="let occupant of this.chatService.directChats$ | async; let index = index">
+
 					<div fxLayout="row" fxLayoutAlign="start center">
 						<mat-icon mat-list-icon class="online">
 							fiber_manual_record
 						</mat-icon>
 						<div>
-							{{ occupant }}  
-							<small class="dull">@{{ occupant}} </small>
+							{{ occupant.channel }}  
+							<small class="dull">@{{ occupant.uuid }} </small>
 						</div>
 					</div>
 					
@@ -147,7 +149,8 @@
 				<mat-divider></mat-divider>
 					<a mat-list-item 
 						routerLinkActive="active" class="online-name"
-						routerLink="../{{channel}}"
+						routerLink="/messages/{{channel}}"
+						(click)="channelClicked(channel, false)"
 						matLine 
 						*ngFor="let channel of this.chatService.publicChats$ | async; let index = index">
 					

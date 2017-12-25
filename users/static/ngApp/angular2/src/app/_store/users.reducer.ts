@@ -2,14 +2,15 @@ import { Constants } from './constants';
 
 
 export interface IUserState {
-    id?: number;
-    name?: string;
-    groupId?: number;
-    all?: object[];
+    type: string;
+    payload: object[];
+    error?: boolean;
 }
 
 export const INITIAL_STATE: IUserState = {
-    id: 0
+    type: null,
+    payload: [],
+    error: false
 }
 
 export function userReducer(state: IUserState = INITIAL_STATE, action): IUserState {
@@ -18,37 +19,38 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
     switch (action.type) {
 
         case Constants.USERLIST:
-            return { groupId: state.groupId + 1 };
+            return {
+                type: action.type, 
+                payload: state.payload 
+            };
 
         case Constants.USERDETAILS:
-            return { groupId: state.groupId + 1 };
+            return {
+                type: action.type,
+                payload: state.payload
+            };
 
         case Constants.USERADD:
             let lastId = 0
-            console.log(action.all);
-            for (const user in action.all) {
-                console.log("for each", user);
-                if (action.all.hasOwnProperty(user)) {
-                    const element = action.all[user];
-                }
-            }
-            // action.all.forEach(element => {
-            //     lastId += 1;
-            //     if (state.all && state.all.length) {
-            //         lastId = state.all.length + 1
-            //     }
-            //     action.all = [{ ...element, ...{ id: lastId } }]
-            //     state.all = [...state.all, ...action.all]
-            // });
+    
 
-            return { all: state.all };
-
+            return {
+                type: action.type,
+                payload: [...state.payload, ...action.payload],
+                error: false
+            };
 
         case Constants.USEREDIT:
-            return { groupId: state.groupId + 1 };
+            return {
+                type: action.type,
+                payload: state.payload
+            };
 
         case Constants.USERREMOVE:
-            return { groupId: state.groupId + 1 };
+            return {
+                type: action.type,
+                payload: state.payload
+            };
 
         default:
             return state;

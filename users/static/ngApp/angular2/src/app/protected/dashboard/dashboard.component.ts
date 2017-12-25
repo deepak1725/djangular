@@ -64,7 +64,7 @@ export class DashboardComponent implements OnInit {
 		this.chatService.callStack();
 		this.scrollToBottom();
 		this.events(NavigationEnd);
-		
+			
 	}
 
 
@@ -134,17 +134,40 @@ export class DashboardComponent implements OnInit {
 			return ar.pop();
 		}	
 	}
-	events = (naviStart) => {
+	events = (naviEnd) => {
 		this.router.events.subscribe(
 			 (event: Event) => {
-				 if (event instanceof naviStart) {
-					 let channelInput: string = this.route.snapshot.paramMap.get('channel');
-					 this.chatService.channelInput = channelInput;
-					 this.chatService.updateChatObject();
-					 this.chatService.shiftChannel(channelInput);
+				//  if (event instanceof NavigationStart) {
+				// 	 console.log("Navigation Started");
+				// 	 let channelInput: string = this.route.snapshot.paramMap.get('channel');
+				// 	 let channelType: string = this.route.snapshot.paramMap.get('type');
+
+				// 	 //  let alll: any = this.route.snapshot.paramMap.params;
+				// 	 console.log("ChannelType", channelType);
+				// 	 console.log("ChannelInput", channelInput);
+				//  }
+				 if (event instanceof NavigationEnd) {
+					//  console.log("Navigation Ended");
+					 
+					//  let channelInput: string = this.route.snapshot.paramMap.get('channel');
+					//  let channelType: string = this.route.snapshot.paramMap.get('type');
+					 
+					//  let alll: any = this.route.snapshot.paramMap.params;
+					//  console.log("ChannelType", channelType);
+					//  console.log("ChannelInput", channelInput);
+					//  this.chatService.channelInput = channelInput;
+					//  this.chatService.updateChatObject();
+					//  this.chatService.shiftChannel(channelInput, channelType);
 				 }
 			 }
 		)
+	}
+
+	channelClicked = (channel, isPrivate) => {
+		 this.chatService.channelInput = channel;
+		 console.log("When CLicked", channel, isPrivate);
+		this.chatService.updateChatObject(channel, isPrivate);
+		this.chatService.shiftChannel(channel, isPrivate);
 	}
 
 
