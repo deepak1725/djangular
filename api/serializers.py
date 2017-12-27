@@ -6,8 +6,7 @@ from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer
 from ngApp.forms import MyPasswordResetForm
-from users.models import UserChatRecords
-
+from users.models import UserChatRecords, UserChannels
 
 
 class MyRegisterSerializer(RegisterSerializer):
@@ -36,4 +35,10 @@ class ChatRecordsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserChatRecords
         fields = ('user','uuid', 'created', 'modified')
+
+class UserChannelsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserChannels
+        fields = ('friend_id', 'created', 'modified')
 

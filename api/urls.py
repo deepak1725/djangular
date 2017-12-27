@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 
 router = DefaultRouter()
 router.register(r'chat', views.UsersChatRecoredsViewSet)
+router.register(r'user-channels', views.UserChannelsViewSet)
 
 
 urlpatterns = [

@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
-from api.serializers import ChatRecordsSerializer
+from api.serializers import ChatRecordsSerializer, UserChannelsSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework import status
 from django.http import HttpResponse
-from users.models import UserChatRecords
+from users.models import UserChatRecords,UserChannels
 from django.shortcuts import get_object_or_404
 
 
@@ -35,3 +35,20 @@ class UsersChatRecoredsViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class UserChannelsViewSet(viewsets.ModelViewSet):
+    queryset = UserChannels.objects.all()
+    serializer_class = UserChannelsSerializer
+
+    def list(self, request, *args, **kwargs):
+        userChatObj = UserChannels.objects.filter(user_id = 1).first()
+        print (userChatObj)
+        return HttpResponse(request.user)
+
+    def retrieve(self, request, *args, **kwargs):
+        # pk --> userId
+        userId = kwargs['pk']
+        userChatObj = UserChannels.objects.filter(user_id = userId).first()
+        print (userChatObj)
+        serializer = ChatRecordsSerializer(userChatObj)
+        return Response(serializer.data)

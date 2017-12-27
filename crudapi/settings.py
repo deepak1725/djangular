@@ -114,10 +114,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
+        'NAME': 'postgress',
         'USER': 'postgres',
-        'HOST':'db',
-        'PASSWORD': '123456',
+        'HOST':'localhost',
+        'PASSWORD': 'ucodesoft',
         'PORT': '5432',
     }
 }
@@ -180,6 +180,8 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+            'rest_framework.authentication.BasicAuthentication',
+
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
