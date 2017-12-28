@@ -40,15 +40,25 @@ class UserChannelsViewSet(viewsets.ModelViewSet):
     queryset = UserChannels.objects.all()
     serializer_class = UserChannelsSerializer
 
-    def list(self, request, *args, **kwargs):
-        userChatObj = UserChannels.objects.filter(user_id = 1).first()
-        print (userChatObj)
-        return HttpResponse(request.user)
+    # def list(self, request, *args, **kwargs):
+    #     userChatObj = UserChannels.objects.filter(user_id = 1).first()
+    #     print (userChatObj)
+    #     return HttpResponse(request.user)
 
-    def retrieve(self, request, *args, **kwargs):
-        # pk --> userId
-        userId = kwargs['pk']
-        userChatObj = UserChannels.objects.filter(user_id = userId).first()
-        print (userChatObj)
-        serializer = ChatRecordsSerializer(userChatObj)
-        return Response(serializer.data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     # pk --> userId
+    #     userId = request.user.id
+    #     # print userId
+    #
+    #     userChatObj = UserChannels.objects.filter(user_id = userId).all()
+    #     self.queryset = userChatObj
+    #     print (userChatObj)
+    #     serializer = UserChannelsSerializer(userChatObj)
+    #     return Response(serializer.data)
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     userId = request.user.id
+    #     instance = UserChannels.objects.get(user_id = userId)
+    #     serializer = self.get_serializer(instance)
+    #     print serializer
+    #     return Response(serializer.data)

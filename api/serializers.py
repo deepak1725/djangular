@@ -36,9 +36,23 @@ class ChatRecordsSerializer(serializers.ModelSerializer):
         model = UserChatRecords
         fields = ('user','uuid', 'created', 'modified')
 
+
+
+
+class TrackListingField(serializers.RelatedField):
+    def to_representation(self, value):
+        return 'Track: %s (%s)' % (value.friend.first_name, value.friend.last_name)
+
 class UserChannelsSerializer(serializers.ModelSerializer):
+    friend = TrackListingField(many=True, read_only=True)
 
     class Meta:
         model = UserChannels
-        fields = ('friend_id', 'created', 'modified')
+        fields = ('user', 'friend')
 
+    def create(self, validated_data):
+        friend = validated_data.pop('friend')
+        album = UserChannels.objects.create(**validated_data)
+        for track_data in friend:
+            UserModel.objects.create(user=album, **track_data)
+        return album

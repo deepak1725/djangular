@@ -26,11 +26,24 @@ class UserChatRecords(models.Model):
     def __str__(self):
         return self.user.first_name
 
-class UserChannels(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    user = models.ForeignKey(User, related_name='UserChannel')
-    friend = models.ForeignKey(User, related_name='FriendChannel' )
+
+
+
+
+class FriendChannels(models.Model):
+    friend = models.ForeignKey(User)
     channel = models.CharField(max_length=10)
+    created = models.DateTimeField(auto_created=True, auto_now=True)
+    modified = models.DateTimeField(auto_created=True, auto_now_add=True)
+
+    def __str__(self):
+        return self.channel
+
+
+class UserChannels(models.Model):
+    user = models.ForeignKey(User, related_name='UserChannel')
+    friend = models.ForeignKey(FriendChannels, related_name='FriendChannel')
+    # channel = models.CharField(max_length=10)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
 
