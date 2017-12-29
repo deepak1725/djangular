@@ -6,7 +6,7 @@ from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer
 from ngApp.forms import MyPasswordResetForm
-from users.models import UserChatRecords, UserChannels
+from users.models import UserChatRecords, UserChannels, FriendChannels
 
 
 class MyRegisterSerializer(RegisterSerializer):
@@ -36,23 +36,26 @@ class ChatRecordsSerializer(serializers.ModelSerializer):
         model = UserChatRecords
         fields = ('user','uuid', 'created', 'modified')
 
+#
+class UserModelSerializer(serializers.RelatedField):
+    class Meta:
+        models = UserModel
 
+class FriendField(serializers.ModelSerializer):
 
-
-class TrackListingField(serializers.RelatedField):
-    def to_representation(self, value):
-        return 'Track: %s (%s)' % (value.friend.first_name, value.friend.last_name)
+    class Meta:
+        model = FriendChannels
+        fields = ('user', 'channel')
 
 class UserChannelsSerializer(serializers.ModelSerializer):
-    friend = TrackListingField(many=True, read_only=True)
-
+    friend = FriendField(many=True)
     class Meta:
         model = UserChannels
         fields = ('user', 'friend')
 
     def create(self, validated_data):
-        friend = validated_data.pop('friend')
-        album = UserChannels.objects.create(**validated_data)
-        for track_data in friend:
-            UserModel.objects.create(user=album, **track_data)
-        return album
+        friends = validated_data.pop('friend')
+        uc = UserChannels.objects.create(**validated_data)
+        for friend_data in friends:
+            uc.friend.add(FriendChannels.objects.create(**friend_data))
+        return uc

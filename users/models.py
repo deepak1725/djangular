@@ -31,7 +31,7 @@ class UserChatRecords(models.Model):
 
 
 class FriendChannels(models.Model):
-    friend = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     channel = models.CharField(max_length=10)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
@@ -42,8 +42,7 @@ class FriendChannels(models.Model):
 
 class UserChannels(models.Model):
     user = models.ForeignKey(User, related_name='UserChannel')
-    friend = models.ForeignKey(FriendChannels, related_name='FriendChannel')
-    # channel = models.CharField(max_length=10)
+    friend = models.ManyToManyField(FriendChannels, related_name='FriendChannel')
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
 
