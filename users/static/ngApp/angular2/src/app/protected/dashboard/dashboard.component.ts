@@ -1,3 +1,5 @@
+import { UserService } from './../../../../../../../../crudapi/my_cdn/ngApp/angular2/src/app/_services/user.service';
+import { UserService } from './../../_services/user.service';
 import { Component, ViewEncapsulation, 
 	OnInit, AfterViewChecked, 
 	ElementRef, ViewChild, 
@@ -24,6 +26,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {AddChannelDialog} from '../dialogs/add-channel.dialog'
 import {RemoveChannelDialog} from '../dialogs/remove-channel.dialog'
 import { MatSnackBar } from '@angular/material';
+import { UserService } from '../../_services/user.service';
 
 
 
@@ -57,7 +60,9 @@ export class DashboardComponent implements OnInit {
 		public dialog: MatDialog,
 		private router: Router,
 		private route: ActivatedRoute,
+		private UserServicee: UserService,
 	) {
+		this.UserServicee.getUserChannelDetails(2)
 	}
 
 	ngOnInit() {

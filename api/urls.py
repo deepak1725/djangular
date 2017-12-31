@@ -16,7 +16,6 @@ router = DefaultRouter()
 router.register(r'chat', views.UsersChatRecoredsViewSet)
 router.register(r'user-channels', views.UserChannelsViewSet)
 
-
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^rest-auth/', include('rest_auth.urls')),
@@ -50,6 +49,7 @@ urlpatterns += [
         name='account_confirm_email'),
 
     url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+    url(r'^channel-name/', views.GetChannelNameViewSet.as_view(), name='channel-name'),
 
 ]

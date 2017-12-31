@@ -7,6 +7,7 @@ import { User } from '../_models/user';
 export class UserService {
     headers: Headers;
     options: RequestOptions;
+    currentUser: any;
 
     constructor(private http: Http) {
         this.options = new RequestOptions ();
@@ -15,19 +16,18 @@ export class UserService {
         }
 
         this.options.headers.append('Content-Type', 'application/json');
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        this.options.headers.append('Authorization','JWT ' + currentUser.token);
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.options.headers.append('Authorization','JWT ' + this.currentUser.token);
 
      }
- 
+    
+
     getAll() {
         return this.http.get('/users').map((response: Response) => response.json());
     }
  
     getUserName():String {
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        let fullName = currentUser.user.first_name +' '+ currentUser.user.last_name
-        return fullName;
+        return this.currentUser.user.first_name +' '+ this.currentUser.user.last_name
     }
  
     create(user: User) {
@@ -51,5 +51,10 @@ export class UserService {
             var apiresponse = JSON.stringify(response);
             return apiresponse;
         });
+    }
+
+    getUserChannelDetails = (id) => {
+        return this.http.get("/user-channels/${id}/")
+                .map((response: Response) => response.json());
     }
 }

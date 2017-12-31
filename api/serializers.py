@@ -1,13 +1,12 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers, models
-
+# from views import
 UserModel = get_user_model()
 from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer
 from ngApp.forms import MyPasswordResetForm
 from users.models import UserChatRecords, UserChannels, FriendChannels
-
 
 class MyRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField()
@@ -37,9 +36,9 @@ class ChatRecordsSerializer(serializers.ModelSerializer):
         fields = ('user','uuid', 'created', 'modified')
 
 #
-class UserModelSerializer(serializers.RelatedField):
-    class Meta:
-        models = UserModel
+# class UserModelSerializer(serializers.RelatedField):
+#     class Meta:
+#         models = UserModel
 
 class FriendField(serializers.ModelSerializer):
 
@@ -49,13 +48,19 @@ class FriendField(serializers.ModelSerializer):
 
 class UserChannelsSerializer(serializers.ModelSerializer):
     friend = FriendField(many=True)
+
     class Meta:
         model = UserChannels
         fields = ('user', 'friend')
 
     def create(self, validated_data):
         friends = validated_data.pop('friend')
-        uc = UserChannels.objects.create(**validated_data)
+        uc = UserChannels.objects.filter(**validated_data)
+        if (uc.exists()):
+            uc = uc.first()
+        else:
+            uc = UserChannels.objects.create(**validated_data)
         for friend_data in friends:
-            uc.friend.add(FriendChannels.objects.create(**friend_data))
+            if not uc.friend.filter(user=friend_data['user']).exists():
+                uc.friend.add(FriendChannels.objects.create(**friend_data))
         return uc

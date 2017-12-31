@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
-from api.serializers import ChatRecordsSerializer, UserChannelsSerializer, FriendField
+from api.serializers import ChatRecordsSerializer, UserChannelsSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route, list_route
 from rest_framework import status
 from django.http import HttpResponse
-from users.models import UserChatRecords,UserChannels
+from users.models import UserChatRecords,UserChannels, FriendChannels
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+import random, string
 
 
 class UsersChatRecoredsViewSet(viewsets.ModelViewSet):
@@ -40,25 +42,21 @@ class UserChannelsViewSet(viewsets.ModelViewSet):
     queryset = UserChannels.objects.all()
     serializer_class = UserChannelsSerializer
 
-    # def list(self, request, *args, **kwargs):
-    #     userChatObj = UserChannels.objects.filter(user_id = 1).first()
-    #     print (userChatObj)
-    #     return HttpResponse(request.user)
+    def retrieve(self, request, *args, **kwargs):
+        instance = UserChannels.objects.filter(user_id=kwargs['pk']).first()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     # pk --> userId
-    #     userId = request.user.id
-    #     # print userId
-    #
-    #     userChatObj = UserChannels.objects.filter(user_id = userId).all()
-    #     self.queryset = userChatObj
-    #     print (userChatObj)
-    #     serializer = UserChannelsSerializer(userChatObj)
-    #     return Response(serializer.data)
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     userId = request.user.id
-    #     instance = UserChannels.objects.get(user_id = userId)
-    #     serializer = self.get_serializer(instance)
-    #     print serializer
-    #     return Response(serializer.data)
+class GetChannelNameViewSet(APIView):
+
+    def get(self, request, *args, **kw):
+
+        condition = True
+        result=None
+
+        while condition:
+            result = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            condition = FriendChannels.objects.filter(channel=result).exists()
+
+        return Response(result, status=status.HTTP_200_OK)
