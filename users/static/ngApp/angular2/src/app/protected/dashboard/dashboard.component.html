@@ -70,7 +70,8 @@
 					[routerLinkActiveOptions]="{exact: true}"
 					routerLink="/messages/{{occupant.uuid}}"
 					 (click)="channelClicked(occupant.channel, true)"
-				 	*ngFor="let occupant of this.chatService.directChats$ | async; let index = index">
+ 					*ngFor="let occupant of ((this.chatService).privateChats$ | async) ; let index = index">
+
 
 					<div fxLayout="row" fxLayoutAlign="start center">
 						<mat-icon mat-list-icon class="online">

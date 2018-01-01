@@ -12,6 +12,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { rootReducer, IAppState } from '../_store/store';
 import * as ChatEngineCore from 'chat-engine';
 import { environment } from '../../environments/environment';
+import { UserService } from './user.service';
 
 
 @Injectable()
@@ -21,14 +22,15 @@ export class NewchatService {
     ChatEngine:any;
     room: string = 'general';
     rooms: Array<any> = ['general', 'annoucement'];
+    privateRooms: Array<any> = [];
     currentChatObject:any;
     basicRooms:any;
     allUsers: any = [];
     // message: any = [];
-    globalChannel:string = 'Bhai'
+    globalChannel:string = 'BhaiLaptop'
     me:any;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
-    
+    myPrivateChannels: Array<any> = []
 
     @select(['public_channel','payload']) readonly publicChats$: Observable<any[]>;
     @select(['private_channel','payload']) readonly privateChats$: Observable<any[]>;
@@ -39,7 +41,7 @@ export class NewchatService {
     constructor(
         private ngRedux: NgRedux<IAppState>,
         private route: ActivatedRoute,
-
+        private UserServicee: UserService,
     ) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.username = currentUser.user.username;
@@ -47,8 +49,17 @@ export class NewchatService {
     }
 
     callStack = () => {
-        this.initialize();
-        this.lobby();
+        this.UserServicee.getUserChannelDetails().subscribe(
+            (response) => { 
+                console.log("Yeag", response)
+                this.myPrivateChannels = response.data.friend
+                this.initialize();
+                this.lobby();
+            },
+            (error) => {
+                console.log("Error")
+            }
+        )
         
     }
     
@@ -136,7 +147,7 @@ export class NewchatService {
 
     eventListerners = () => {
         this.ChatEngine.on('$.created.chat', (data, chat) => {
-            console.log('A Chat is Created', chat);
+            console.log('A Chat is Created');
             
             this.fetchChannel(chat.channel);
         });
@@ -150,6 +161,21 @@ export class NewchatService {
         });
 
         this.ChatEngine.on('$.created.user', (data, user) => {
+            console.log("User is created", user)
+            
+            Observable.forkJoin(
+                this.UserServicee.getUserDetails(user.uuid),
+                this.UserServicee.getChannelName()
+            ).subscribe(resp => {
+                return this.UserServicee.addUserChannelDetails(resp[0].data.id, resp[1].data.name)
+                    .subscribe((response) => {
+                        let channelName = response.data.friend[0].channel
+                        let newChat = new (this.ChatEngine).Chat(channelName, true);
+                        
+                    })
+            }
+        )
+
             this.ngRedux.dispatch({ type: Constants.USERADD, payload:[user] })    
             
         });
@@ -203,21 +229,36 @@ export class NewchatService {
         }
 
         if (chat[2] == 'private.') {
-            this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: chat[3] })    
-            isCurrentChannel = this.isChannelCurrent(chat[3]);
-        }
-
-        if (chat[4] == 'direct') {
+            console.log("Fired2", chat[3])
+            
+            for(const iterator of this.myPrivateChannels) {
+                console.log(iterator);    
+            }
             let payload = {
-                channel : chat[2],
-                uuid: chat[2]
+                channel: chat[3],
+                uuid: chat[3]
             }
             if ((this.ChatEngine.chats).hasOwnProperty(element)) {
                 element = this.ChatEngine.chats[element];
+                console.log("Elememn",this.ChatEngine.chats);
+                // this.sendInvite(this.username, element)
             }
-            this.ngRedux.dispatch({ type: Constants.DIRECTCHANNELADD, payload: payload })    
-            isCurrentChannel = this.isChannelCurrent(chat[2]);
+
+            this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: payload })    
+            isCurrentChannel = this.isChannelCurrent(chat[3]);
         }
+
+        // if (chat[4] == 'direct') {
+        //     let payload = {
+        //         channel : chat[2],
+        //         uuid: chat[2]
+        //     }
+        //     if ((this.ChatEngine.chats).hasOwnProperty(element)) {
+        //         element = this.ChatEngine.chats[element];
+        //     }
+        //     this.ngRedux.dispatch({ type: Constants.DIRECTCHANNELADD, payload: payload })    
+        //     isCurrentChannel = this.isChannelCurrent(chat[2]);
+        // }
 
         
         if (isCurrentChannel) { //Checking Current Channel
@@ -241,26 +282,28 @@ export class NewchatService {
         let channelAdd = null;
         
         if (isPrivate){
-            channelAdd = this.sendInvite(channel)
+            // channelAdd = this.sendInvite(channel)
             // this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: secretChat })    
             
         }else{
 
             channelAdd = (this.ChatEngine).Chat(channel);
         }
+        this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: channel })    
+
     }
 
 
-    sendInvite = (invitedUuid) => {
-        let secretChat = (this.ChatEngine).Chat(invitedUuid, true);
+    sendInvite = (invitedUuid, chat) => {
         let user = this.ChatEngine.global.users[invitedUuid];
-        secretChat.invite(user);
+        chat.invite(user);
         console.log("You sent an Invite");
-        this.subscribe(secretChat);
 
-        this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: secretChat })    
+        this.subscribe(chat);
+        console.log(chat);
+        
 
-        return secretChat;
+        return chat;
 
     }
 

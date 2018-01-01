@@ -15,7 +15,7 @@ from django.core.mail.backends.filebased import EmailBackend
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import dj_database_url
-
+import datetime
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -156,7 +156,8 @@ USE_L10N = True
 USE_TZ = True
 
 REST_USE_JWT = True
-
+JWT_ALLOW_REFRESH = False
+JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=300000000)
 # from django.urls import reverse
 
 # Static files (CSS, JavaScript, Images)
@@ -179,8 +180,8 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
             'rest_framework.authentication.BasicAuthentication',
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
 
     ],
 

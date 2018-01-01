@@ -58,19 +58,19 @@ export class DashboardComponent implements OnInit {
 		public dialog: MatDialog,
 		private router: Router,
 		private route: ActivatedRoute,
-		private UserServicee: UserService,
+		
 	) {
-		this.UserServicee.getUserChannelDetails(2)
+		
 	}
 
 	ngOnInit() {
-		this.chatService.callStack();
 		this.scrollToBottom();
 		this.events(NavigationEnd);
+		this.chatService.callStack();
 			
 	}
 
-
+	
 	ngAfterViewChecked() {
 		this.scrollToBottom();
 	}

@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from users.models import UserChatRecords,UserChannels, FriendChannels
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-import random, string
+import random, string, types
 
 
 class UsersChatRecoredsViewSet(viewsets.ModelViewSet):
@@ -41,6 +41,9 @@ class UsersChatRecoredsViewSet(viewsets.ModelViewSet):
 class UserChannelsViewSet(viewsets.ModelViewSet):
     queryset = UserChannels.objects.all()
     serializer_class = UserChannelsSerializer
+    permission_classes = ''
+    authentication_classes = ''
+
 
     def retrieve(self, request, *args, **kwargs):
         instance = UserChannels.objects.filter(user_id=kwargs['pk']).first()
@@ -80,6 +83,8 @@ class UserChannelsViewSet(viewsets.ModelViewSet):
 
 
 class GetChannelNameViewSet(APIView):
+    permission_classes = ''
+    authentication_classes = ''
 
     def get(self, request, *args, **kw):
 
@@ -96,3 +101,45 @@ class GetChannelNameViewSet(APIView):
             'error': None
         }
         return Response(responseData, status=status.HTTP_200_OK)
+
+class UserDetailsViewSet(APIView):
+    permission_classes = ''
+    authentication_classes = ''
+
+    def get(self, request, *args, **kw):
+        arg_2 = request.GET.get('username')
+        arg_1 = request.GET.get('id')
+        message = 'Invalid or missing username.'
+        data = {}
+
+        if arg_1:
+            message = 'User Found'
+            user = User.objects.get(id = arg_1)
+            data = {'id':user.id, 'name' : user.get_full_name(), 'username': user.username}
+
+        elif isinstance(arg_2, str):
+            user = User.objects.get_by_natural_key(arg_2)
+
+            message = 'User Details Successfully fetched'
+            data = {'id':user.id, 'name' : user.get_full_name(), 'username': user.username}
+
+        responseData = {
+            'message': message,
+            'data': data,
+            'error': None
+        }
+        return Response(responseData, status=status.HTTP_200_OK)
+
+        # def post(self, request, *args, **kwargs):
+        #     user = request.POST.get('user')
+        #     myuser = User.objects.get_by_natural_key('deepak')
+        #     print(myuser.id)
+        #     message = 'User Details Successfully fetched'
+        #     # data = {'id': user.id, 'name': user.get_full_name(), 'username': user.username}
+        #     data ={}
+        #     responseData = {
+        #         'message': message,
+        #         'data': data,
+        #         'error': None
+        #     }
+        #     return Response(responseData, status=status.HTTP_200_OK)

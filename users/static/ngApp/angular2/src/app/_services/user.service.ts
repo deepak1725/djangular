@@ -18,8 +18,7 @@ export class UserService {
         this.options.headers.append('Content-Type', 'application/json');
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.options.headers.append('Authorization','JWT ' + this.currentUser.token);
-
-     }
+    }
     
 
     getAll() {
@@ -53,8 +52,42 @@ export class UserService {
         });
     }
 
-    getUserChannelDetails = (id) => {
-        return this.http.get("/user-channels/${id}/")
-                .map((response: Response) => response.json());
+    getUserChannelDetails = (id=undefined) => { 
+        if (! id) {
+            id = this.currentUser.user.pk      
+        }      
+        return this.http
+            .get(`/api/user-channels/${ id }`, this.options)
+            .map((response: Response) => response.json());
+    }
+
+    addUserChannelDetails = (friendId, channelName) => {
+        let id = null;
+        if (!id) {
+            id = this.currentUser.user.pk
+        }
+        let body = {
+            
+            "user": id,
+            "friend" : [
+                { "user": friendId, "channel": channelName }
+            ]
+            
+        }
+        return this.http
+            .post(`/api/user-channels/`, body , this.options)
+            .map((response: Response) => response.json());
+    }
+
+    getChannelName = () => {
+        return this.http
+            .get(`/api/channel-name`, this.options)
+            .map((response: Response) => response.json());
+    }
+
+    getUserDetails = (name: string, param='username') => {
+        return this.http
+            .get(`api/user-details/?${param}=${ name}`, this.options)
+            .map((response: Response) => response.json());
     }
 }

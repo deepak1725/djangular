@@ -36,13 +36,6 @@ urlpatterns += [
     url(r'^reset-password', PasswordResetView.as_view(), name='resetPassword'),
     #POST NEW PASSWORD HERE
     url(r'^reset/password/confirm', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-
-    # Password Reset Confirm
-    #TODO BRING Back reset password serializer link here|
-    # (from ngApp using custom my PASSWORD_RESET_SERIALIZER).
-    # url(r'^reset/(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', PasswordResetConfirmView.as_view(),
-    #     name='password_reset_confirm'),
-
     # Change Password
     url(r'^change-password', PasswordChangeView.as_view(), name='change_password'),
     url(r'^account-confirm-email/(?P<key>[-:\w]+)/$', TemplateView.as_view(),
@@ -51,5 +44,6 @@ urlpatterns += [
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^channel-name/', views.GetChannelNameViewSet.as_view(), name='channel-name'),
+    url(r'^user-details/', views.UserDetailsViewSet.as_view(), name='user-details'),
 
 ]
