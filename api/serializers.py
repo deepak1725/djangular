@@ -56,11 +56,26 @@ class UserChannelsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         friends = validated_data.pop('friend')
         uc = UserChannels.objects.filter(**validated_data)
+
         if (uc.exists()):
             uc = uc.first()
         else:
             uc = UserChannels.objects.create(**validated_data)
+
         for friend_data in friends:
+            # Add Friend as User If not exists
+            friendUser = UserChannels.objects.get_or_create(user=friend_data['user'])
+
+
+            # Add User as Friend of New Friend
+            if not friendUser[0].friend.filter(user=validated_data['user']).exists():
+                newFriend = friendUser[0].friend.get_or_create(user=validated_data['user'], channel=friend_data['channel'])
+                friendUser[0].friend.add(newFriend[0])
+
+
+
             if not uc.friend.filter(user=friend_data['user']).exists():
                 uc.friend.add(FriendChannels.objects.create(**friend_data))
+
         return uc
+

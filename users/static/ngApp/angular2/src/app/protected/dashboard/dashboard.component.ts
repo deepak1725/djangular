@@ -1,5 +1,3 @@
-import { UserService } from './../../../../../../../../crudapi/my_cdn/ngApp/angular2/src/app/_services/user.service';
-import { UserService } from './../../_services/user.service';
 import { Component, ViewEncapsulation, 
 	OnInit, AfterViewChecked, 
 	ElementRef, ViewChild, 

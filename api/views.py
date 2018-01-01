@@ -45,7 +45,38 @@ class UserChannelsViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = UserChannels.objects.filter(user_id=kwargs['pk']).first()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        message = 'Data Successfully fetched'
+        if not serializer.data['user']:
+            message = "No User Found"
+        responseData = {
+            'message' : message,
+            'data': serializer.data,
+            'error' : None
+        }
+        return Response(responseData,  status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        response = super(UserChannelsViewSet, self).create(request, args, kwargs)
+        message = 'Channel Successfully created'
+
+        responseData = {
+            'message': message,
+            'data': response.data,
+            'error': None
+        }
+        return Response(responseData, status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        response = super(UserChannelsViewSet, self).list(request, args, kwargs)
+        message = 'Data Successfully fetched'
+
+        responseData = {
+            'message': message,
+            'data': response.data,
+            'error': None
+        }
+        return Response(responseData, status=status.HTTP_200_OK)
+
 
 
 class GetChannelNameViewSet(APIView):
@@ -59,4 +90,9 @@ class GetChannelNameViewSet(APIView):
             result = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             condition = FriendChannels.objects.filter(channel=result).exists()
 
-        return Response(result, status=status.HTTP_200_OK)
+        responseData = {
+            'message': 'Channel Name Successfully Created.',
+            'data': {'name':result},
+            'error': None
+        }
+        return Response(responseData, status=status.HTTP_200_OK)
