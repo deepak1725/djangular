@@ -41,10 +41,13 @@ class ChatRecordsSerializer(serializers.ModelSerializer):
 #         models = UserModel
 
 class FriendField(serializers.ModelSerializer):
+    first_name = serializers.CharField(read_only=True, source='user.first_name')
+    username = serializers.CharField(read_only=True, source='user.username')
+    last_name = serializers.CharField(read_only=True, source='user.last_name')
 
     class Meta:
         model = FriendChannels
-        fields = ('user', 'channel')
+        fields = ('user', 'channel', 'first_name', 'last_name', 'username')
 
 class UserChannelsSerializer(serializers.ModelSerializer):
     friend = FriendField(many=True)
@@ -52,6 +55,14 @@ class UserChannelsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserChannels
         fields = ('user', 'friend')
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        rett = {}
+        rett['message'] = "Data Successfully fetched"
+        rett['data'] = ret
+        rett['error'] = None
+        return rett
 
     def create(self, validated_data):
         friends = validated_data.pop('friend')
