@@ -3,7 +3,7 @@ import { Constants } from './constants';
 
 export interface ICurrentChannelState {
     type?: string;
-    payload?: object;
+    payload?: string;
     error?: boolean;
 }
 
@@ -27,14 +27,14 @@ export function CurrentChannelReducer(state: ICurrentChannelState = INITIAL_STAT
         case Constants.CURRENTCHANNELADD:
             return {
                 type: action.type,
-                payload: {...state.payload, ...action.payload},
+                payload: action.payload,
                 error: false
             };
         
         case Constants.CURRENTCHANNELEDIT:
             return {
                 type: action.type,
-                payload: {...state.payload, ...action.payload},
+                payload: action.payload,
                 error: false
             };
 
