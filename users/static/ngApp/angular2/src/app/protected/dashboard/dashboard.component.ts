@@ -45,11 +45,14 @@ export class DashboardComponent implements OnInit {
 	title = 'Dashboard';
 	rakeArray = new Array(90);
 	newChannel: string = '';
-	ChatEngine
 	chatObjectForView: IChatObjectForView = {
 		room : "no",
 		online: 0
 	}
+	currentChannel:string = '#general';
+
+	@select(['current_channel', 'payload']) readonly currentChannel$: Observable<any[]>;
+
 
 
 	constructor(
@@ -67,7 +70,10 @@ export class DashboardComponent implements OnInit {
 		this.scrollToBottom();
 		this.events(NavigationEnd);
 		this.chatService.callStack();
-			
+		// this.currentChannel$.subscribe((event) => {
+        //     console.log("Current Channel Changed", event);
+		// 	this.chatService.history(event)
+        // })
 	}
 
 	
@@ -89,7 +95,6 @@ export class DashboardComponent implements OnInit {
 		message = message.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
 		if (message) {
 			this.chatService.publish(message)
-			// this.chatService.publishDirectMessage('deepak')
 		}
 						
 
@@ -118,6 +123,7 @@ export class DashboardComponent implements OnInit {
 			}
 		});
 	}
+	
 
 	removeChannel():void{
 		let dialogRef = this.dialog.open(RemoveChannelDialog, {
@@ -131,36 +137,32 @@ export class DashboardComponent implements OnInit {
 		});
 	}
 
-	fetchChannelNameFromString = (channel:string):string => {
-		if (channel) {	
+	fetchChannelNameFromString = (channel:string):any => {
+		if (channel) {
 			let ar = channel.split("#");
-			return ar.pop();
+			let channelName = ar.pop(); 
+			let isPrivate = ar.pop();
+			if (isPrivate == 'private.'){
+				
+				let userDetails = this.chatService.myPrivateChannels.find((arg): any => arg.channel == channelName)
+				return `@${userDetails.username}`;
+			}else{
+				return `#${channelName}`;
+			}
 		}	
 	}
 	events = (naviEnd) => {
 		this.router.events.subscribe(
 			 (event: Event) => {
-				//  if (event instanceof NavigationStart) {
-				// 	 console.log("Navigation Started");
-				// 	 let channelInput: string = this.route.snapshot.paramMap.get('channel');
-				// 	 let channelType: string = this.route.snapshot.paramMap.get('type');
-
-				// 	 //  let alll: any = this.route.snapshot.paramMap.params;
-				// 	 console.log("ChannelType", channelType);
-				// 	 console.log("ChannelInput", channelInput);
-				//  }
+				
 				 if (event instanceof NavigationEnd) {
-					//  console.log("Navigation Ended");
-					 
-					//  let channelInput: string = this.route.snapshot.paramMap.get('channel');
-					//  let channelType: string = this.route.snapshot.paramMap.get('type');
-					 
-					//  let alll: any = this.route.snapshot.paramMap.params;
-					//  console.log("ChannelType", channelType);
-					//  console.log("ChannelInput", channelInput);
-					//  this.chatService.channelInput = channelInput;
-					//  this.chatService.updateChatObject();
-					//  this.chatService.shiftChannel(channelInput, channelType);
+					// this.chatService.currentChannel$.subscribe(
+					// 	(element:any) => {
+					// 		console.log("Navigation Ended")
+					// 		this.fetchChannelNameFromString(element.channel)
+					// 	}
+					// )
+					
 				 }
 			 }
 		)
@@ -168,7 +170,7 @@ export class DashboardComponent implements OnInit {
 
 	channelClicked = (channel, isPrivate) => {
 		 this.chatService.channelInput = channel;
-		this.chatService.updateChatObject(channel, isPrivate);
+		// this.chatService.updateChatObject(channel, isPrivate);
 		this.chatService.shiftChannel(channel, isPrivate);
 	}
 

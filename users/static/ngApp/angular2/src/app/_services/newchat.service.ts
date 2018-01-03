@@ -25,9 +25,8 @@ export class NewchatService {
     privateRooms: Array<any> = [];
     currentChatObject:any;
     basicRooms:any;
-    allUsers: any = [];
-    // message: any = [];
-    globalChannel:string = 'BhaiLaptop'
+    // allUsers: any = [];
+    globalChannel:string = 'Screen'
     me:any;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
     myPrivateChannels: Array<any> = []
@@ -51,7 +50,6 @@ export class NewchatService {
     callStack = () => {
         this.UserServicee.getUserChannelDetails().subscribe(
             (response) => { 
-                console.log("Yeag", response)
                 this.myPrivateChannels = response.data.friend
                 this.initialize();
                 this.lobby();
@@ -105,13 +103,13 @@ export class NewchatService {
         if (this.isChannelCurrent(room)) {
             this.currentChatObject = this.basicRooms;
         }
-        this.subscribe(this.basicRooms)   
+        // this.subscribe(this.basicRooms)   
     }
 
-    updateChatObject = (channel, isPrivate = false) => {
-        this.currentChatObject = new (this.ChatEngine).Chat(channel, isPrivate);
-        this.history(this.currentChatObject)
-    }
+    // updateChatObject = (channel, isPrivate = false) => {
+    //     this.currentChatObject = new (this.ChatEngine).Chat(channel, isPrivate);
+    //     this.history(this.currentChatObject)
+    // }
 
     subscribe = (basicRoom) => {
 
@@ -120,34 +118,35 @@ export class NewchatService {
         });
     }
 
-    renderMessage = (payload) => {
-        let newData = {
-                        channel: this.channelInput,
-                        data: payload.data,
-                        sender: payload.sender
-                    }
-        this.ngRedux.dispatch({ type: Constants.MESSAGEADD, message: newData })        
-        // this.message.push(payload);
-    }
+   
 
     history = (currentChatObject) => {
         // wait for our chat to connect
         this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, payload: {} })        
         
-            this.currentChatObject.search({
+            currentChatObject.search({
                 reverse: true,
                 event: 'message',
                 limit: 50
             }).on('message', (data) => {
+                
                 this.renderMessage(data);
 
-            });
+            });   
+    }
+
+    renderMessage = (payload) => {
         
+        let newData = {
+            channel: this.channelInput,
+            data: payload.data,
+            sender: payload.sender
+        }
+        this.ngRedux.dispatch({ type: Constants.MESSAGEADD, message: newData })
     }
 
     eventListerners = () => {
         this.ChatEngine.on('$.created.chat', (data, chat) => {
-            console.log('A Chat is Created');
             
             this.fetchChannel(chat.channel);
         });
@@ -156,12 +155,11 @@ export class NewchatService {
             console.log(payload.sender.uuid, 'sent your a game invite on the map', payload.data.map);
         });
 
-        this.currentChatObject.on('$.join', (data) => {
-            console.log('User has joined the room!');
-        });
+        // this.currentChatObject.on('$.join', (data) => {
+        //     console.log('User has joined the room!');
+        // });
 
         this.ChatEngine.on('$.created.user', (data, user) => {
-            console.log("User is created", user)
             
             Observable.forkJoin(
                 this.UserServicee.getUserDetails(user.uuid),
@@ -185,13 +183,20 @@ export class NewchatService {
             // this.subscribe();
         });
 
-        this.currentChatObject.on('$.online.*', (data) => {
-            this.allUsers.push(data.user);
-        });
+        // this.currentChatObject.on('$.online.*', (data) => {
+        //     // this.allUsers.push(data.user);
+        // });
 
-        (this.currentChatObject).on('$.offline.*', (data) => {
-            console.log("SomeOne got offline");
-        });
+        // (this.currentChatObject).on('$.offline.*', (data) => {
+        //     console.log("SomeOne got offline");
+        // });
+
+
+        this.currentChannel$.subscribe((event) => {
+            this.currentChatObject = event
+            
+            // this.history(event)
+        })
     }
 
     updateUserState = (me) => {
@@ -221,53 +226,35 @@ export class NewchatService {
 
     fetchChannel = (element) => {
         let chat = element.split("#");
-        let isCurrentChannel = false;
+        let isCurrentChannel = this.isChannelCurrent(chat[3]);
+        let currentChatRoom = null;
+        
+        if ((this.ChatEngine.chats).hasOwnProperty(element)) {
+            currentChatRoom = this.ChatEngine.chats[element];
+        }
 
         if (chat[2] == 'public.') {
             this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: chat[3] })
-            isCurrentChannel = this.isChannelCurrent(chat[3]);
         }
 
         if (chat[2] == 'private.') {
-            console.log("Fired2", chat[3])
-            
-            for(const iterator of this.myPrivateChannels) {
-                console.log(iterator);    
-            }
+            let userDetails = this.myPrivateChannels.find((arg):any => arg.channel == chat[3] )
             let payload = {
                 channel: chat[3],
-                uuid: chat[3]
+                uuid: userDetails.username,
+                firstName : userDetails.first_name,
+                lastName : userDetails.last_name,
             }
-            if ((this.ChatEngine.chats).hasOwnProperty(element)) {
-                element = this.ChatEngine.chats[element];
-                console.log("Elememn",this.ChatEngine.chats);
-                // this.sendInvite(this.username, element)
-            }
+           
 
             this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: payload })    
-            isCurrentChannel = this.isChannelCurrent(chat[3]);
         }
 
-        // if (chat[4] == 'direct') {
-        //     let payload = {
-        //         channel : chat[2],
-        //         uuid: chat[2]
-        //     }
-        //     if ((this.ChatEngine.chats).hasOwnProperty(element)) {
-        //         element = this.ChatEngine.chats[element];
-        //     }
-        //     this.ngRedux.dispatch({ type: Constants.DIRECTCHANNELADD, payload: payload })    
-        //     isCurrentChannel = this.isChannelCurrent(chat[2]);
-        // }
 
-        
-        if (isCurrentChannel) { //Checking Current Channel
-            let allChats = this.ChatEngine.chats;
-            if ((this.ChatEngine.chats).hasOwnProperty(element)){
-                element = allChats[element];
-            }
+        if (isCurrentChannel && currentChatRoom) { //Checking Current Channel
+            this.history(currentChatRoom) 
             
-            this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: element })    
+            this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: currentChatRoom })    
         }
     }
 
@@ -279,17 +266,12 @@ export class NewchatService {
     }
 
     shiftChannel = (channel: string, isPrivate: boolean) => {
-        let channelAdd = null;
-        
-        if (isPrivate){
-            // channelAdd = this.sendInvite(channel)
-            // this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: secretChat })    
-            
-        }else{
-
-            channelAdd = (this.ChatEngine).Chat(channel);
-        }
-        this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: channel })    
+        let channelAdd = (this.ChatEngine).Chat(channel, isPrivate);
+        // if (isPrivate) {
+            // this.subscribe(channelAdd);
+            this.history(channelAdd);
+        // }
+        this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: channelAdd })    
 
     }
 
@@ -298,17 +280,14 @@ export class NewchatService {
         let user = this.ChatEngine.global.users[invitedUuid];
         chat.invite(user);
         console.log("You sent an Invite");
-
-        this.subscribe(chat);
-        console.log(chat);
-        
-
         return chat;
 
     }
 
     publish = (message="") => {
-        this.currentChatObject.emit('message', {
+        let newChat = this.ChatEngine.Chat(this.currentChatObject.channel);
+        this.subscribe(newChat);
+        newChat.emit('message', {
             text: message,
             nickName: this.username,
             fullName: this.fullName,

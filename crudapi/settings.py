@@ -117,7 +117,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'HOST':'localhost',
-        'PASSWORD': '123456',
+        'PASSWORD': 'ucodesoft',
         'PORT': '5432',
     }
 }

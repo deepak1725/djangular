@@ -56,13 +56,13 @@ class UserChannelsSerializer(serializers.ModelSerializer):
         model = UserChannels
         fields = ('user', 'friend')
 
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        rett = {}
-        rett['message'] = "Data Successfully fetched"
-        rett['data'] = ret
-        rett['error'] = None
-        return rett
+    # def to_representation(self, instance):
+    #     ret = super().to_representation(instance)
+    #     rett = {}
+    #     rett['message'] = "Data Successfully fetched"
+    #     rett['data'] = ret
+    #     rett['error'] = None
+    #     return rett
 
     def create(self, validated_data):
         friends = validated_data.pop('friend')
@@ -75,7 +75,9 @@ class UserChannelsSerializer(serializers.ModelSerializer):
 
         for friend_data in friends:
             # Add Friend as User If not exists
-            friendUser = UserChannels.objects.get_or_create(user=friend_data['user'])
+            friendUser = UserChannels.objects.filter(user=friend_data['user']).all()
+            if not friendUser.exists():
+                friendUser = UserChannels.objects.create(user=friend_data['user'])
 
 
             # Add User as Friend of New Friend
