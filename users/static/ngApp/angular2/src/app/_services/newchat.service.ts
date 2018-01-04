@@ -20,7 +20,7 @@ export class NewchatService {
     username: string;
     fullName: string;
     ChatEngine:any;
-    room: string = 'general';
+    // room: string = 'general';
     rooms: Array<any> = ['general', 'annoucement'];
     privateRooms: Array<any> = [];
     currentChatObject:any;
@@ -187,15 +187,13 @@ export class NewchatService {
         this.currentChannel$.subscribe(
             (channel) => {
                 this.currentChat = channel;
-                console.log("Event data",channel);
-                this.currentChatObject = new (this.ChatEngine).Chat( channel )
-                console.log("Chat Object updated",this.currentChatObject)
-                this.history(this.currentChatObject) 
-                this.subscribe(this.currentChatObject);   
+                let chatObject = new (this.ChatEngine).Chat( channel )
+                // console.log("Chat Object updated",this.currentChatObject)
+                this.history(chatObject) 
+                this.subscribe(chatObject);   
             },(error) => {
                 console.log("Error in current channel", error)
-            }
-    )
+            })
     }
 
     updateUserState = (me) => {
@@ -224,6 +222,7 @@ export class NewchatService {
     }
 
     fetchChannel = (element) => {
+        console.log("In Fetch Channel");
         let chat = element.split("#");
         let isCurrentChannel = this.isChannelCurrent(chat[3]);
         let currentChatRoom = null;
@@ -253,7 +252,6 @@ export class NewchatService {
 
 
         if (isCurrentChannel && currentChatRoom) { //Checking Current Channel
-            console.log("Channel Room", element)
             
             this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: element })    
         }
@@ -273,7 +271,6 @@ export class NewchatService {
             // this.subscribe(channelAdd);
             // this.history(channelAdd);
         // }
-        console.log("Channel", channel)
         this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: channelAdd.channel })    
 
     }

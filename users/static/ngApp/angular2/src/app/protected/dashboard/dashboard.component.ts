@@ -49,8 +49,8 @@ export class DashboardComponent implements OnInit {
 		room : "no",
 		online: 0
 	}
-	currentChannel:string = '#general';
-
+	// currentChannel:string = '#general';
+	currentChat = this.chatService.currentChat
 	@select(['current_channel', 'payload']) readonly currentChannel$: Observable<any[]>;
 
 
@@ -70,6 +70,8 @@ export class DashboardComponent implements OnInit {
 		this.scrollToBottom();
 		this.events(NavigationEnd);
 		this.chatService.callStack();
+		let channel = this.route.snapshot.paramMap.get('channel');		
+		this.currentChat = this.fetchChannelNameFromString(channel)
 		// this.currentChannel$.subscribe((event) => {
         //     console.log("Current Channel Changed", event);
 		// 	this.chatService.history(event)
@@ -159,7 +161,8 @@ export class DashboardComponent implements OnInit {
 					// this.chatService.currentChannel$.subscribe(
 					// 	(element:any) => {
 					// 		console.log("Navigation Ended")
-					// 		this.fetchChannelNameFromString(element.channel)
+					 let channel = this.route.snapshot.paramMap.get('channel');
+					 this.currentChat = this.fetchChannelNameFromString(channel)
 					// 	}
 					// )
 					
