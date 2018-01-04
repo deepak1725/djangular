@@ -140,7 +140,6 @@ export class DashboardComponent implements OnInit {
 	}
 
 	fetchChannelNameFromString = (channel:string):any => {
-		if (channel) {
 			let ar = channel.split("#");
 			let channelName = ar.pop(); 
 			let isPrivate = ar.pop();
@@ -151,7 +150,6 @@ export class DashboardComponent implements OnInit {
 			}else{
 				return `#${channelName}`;
 			}
-		}	
 	}
 	events = (naviEnd) => {
 		this.router.events.subscribe(

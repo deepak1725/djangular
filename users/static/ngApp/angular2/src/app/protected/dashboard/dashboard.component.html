@@ -26,8 +26,8 @@
 		<div fxFlexFill fxLayoutAlign="space-around center">
 			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
 				<div fxLayout="row" class="channel-title">
-					<div *ngIf="this.chatService.room">
-						<strong>{{ currentChat }}</strong>
+					<div *ngIf="this.currentChat">
+						<strong>{{ currentChat  }}</strong>
 					</div>
 				</div>
 				<div fxLayout="row" class="channel-title">

@@ -21,7 +21,7 @@ export class NewchatService {
     fullName: string;
     ChatEngine:any;
     // room: string = 'general';
-    rooms: Array<any> = ['general', 'annoucement'];
+    rooms: Array<any> = ['NewKey#chat#public.#general', 'NewKey#chat#public.#annoucement'];
     privateRooms: Array<any> = [];
     currentChatObject:any;
     currentChat:any;
@@ -125,13 +125,14 @@ export class NewchatService {
                 event: 'message',
                 limit: 50
             }).on('message', (data) => {
-                
+                console.log("in history render");
                 this.renderMessage(data);
 
             });   
     }
 
     renderMessage = (payload) => {
+        console.log("in  render");
         
         let newData = {
             channel: this.channelInput,
@@ -188,9 +189,8 @@ export class NewchatService {
             (channel) => {
                 this.currentChat = channel;
                 let chatObject = new (this.ChatEngine).Chat( channel )
-                // console.log("Chat Object updated",this.currentChatObject)
-                this.history(chatObject) 
                 this.subscribe(chatObject);   
+                this.history(chatObject) 
             },(error) => {
                 console.log("Error in current channel", error)
             })
@@ -222,7 +222,6 @@ export class NewchatService {
     }
 
     fetchChannel = (element) => {
-        console.log("In Fetch Channel");
         let chat = element.split("#");
         let isCurrentChannel = this.isChannelCurrent(chat[3]);
         let currentChatRoom = null;
