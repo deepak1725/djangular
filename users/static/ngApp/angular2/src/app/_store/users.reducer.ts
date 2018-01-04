@@ -32,11 +32,12 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
 
         case Constants.USERADD:
             let lastId = 0
-    
-
+            // console.log("State", state)
+            // console.log("Action", action)
+            // state.payload.find(findd => action.payload)
             return {
                 type: action.type,
-                payload: [...state.payload, ...action.payload],
+                payload: [ ...action.payload],
                 error: false
             };
 
