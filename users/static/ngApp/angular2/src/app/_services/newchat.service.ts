@@ -35,6 +35,7 @@ export class NewchatService {
     @select(['public_channel','payload']) readonly publicChats$: Observable<any[]>;
     @select(['private_channel','payload']) readonly privateChats$: Observable<any[]>;
     @select(['direct_channel','payload']) readonly directChats$: Observable<any[]>;
+    @select(['users','payload']) readonly users$: Observable<any[]>;
     @select(['current_channel','payload']) readonly currentChannel$: Observable<any>;
     @select(['message','payload']) readonly messages$: Observable<any[]>;
 
@@ -50,10 +51,12 @@ export class NewchatService {
 
     callStack = () => {
         this.UserServicee.getUserChannelDetails().subscribe(
-            (response) => { 
+            (response) => {
+                console.log("UserChannelDetails", response.data.friend) 
                 this.myPrivateChannels = response.data.friend
                 this.initialize();
                 this.lobby();
+                this.ngRedux.dispatch({ type: Constants.USERADD, payload: response.data.friend })
             },
             (error) => {
                 console.log("Error")
@@ -158,16 +161,15 @@ export class NewchatService {
                 this.UserServicee.getUserDetails(user.uuid),
                 this.UserServicee.getChannelName()
             ).subscribe(resp => {
+                console.log("Get User Service response", resp[0])
                 return this.UserServicee.addUserChannelDetails(resp[0].data.id, resp[1].data.name)
                     .subscribe((response) => {
                         let channelName = response.data.friend[0].channel
                         let newChat = new (this.ChatEngine).Chat(channelName, true);
-                        
+                        // this.ngRedux.dispatch({ type: Constants.USERADD, payload:resp[0] })    
                     })
-            }
-        )
+            })
 
-            this.ngRedux.dispatch({ type: Constants.USERADD, payload:[user] })    
             
         });
 
@@ -236,7 +238,7 @@ export class NewchatService {
 
         if (chat[2] == 'private.') {
             let userDetails = this.myPrivateChannels.find((arg):any => arg.channel == chat[3] )
-            
+            console.log("My Rpivate Channals", userDetails)
             if (userDetails) {        
                 let payload = {
                     channel: chat[3],

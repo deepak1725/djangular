@@ -3,7 +3,7 @@ import { Constants } from './constants';
 
 export interface IUserState {
     type: string;
-    payload: object[];
+    payload: any;
     error?: boolean;
 }
 

@@ -70,7 +70,7 @@
 					[routerLinkActiveOptions]="{exact: true}"
 					routerLink="/messages/{{occupant.channel}}"
 					 (click)="channelClicked(occupant.channel, true)"
- 					*ngFor="let occupant of ((this.chatService).privateChats$ | async) ; let index = index">
+ 					*ngFor="let occupant of ((this.chatService).users$ | async) ; let index = index">
 
 
 					<div fxLayout="row" fxLayoutAlign="start center">
@@ -78,8 +78,8 @@
 							fiber_manual_record
 						</mat-icon>
 						<div>
-				 			{{ occupant.firstName }}&nbsp;{{ occupant.lastName }}
-							<small class="dull">@{{ occupant.uuid }} </small>
+				 			{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}
+							<small class="dull">@{{ occupant.username }} </small>
 						</div>
 					</div>
 					
@@ -109,27 +109,31 @@
 
 	<!-- MessageContainer -->
   	<mat-grid-tile rowspan="8" colspan="4" >
-			
-
-			<div *ngFor="let element of ((this.chatService).messages$ | async ) let index = index">
-				<div fxLayout="row" class="message-text">
-					<div fxFlex="5">
-						<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
-					</div>
-					<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
-						<div fxLayout="row" fxLayoutAlign="space-between center">
-							<span>
-								<b>{{ element.message.sender.state.fullName }}</b>
-								<small class="dull">@{{ element.message.sender.uuid}}</small>
-							</span>
-							<div fxFlex class="time" fxFlexAlign="center">
-								{{ this.getReadableTime( element.message.data.date) }}
-							</div>
+		
+			<div style="overflow-y: scroll" fxLayoutAlign="start stretch" fxLayout="column" class="content-container">
+				
+				<div *ngFor="let element of ((this.chatService).messages$ | async ) let index = index">
+					<div fxLayout="row" class="message-text">
+						<div fxFlex="5">
+							<mat-icon color="accent" class="f-s-40">account_box</mat-icon>
 						</div>
-						<div>{{ element.message.data.text }}</div>
+						<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
+							<div fxLayout="row" fxLayoutAlign="space-between center">
+								<span>
+									<b>{{ element.message.sender.state.fullName }}</b>
+									<small class="dull">@{{ element.message.sender.uuid}}</small>
+								</span>
+								<div fxFlex class="time" fxFlexAlign="center">
+									{{ getReadableTime( element.message.data.date) }}
+								</div>
+							</div>
+							<div>{{ element.message.data.text }}</div>
+						</div>
 					</div>
 				</div>
+
 			</div>
+			
 				
 
 	</mat-grid-tile>

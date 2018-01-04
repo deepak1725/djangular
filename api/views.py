@@ -115,13 +115,13 @@ class UserDetailsViewSet(APIView):
         if arg_1:
             message = 'User Found'
             user = User.objects.get(id = arg_1)
-            data = {'id':user.id, 'name' : user.get_full_name(), 'username': user.username}
+            data = {'id':user.id, 'first_name' : user.first_name, 'last_name' : user.last_name, 'username': user.username}
 
         elif isinstance(arg_2, str):
             user = User.objects.get_by_natural_key(arg_2)
 
             message = 'User Details Successfully fetched'
-            data = {'id':user.id, 'name' : user.get_full_name(), 'username': user.username}
+            data = {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'username': user.username}
 
         responseData = {
             'message': message,
