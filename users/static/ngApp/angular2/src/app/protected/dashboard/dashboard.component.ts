@@ -70,8 +70,8 @@ export class DashboardComponent implements OnInit {
 		this.scrollToBottom();
 		this.events(NavigationEnd);
 		this.chatService.callStack();
-		let channel = this.route.snapshot.paramMap.get('channel');		
-		this.currentChat = this.fetchChannelNameFromString(channel)
+		// let channel = this.route.snapshot.paramMap.get('channel');		
+		// this.currentChat = this.fetchChannelNameFromString()
 		// this.currentChannel$.subscribe((event) => {
         //     console.log("Current Channel Changed", event);
 		// 	this.chatService.history(event)
@@ -139,30 +139,29 @@ export class DashboardComponent implements OnInit {
 		});
 	}
 
-	fetchChannelNameFromString = (channel:string):any => {
-			let ar = channel.split("#");
-			let channelName = ar.pop(); 
-			let isPrivate = ar.pop();
-			if (isPrivate == 'private.'){
-				
-				let userDetails = this.chatService.myPrivateChannels.find((arg): any => arg.channel == channelName)
-				return `@${userDetails.username}`;
-			}else{
-				return `#${channelName}`;
-			}
-	}
+	// fetchChannelNameFromString = ():any => {
+	// 	let channel: string = this.route.snapshot.paramMap.get('channel');
+	// 	let ar = channel.split("#");
+	// 	let channelName = ar.pop(); 
+	// 	let isPrivate = ar.pop();
+	// 	let userDetails = this.chatService.myPrivateChannels.find((arg): any => arg.channel == channelName)
+	// 	console.log(userDetails);
+	// 	if (isPrivate == 'private.'){
+			
+	// 		let userDetails = this.chatService.myPrivateChannels.find((arg): any => arg.channel == channelName)
+	// 		return `@${userDetails.username}`;
+	// 	}else{
+	// 		return `#${channelName}`;
+	// 	}
+	// }
+
 	events = (naviEnd) => {
 		this.router.events.subscribe(
 			 (event: Event) => {
 				
 				 if (event instanceof NavigationEnd) {
-					// this.chatService.currentChannel$.subscribe(
-					// 	(element:any) => {
-					// 		console.log("Navigation Ended")
-					 let channel = this.route.snapshot.paramMap.get('channel');
-					 this.currentChat = this.fetchChannelNameFromString(channel)
-					// 	}
-					// )
+					
+					//  this.currentChat = this.fetchChannelNameFromString()
 					
 				 }
 			 }
@@ -170,7 +169,7 @@ export class DashboardComponent implements OnInit {
 	}
 
 	channelClicked = (channel, isPrivate) => {
-		 this.chatService.channelInput = channel;
+		this.chatService.channelInput = channel;
 		// this.chatService.updateChatObject(channel, isPrivate);
 		this.chatService.shiftChannel(channel, isPrivate);
 	}

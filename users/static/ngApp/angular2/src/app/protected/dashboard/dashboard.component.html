@@ -27,7 +27,7 @@
 			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
 				<div fxLayout="row" class="channel-title">
 					<div *ngIf="this.currentChat">
-						<strong>{{ currentChat  }}</strong>
+						<strong>{{ ((this.chatService).currentChannel$ | async)  }}</strong>
 					</div>
 				</div>
 				<div fxLayout="row" class="channel-title">
