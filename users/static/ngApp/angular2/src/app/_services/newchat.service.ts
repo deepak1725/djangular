@@ -140,9 +140,9 @@ export class NewchatService {
         let newData = {
             channel: this.channelInput,
             data: payload.data,
-            sender: payload.sender
+            // sender: payload.sender
         }
-        this.ngRedux.dispatch({ type: Constants.MESSAGEADD, message: newData })
+        this.ngRedux.dispatch({ type: Constants.MESSAGEADD, newData })
     }
 
     eventListerners = () => {
@@ -156,7 +156,7 @@ export class NewchatService {
         });
 
         this.ChatEngine.on('$.created.user', (data, user) => {
-        
+            console.log("UserCreated");
             
             let helo = Observable.forkJoin(
                     this.UserServicee.getUserDetails(user.uuid),
@@ -191,11 +191,9 @@ export class NewchatService {
 
         this.currentChannel$.subscribe(
             (payload) => {
-                console.log("Payload", payload);
                 if (payload && payload.channel) {
                         
                     this.currentChat = payload.channel;
-                    console.log("Navigation ended, obj updated", payload.channel);
                     let chatObject = this.createChat(payload.channel);
                     this.subscribe(chatObject);   
                     this.history(chatObject)
@@ -235,12 +233,15 @@ export class NewchatService {
         let isCurrentChannel = this.isChannelCurrent(chat[3]);
         let currentChatRoom = null;
         let isPrivate= false;
+        let displayName=null;
 
         if ((this.ChatEngine.chats).hasOwnProperty(element)) {
             currentChatRoom = this.ChatEngine.chats[element];
+            displayName = '#'+chat[3];
         }
 
         if (chat[2] == 'public.') {
+            
             this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: chat[3] })
         }
 
@@ -248,7 +249,8 @@ export class NewchatService {
             let isPrivate = true;
             
             let userDetails = this.myPrivateChannels.find((arg):any => arg.channel == chat[3] )
-            if (userDetails) {        
+            if (userDetails) {
+                displayName = '@'+userDetails.username;
                 let payload = {
                     channel: chat[3],
                     uuid: userDetails.username,
@@ -266,7 +268,7 @@ export class NewchatService {
             let payload = {
                 'channel': element,
                 'isPrivate': isPrivate,
-                'displayName': "Heelloo"
+                'displayName': displayName
             }
 
             this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: payload })    
@@ -287,10 +289,19 @@ export class NewchatService {
             // this.subscribe(channelAdd);
             // this.history(channelAdd);
         // }
+        let displayName= '#'+channel;
+
+        if (isPrivate) {
+            let userDetails = this.myPrivateChannels.find((arg): any => arg.channel == channel)
+
+            if (userDetails) {
+                displayName = '@' + userDetails.username;
+            }
+        }
         let payload = {
             'channel' : chat.channel,
             'isPrivate' : isPrivate,
-            'displayName' : "Heelloo"
+            'displayName' : displayName
         }
         this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: payload })    
 
@@ -313,6 +324,7 @@ export class NewchatService {
             text: message,
             nickName: this.username,
             fullName: this.fullName,
+            edited: false,
             date: new Date()
         });
     }

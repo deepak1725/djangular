@@ -36,12 +36,11 @@ export function messageReducer(state: IMessageState = INITIAL_STATE, action): IM
         case Constants.MESSAGEADD:
             let emptyArray = [];
             let id = state.payload.length + 1
-            let edited = false;
-            
             let object = {
                 id : id,
-                edited: edited,
-                message: action.message
+                edited: action.newData.edited,
+                data: action.newData.data,
+                channel: action.newData.channel
             }
             emptyArray.push(object);
             state.payload = [ ...state.payload, ...emptyArray ]

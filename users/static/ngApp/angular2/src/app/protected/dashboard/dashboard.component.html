@@ -26,8 +26,8 @@
 		<div fxFlexFill fxLayoutAlign="space-around center">
 			<div fxFlex=90 fxLayoutAlign="center center" fxLayout="column">
 				<div fxLayout="row" class="channel-title">
-					<div *ngIf="this.currentChat">
-						<strong>{{ ((this.chatService).currentChannel$ | async)  }}</strong>
+					<div>
+						<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>
 					</div>
 				</div>
 				<div fxLayout="row" class="channel-title">
@@ -70,7 +70,7 @@
 					[routerLinkActiveOptions]="{exact: true}"
 					routerLink="/messages/{{occupant.channel}}"
 					 (click)="channelClicked(occupant.channel, true)"
- 					*ngFor="let occupant of ((this.chatService).users$ | async) ; let index = index">
+ 					*ngFor="let occupant of (this.chatService).users$ | async ; let index = index">
 
 
 					<div fxLayout="row" fxLayoutAlign="start center">
@@ -120,14 +120,14 @@
 						<div fxFlex fxLayout="column" fxLayoutAlign="space-evenly stretch">
 							<div fxLayout="row" fxLayoutAlign="space-between center">
 								<span>
-									<b>{{ element.message.sender.state.fullName }}</b>
-									<small class="dull">@{{ element.message.sender.uuid}}</small>
+									<b>{{ element.data.fullName }}</b>
+									<small class="dull">@{{ element.data.nickName}}</small>
 								</span>
 								<div fxFlex class="time" fxFlexAlign="center">
-									{{ getReadableTime( element.message.data.date) }}
+									{{ getReadableTime( element.data.date) }}
 								</div>
 							</div>
-							<div>{{ element.message.data.text }}</div>
+							<div>{{ element.data.text }}</div>
 						</div>
 					</div>
 				</div>
