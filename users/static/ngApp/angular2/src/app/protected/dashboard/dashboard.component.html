@@ -154,15 +154,15 @@
 				<mat-divider></mat-divider>
 					<a mat-list-item 
 						routerLinkActive="active" class="online-name"
-						routerLink="/messages/{{channel}}"
-						(click)="channelClicked(channel, false)"
+						routerLink="/messages/{{channel.channel}}"
+						(click)="channelClicked(channel.channel, false)"
 						matLine 
 						*ngFor="let channel of this.chatService.publicChats$ | async; let index = index">
 					
 						<div fxLayout="row" fxLayoutAlign="start center">
 							
 							<div>
-								#{{ channel }}
+								#{{ channel.channel }}
 							</div>
 						</div>
 					

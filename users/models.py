@@ -32,7 +32,7 @@ class UserChatRecords(models.Model):
 
 class FriendChannels(models.Model):
     user = models.ForeignKey(User)
-    channel = models.CharField(max_length=10)
+    channel = models.CharField(max_length=50)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
 
@@ -48,3 +48,20 @@ class UserChannels(models.Model):
 
     def __str__(self):
         return self.user.first_name
+
+
+class GroupUsers(models.Model):
+    user = models.ForeignKey(User)
+    isAdmin = models.BooleanField()
+
+
+class AllChannels(models.Model):
+    channel = models.CharField(max_length=50)
+    users = models.ManyToManyField(GroupUsers, related_name='Users')
+    isPrivate = models.BooleanField()
+    created = models.DateTimeField(auto_created=True, auto_now=True)
+    modified = models.DateTimeField(auto_created=True, auto_now_add=True)
+    displayName = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.channel

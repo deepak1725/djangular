@@ -15,11 +15,13 @@ from django.views.generic import TemplateView
 router = DefaultRouter()
 router.register(r'chat', views.UsersChatRecoredsViewSet)
 router.register(r'user-channels', views.UserChannelsViewSet)
+router.register(r'all-channels', views.AllChannelsViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^rest-auth/auth/', include('rest_auth.registration.urls')),
     url(r'^rest-auth/auth/', include('rest_auth.registration.urls')),
 ]
 
@@ -45,5 +47,6 @@ urlpatterns += [
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
     url(r'^channel-name/', views.GetChannelNameViewSet.as_view(), name='channel-name'),
     url(r'^user-details/', views.UserDetailsViewSet.as_view(), name='user-details'),
+    url(r'^my-channel/(?P<pk>[-:\w]+)/$', views.GetUserChannels.as_view(), name='my-channel'),
 
 ]

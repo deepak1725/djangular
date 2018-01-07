@@ -6,7 +6,7 @@ from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.serializers import PasswordResetSerializer
 from ngApp.forms import MyPasswordResetForm
-from users.models import UserChatRecords, UserChannels, FriendChannels
+from users.models import UserChatRecords, UserChannels, FriendChannels, AllChannels, GroupUsers
 
 class MyRegisterSerializer(RegisterSerializer):
     first_name = serializers.CharField()
@@ -36,9 +36,9 @@ class ChatRecordsSerializer(serializers.ModelSerializer):
         fields = ('user','uuid', 'created', 'modified')
 
 #
-# class UserModelSerializer(serializers.RelatedField):
-#     class Meta:
-#         models = UserModel
+
+
+
 
 class FriendField(serializers.ModelSerializer):
     first_name = serializers.CharField(read_only=True, source='user.first_name')
@@ -49,20 +49,16 @@ class FriendField(serializers.ModelSerializer):
         model = FriendChannels
         fields = ('user', 'channel', 'first_name', 'last_name', 'username')
 
+
 class UserChannelsSerializer(serializers.ModelSerializer):
     friend = FriendField(many=True)
+    first_name = serializers.CharField(read_only=True, source='user.first_name')
+    username = serializers.CharField(read_only=True, source='user.username')
+    last_name = serializers.CharField(read_only=True, source='user.last_name')
 
     class Meta:
         model = UserChannels
-        fields = ('user', 'friend')
-
-    # def to_representation(self, instance):
-    #     ret = super().to_representation(instance)
-    #     rett = {}
-    #     rett['message'] = "Data Successfully fetched"
-    #     rett['data'] = ret
-    #     rett['error'] = None
-    #     return rett
+        fields = ('user', 'friend', 'first_name', 'last_name', 'username')
 
     def create(self, validated_data):
         friends = validated_data.pop('friend')
@@ -82,7 +78,11 @@ class UserChannelsSerializer(serializers.ModelSerializer):
 
             # Add User as Friend of New Friend
             if not friendUser.friend.filter(user=validated_data['user']).exists():
-                newFriend = friendUser.friend.get_or_create(user=validated_data['user'], channel=friend_data['channel'])
+                newFriend = friendUser.friend.get_or_create(
+                    user=validated_data['user'],
+                    channel=friend_data['channel'],
+                    isDirect = friend_data['isDirect']
+                )
                 friendUser.friend.add(newFriend[0])
 
 
@@ -91,4 +91,65 @@ class UserChannelsSerializer(serializers.ModelSerializer):
                 uc.friend.add(FriendChannels.objects.create(**friend_data))
 
         return uc
+
+
+
+class GroupUserField(serializers.ModelSerializer):
+    first_name = serializers.CharField(read_only=True, source="user.first_name")
+    last_name = serializers.CharField(read_only=True, source="user.last_name")
+    username = serializers.CharField(read_only=True, source="user.username")
+
+    class Meta:
+        model = GroupUsers
+        fields = ('user','isAdmin', 'first_name', 'last_name', 'username')
+
+
+class AllChannelSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(read_only=True, source='createdBy.first_name')
+    username = serializers.CharField(read_only=True, source='createdBy.username')
+    last_name = serializers.CharField(read_only=True, source='createdBy.last_name')
+    users = GroupUserField(many=True)
+
+
+    class Meta:
+        model = AllChannels
+        fields = ('id','users', 'channel','isPrivate', 'displayName','first_name', 'last_name', 'username')
+
+    def create(self, validated_data):
+        users = validated_data.pop('users')
+        instanceAllChannels = AllChannels.objects.filter(channel=validated_data['channel'])
+
+        if(not instanceAllChannels.exists()):
+            instanceAllChannels = AllChannels.objects.create(**validated_data)
+        else:
+            instanceAllChannels = instanceAllChannels.first()
+
+        for user_data in users:
+            gc = instanceAllChannels.users.filter(user=user_data['user'])
+            if gc.exists():
+                gc = gc.first()
+            else:
+                gc = GroupUsers.objects.create(**user_data)
+            instanceAllChannels.users.add(gc)
+        return  instanceAllChannels
+
+    def update(self, instance, validated_data):
+        users = validated_data.pop('users')
+        instance.displayName = validated_data['displayName']
+        instance.isPrivate = validated_data['isPrivate']
+        instance.save()
+
+        for user_data in users:
+            gc = instance.users.filter(user=user_data['user'])
+
+            if gc.exists():
+                gc = gc.first()
+            else:
+                gc = GroupUsers.objects.create(**user_data)
+
+            gc.isAdmin = user_data['isAdmin']
+            gc.save()
+            instance.users.add(gc)
+
+        return instance
 

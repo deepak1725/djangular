@@ -28,7 +28,7 @@ export class NewchatService {
     currentChat:any;
     basicRooms:any;
     // allUsers: any = [];
-    globalChannel:string = 'NewKey'
+    globalChannel:string = 'NKey'
     me:any;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
     myPrivateChannels: Array<any> = []
@@ -56,7 +56,17 @@ export class NewchatService {
                 this.myPrivateChannels = response.data.friend
                 this.initialize();
                 this.lobby();
-                // this.ngRedux.dispatch({ type: Constants.USERADD, payload: response.data.friend })
+                console.log(this.myPrivateChannels);
+                
+                for (const key of response.data.friend) {
+                    if (key.isDirect) {
+                        this.ngRedux.dispatch({ type: Constants.USERADD, payload: key })
+                    }else{
+                        this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: key })
+                    }
+                    
+                }
+                
             },
             (error) => {
                 console.log("Error")
@@ -92,24 +102,13 @@ export class NewchatService {
             let me = this.me = data.me;
             this.updateUserState(me);
             
-            this.rooms.forEach(room => {
-                this.createRoom(room);
+            this.myPrivateChannels.forEach(room => {
+                this.createChat(room, true);
             });
-            // this.updateChatObject();
             
             this.publicChannelListing()
             this.eventListerners()
         });
-    }
-
-    createRoom = (room, isPrivate=false) => {
-        
-        this.basicRooms = new (this.ChatEngine).Chat(room, isPrivate);
-        
-        // if (this.isChannelCurrent(room)) {
-        //     this.currentChatObject = this.basicRooms;
-        // }
-        // this.subscribe(this.basicRooms)   
     }
 
     subscribe = (basicRoom) => {
@@ -240,10 +239,10 @@ export class NewchatService {
             displayName = '#'+chat[3];
         }
 
-        if (chat[2] == 'public.') {
+        // if (chat[2] == 'public.') {
             
-            this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: chat[3] })
-        }
+        //     this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: chat[3] })
+        // }
 
         if (chat[2] == 'private.') {
             let isPrivate = true;
