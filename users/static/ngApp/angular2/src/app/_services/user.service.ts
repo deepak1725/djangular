@@ -52,7 +52,7 @@ export class UserService {
         });
     }
 
-    getUserChannelDetails = (id=undefined) => { 
+    getDirectChannelDetails = (id=undefined) => { 
         if (! id) {
             id = this.currentUser.user.pk      
         }      
@@ -61,7 +61,7 @@ export class UserService {
             .map((response: Response) => response.json());
     }
 
-    addUserChannelDetails = (friendId, channelName) => {
+    addDirectChannelDetails = (friendId, channelName) => {
         let id = null;
         if (!id) {
             id = this.currentUser.user.pk
@@ -71,7 +71,8 @@ export class UserService {
             "user": id,
             "friend" : [
                 { "user": friendId, "channel": channelName }
-            ]
+            ],
+            "isDirect": true
             
         }
         return this.http
@@ -88,6 +89,14 @@ export class UserService {
     getUserDetails = (name: string, param='username') => {
         return this.http
             .get(`api/user-details/?${param}=${ name}`, this.options)
+            .map((response: Response) => response.json());
+    }
+    getUserAllChannels = (userId: string = undefined) => {
+        if (!userId) {
+            userId = this.currentUser.user.pk
+        }     
+        return this.http
+            .get(`api/all-channels/${userId}`, this.options)
             .map((response: Response) => response.json());
     }
 }

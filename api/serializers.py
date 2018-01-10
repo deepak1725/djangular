@@ -80,8 +80,7 @@ class UserChannelsSerializer(serializers.ModelSerializer):
             if not friendUser.friend.filter(user=validated_data['user']).exists():
                 newFriend = friendUser.friend.get_or_create(
                     user=validated_data['user'],
-                    channel=friend_data['channel'],
-                    isDirect = friend_data['isDirect']
+                    channel=friend_data['channel']
                 )
                 friendUser.friend.add(newFriend[0])
 
@@ -113,7 +112,7 @@ class AllChannelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AllChannels
-        fields = ('id','users', 'channel','isPrivate', 'displayName','first_name', 'last_name', 'username')
+        fields = ('id','users', 'channel','isPrivate', 'displayName','createdBy','first_name', 'last_name', 'username')
 
     def create(self, validated_data):
         users = validated_data.pop('users')
@@ -131,7 +130,7 @@ class AllChannelSerializer(serializers.ModelSerializer):
             else:
                 gc = GroupUsers.objects.create(**user_data)
             instanceAllChannels.users.add(gc)
-        return  instanceAllChannels
+        return instanceAllChannels
 
     def update(self, instance, validated_data):
         users = validated_data.pop('users')
@@ -152,4 +151,3 @@ class AllChannelSerializer(serializers.ModelSerializer):
             instance.users.add(gc)
 
         return instance
-

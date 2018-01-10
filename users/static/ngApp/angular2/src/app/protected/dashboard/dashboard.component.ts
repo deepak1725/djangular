@@ -163,6 +163,7 @@ export class DashboardComponent implements OnInit {
 					
 					//  this.currentChat = this.fetchChannelNameFromString()
 					
+					//  this.chatService.isChannelCurrent();
 				 }
 			 }
 		)
@@ -170,7 +171,6 @@ export class DashboardComponent implements OnInit {
 
 	channelClicked = (channel, isPrivate) => {
 		this.chatService.channelInput = channel;
-		// this.chatService.updateChatObject(channel, isPrivate);
 		this.chatService.shiftChannel(channel, isPrivate);
 	}
 

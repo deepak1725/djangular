@@ -62,6 +62,7 @@ class AllChannels(models.Model):
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
     displayName = models.CharField(max_length=50)
+    createdBy = models.ForeignKey(User)
 
     def __str__(self):
         return self.channel

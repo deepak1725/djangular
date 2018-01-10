@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 import random, string, types
 from rest_framework import generics
 from django.core import serializers
-
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
 class UsersChatRecoredsViewSet(viewsets.ModelViewSet):
@@ -25,7 +25,15 @@ class UsersChatRecoredsViewSet(viewsets.ModelViewSet):
         userId = kwargs['pk']
         userChatObj = UserChatRecords.objects.filter(user = userId).first()
         serializer = ChatRecordsSerializer(userChatObj)
-        return Response(serializer.data)
+        message = 'Data Successfully fetched'
+        if not serializer.data:
+            message = "No User Found"
+        responseData = {
+            'message': message,
+            'data': serializer.data,
+            'error': None
+        }
+        return Response(responseData, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         userId = request.data['user']
@@ -136,21 +144,17 @@ class UserDetailsViewSet(APIView):
 
 class AllChannelsViewSet(viewsets.ModelViewSet):
     permission_classes = ''
-    authentication_classes = ''
+    authentication_classes = [BasicAuthentication]
     queryset = AllChannels.objects.all()
     serializer_class = AllChannelSerializer
 
     def retrieve(self, request, *args, **kwargs):
 
-        instance = AllChannels.objects.filter(users__user__id=kwargs['pk']).all()
-
-        print(instance)
-
-        serializer = self.get_serializer(instance)
-        # return Response(serializer.data)
-
+        queryset = AllChannels.objects.filter(users__user =kwargs['pk'])
+        serializer = AllChannelSerializer(queryset, many=True)
         message = 'Data Retrieved Successfully'
-        # queryset =
+        if not serializer.data:
+            message = "No Data Found"
         responseData = {
             'message': message,
             'data': serializer.data,
@@ -180,24 +184,3 @@ class AllChannelsViewSet(viewsets.ModelViewSet):
             'error': None
         }
         return Response(responseData, status=status.HTTP_201_CREATED)
-
-
-class GetUserChannels(generics.RetrieveAPIView):
-    permission_classes = ''
-    authentication_classes = ''
-    # serializer_class = AllChannelSerializer
-
-    def get(self, request,*args, **kw):
-        instance = AllChannels.objects.filter(users__user__id=kw['pk'])
-        print(instance)
-        serializer = serializers.serialize("json", instance)
-        return Response(serializer)
-        #
-        # print(user)
-        # responseData = {
-        #     'message': 'Channel Name Successfully Created.',
-        #     'data': {'user':user},
-        #     'error': None
-        # }
-        # responseData = super(GetUserChannels,self).get(self,request,args,kw)
-        # return Response(responseData, status=status.HTTP_200_OK)

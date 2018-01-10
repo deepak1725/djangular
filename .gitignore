@@ -3,6 +3,7 @@ users/static/bower_components/*
 db.sqlite3
 *.pyc
 /sent_emails/
+*/migrations/*
 /ngApp/static/node_modules/
 /users/static/ngApp/angular2/node_modules/
 /.vscode/
