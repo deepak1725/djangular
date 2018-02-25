@@ -50,14 +50,15 @@ export class AuthenticationService {
  
     logout() {
         return this.http.post(
-            '/api/register/',
+            '/api/logout/',
             { }
         )
         .map((response: Response) => {
             // remove user from local storage to log user out
                 localStorage.removeItem('currentUser');
                 this.isLoggedIn = false;
-                this.router.navigate(['login']);                    
+                this.router.navigate(['login']);
+                return response.json();                    
         });
     }
 

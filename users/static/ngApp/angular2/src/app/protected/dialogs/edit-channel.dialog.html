@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Edit Channell</h1>
+
+<form #addChannel="ngForm">
+    <div mat-dialog-content class="dialog-setting" style="min-height: 105px;">
+        <div>
+
+            <mat-form-field fxFlexFill>
+                <input matInput tabindex="1" value="{{ data.channel }}" placeholder="Channel Name" required name="channelName">
+                <mat-error>Channel Name is invalid</mat-error>   
+            </mat-form-field>
+            <mat-checkbox name="isPrivate" checked="{{ data.isPrivate }}" >Private Channel</mat-checkbox>
+        
+        </div>
+        
+    </div>
+    <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+        <button mat-button [mat-dialog-close]='{channelName: channelName, isPrivate:isPrivate}' tabindex="2" [disabled]="!addChannel.form.valid">OK</button>
+        <button mat-button (click)="onNoClick()" tabindex="-1">CANCEL</button>
+    </div>
+</form>

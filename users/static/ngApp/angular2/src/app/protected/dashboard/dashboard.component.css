@@ -72,3 +72,30 @@ button.mat-raised-button {
 mat-grid-list {
   height: 100%;
 }
+.mylist{
+  font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    height: 30px;
+    padding: 0 16px;
+    position: relative;
+
+}
+.mat-nav-list[dense] .mat-list-item .mat-list-item-content {
+
+  flex: 0 0 100%;
+
+}
+.new{
+  color: red;
+  font-weight: bold;
+  font-size: 10px;
+}
+.text{
+  text-transform: capitalize;
+}
+.star{
+  font-size: 15px;
+}

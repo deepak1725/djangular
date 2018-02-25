@@ -1,10 +1,8 @@
-// import { Channel } from './../_models/channel';
 import { element } from 'protractor';
 import { Observable } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Constants } from '../_store/constants'
-// import { Observable } from 'rxjs/Observable';
 import { User } from '../_models/user';
 import { PubNubAngular } from 'pubnub-angular2';
 import { DashboardComponent } from '../protected/dashboard/dashboard.component';
@@ -15,7 +13,7 @@ import * as ChatEngineCore from 'chat-engine';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import { concat } from 'rxjs/operator/concat';
-
+// import 'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class NewchatService {
@@ -29,12 +27,15 @@ export class NewchatService {
     currentChat:any;
     basicRooms:any;
     // allUsers: any = [];
-    globalChannel:string = 'NKey'
+    globalChannel:string = 'keysall'
     me:any;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
     myDirectChannel: Array<any> = []
     myPPChannels: any = [];
     allChannels:any;
+    isPrivate:boolean = false;
+    subscribedRooms = [];
+    currentChatObj :any;
 
     @select(['public_channel','payload']) readonly publicChats$: Observable<any[]>;
     @select(['private_channel','payload']) readonly privateChats$: Observable<any[]>;
@@ -47,6 +48,7 @@ export class NewchatService {
         private ngRedux: NgRedux<IAppState>,
         private route: ActivatedRoute,
         private UserServicee: UserService,
+        private router: Router
     ) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.username = currentUser.user.username;
@@ -72,10 +74,19 @@ export class NewchatService {
         return chat;
     }
 
-    lobby = () => {
-        let allChannels = Observable.forkJoin(
+    getAllChannelDetails = (callback?) => {
+        let alldata =  Observable.forkJoin(
             this.UserServicee.getUserAllChannels(),
-            this.UserServicee.getDirectChannelDetails())
+            this.UserServicee.getDirectChannelDetails());
+        
+        if (callback && typeof (callback) === "function") {
+            callback();
+        }
+        return alldata;
+    }
+
+    lobby = () => {
+        let allChannels = this.getAllChannelDetails()
         
         //Initializing User
         this.ChatEngine.connect(this.username, {
@@ -94,14 +105,30 @@ export class NewchatService {
         allChannels.subscribe(
             (response) => {
 
-                // console.log(response);
                 //Public/Private
                 this.myPPChannels = response[0].data
+                this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: [] })
+                response[0].data.map((element) => {
+                    let chatObj = this.createChat(element.channel, element.isPrivate)
+                    this.subscribe(chatObj);
+                    element.isNewMessageArrived =  false; 
+                    return element
+                });
+
+                
                 this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: response[0].data })
 
 
                 //Direct
                 this.myDirectChannel = response[1].data.friend
+
+                response[1].data.friend.map((element) => {
+                    let chatObj = this.createChat(element.channel, true)
+                    this.subscribe(chatObj);
+                    element.isNewMessageArrived = false;
+                    return element
+                });
+
                 this.ngRedux.dispatch({ type: Constants.USERADD, payload: response[1].data.friend })
 
             },
@@ -109,18 +136,31 @@ export class NewchatService {
                 console.log("Error", error)
             },
             () => {
-                //Completed
-                this.publicChannelListing()
-                this.eventListerners()
+                //Completed        
+                this.eventListerners();
+                this.publicChannelListing();
+        
             }
         )
     }
 
-    subscribe = (basicRoom) => {
-
-        basicRoom.on('message', (payload) => {
-            this.renderMessage(payload)
-        });
+    subscribe = (chatRoom) => {
+        let isAlreadySubscribed = this.subscribedRooms.includes(chatRoom.channel);
+        if (!isAlreadySubscribed) {
+            this.subscribedRooms.push(chatRoom.channel);
+            chatRoom.on('message', (payload) => {
+                console.log("A new MEssage is received");
+                if (this.currentChat === payload.data.channel ){
+                    this.renderMessage(payload)
+                }else{
+                    console.log("A new Payload", payload);
+                    var myPayload = payload.data;
+                    this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: myPayload })
+                    this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELEDIT, payload: myPayload })
+                }
+                
+            });
+        }
     }
 
    
@@ -151,8 +191,7 @@ export class NewchatService {
 
     eventListerners = () => {
         this.ChatEngine.on('$.created.chat', (data, chat) => {
-            
-            this.fetchChannel(chat.channel);
+            // this.fetchChannel(chat.channel);
         });
 
         (this.me).direct.on('message', (payload) => {
@@ -183,7 +222,7 @@ export class NewchatService {
         });
 
         this.me.direct.on('$.invite', (payload) => {
-            console.log("You got annn Invite", payload);
+            // console.log("You got annn Invite", payload);
         });
 
         // this.currentChatObject.on('$.online.*', (data) => {
@@ -198,15 +237,19 @@ export class NewchatService {
         this.currentChannel$.subscribe(
             (payload) => {
                 if (payload && payload.channel) {
-                        
+                    console.log(payload);
                     this.currentChat = payload.channel;
+                    this.currentChatObj = payload;
                     let chatObject = this.createChat(payload.channel, payload.isPrivate);
-                    this.subscribe(chatObject);   
-                    this.history(chatObject)
+                    if (chatObject) {
+                        this.subscribe(chatObject);   
+                        this.history(chatObject)
+                    }
                 } 
             },(error) => {
                 console.log("Error in current channel", error)
-            })            
+            }
+        )            
     }
 
     updateUserState = (me) => {
@@ -227,36 +270,39 @@ export class NewchatService {
 
     publicChannelListing = () => {
         this.isChannelCurrent()
-
-        let allChannels = this.ChatEngine.chats
-        for (let element in allChannels) {
-            this.fetchChannel(element);
-        }
+        // let allChannels = this.ChatEngine.chats
+        // this.myDirectChannel.forEach(element => {
+            // console.log("element", element);
+            this.fetchChannel();
+            
+        // }); 
+        
         
     }
 
-    fetchChannel = (element) => {
-        let chat = element.split("#");
+    fetchChannel = (chatElement="") => {
+        // let chat = element.split("#");
         let currentChatRoom = null;
 
-
-        if (chat[2] == 'private.') {
-            let userDetails = this.myDirectChannel.find((arg):any => arg.channel == chat[3] )
-            if (userDetails) {
+        for (let element of this.myDirectChannel){
+            // this.fetchChannel(element, true);
+            // console.log(element);
+            // let userDetails = this.myDirectChannel.find((arg):any => arg.channel == chat[3] )
+            // if (userDetails) {
                 let payload = {
-                    channel: chat[3],
-                    uuid: userDetails.username,
-                    firstName : userDetails.first_name,
-                    lastName : userDetails.last_name,
+                    channel: element.channel,
+                    uuid: element.username,
+                    firstName : element.first_name,
+                    lastName : element.last_name,
                 }
                 this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: element })    
-            }
+            // }   
             
         }
     }
 
+    // Input: Current Opened Channel or CHannel we tried to shift into
     isChannelCurrent = (channelInput = undefined) => {
-
         if(! channelInput){
             channelInput= this.route.snapshot.paramMap.get('channel');
         }
@@ -265,28 +311,40 @@ export class NewchatService {
         let directElement = this.myDirectChannel.find((element) => element.channel == channelInput)
 
         if (ppElement) {
-            
+            this.isPrivate = ppElement.isPrivate;
+            //If Channel we tried to shift into is Public/Private Channel
             displayName = '#' + ppElement.displayName;
             let payload = {
                 'channel': ppElement.channel,
                 'isPrivate': ppElement.isPrivate,
                 'displayName': displayName
             }
+            //REMOVING NEW MESSAGE INDICATOR
+            let ppChannelEditPayload = { 'channel': ppElement.channel, 'isCurrentChannel' : true};
+            this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELEDIT, payload: ppChannelEditPayload })
 
             this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: payload })
         }
         else if(directElement){
+            this.isPrivate = true;
             
+            //If Channel we tried to shift into is Direct Channel
             displayName = '@' + directElement.username;
             let payload = {
                 'channel': directElement.channel,
                 'isPrivate': true,
                 'displayName': displayName
             }
+            //REMOVING NEW MESSAGE INDICATOR
+            let userEditPayload = { 'channel': directElement.channel, 'isCurrentChannel': true };
+            this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload })
 
             this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: payload })
 
         }else{
+            // If none of above condition is met, the channel is invalid, hence redirect user
+            this.router.navigate([`../messages`, '6DYI4X']);
+            this.shiftChannel("6DYI4X", false)
             console.log("This is not a valid channel :", channelInput);
         }
     }
@@ -305,11 +363,12 @@ export class NewchatService {
 
     }
 
-    publish = (message="") => {
+    publish = (message) => {
         
-        let chat = this.createChat();
+        let chat = this.createChat(this.currentChat, this.isPrivate);
         chat.emit('message', {
             text: message,
+            channel: this.currentChat,
             nickName: this.username,
             fullName: this.fullName,
             edited: false,
@@ -322,7 +381,32 @@ export class NewchatService {
             console.log(payload.user + ' updated state: ' + payload.state);
         });
     }
-    
+
+    channelAdd = (channelDisplayName) => {
+        let channelName = this.UserServicee.getChannelName()
+            .switchMap((response) => {
+                return this.UserServicee.addPublicPrivateChannel(response.data.name, channelDisplayName, false)
+            });
+            
+        channelName.subscribe(response => {
+            let allChannels = this.getAllChannelDetails(this.createChat(response.data.channel, false));
+            this.handleAllChannels(allChannels);
+            this.router.navigate([`../messages`, response.data.channel]);
+        })                       
+    }
+
+    channelEdit = (channelDisplayName) => {
+        let channelName = this.UserServicee.getChannelName()
+            .switchMap((response) => {
+                return this.UserServicee.addPublicPrivateChannel(response.data.name, channelDisplayName, false)
+            });
+
+        channelName.subscribe(response => {
+            let allChannels = this.getAllChannelDetails(this.createChat(response.data.channel, false));
+            this.handleAllChannels(allChannels);
+            this.router.navigate([`../messages`, response.data.channel]);
+        })
+    }
         
     
 

@@ -40,9 +40,25 @@ export function PrivateChannelReducer(state: IPrivateChannelState = INITIAL_STAT
             };
 
         case Constants.PRIVATECHANNELEDIT:
+            console.log("Private CHanel edit payload", action.payload);
+            let newisMessageArrived = true;
+
+            if (action.payload.isCurrentChannel) {
+                console.log("Channel is CUrrent");
+                newisMessageArrived = false;
+            }
+            state.payload.map((element) => {
+                console.log("Checkign channel");
+                
+                if (action.payload.channel === element.channel) {
+                    console.log("Chenle found");
+                    element.isNewMessageArrived = newisMessageArrived
+                    return;
+                }
+            });
             return {
                 type: action.type,
-                payload: [...state.payload, ...action.payload],
+                payload: [...state.payload],
                 error: false
             };
 

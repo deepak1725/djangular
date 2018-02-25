@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Constants } from './constants';
 
 
@@ -25,26 +26,27 @@ export function PublicChannelReducer(state: IPublicChannelState = INITIAL_STATE,
             return { payload: state.payload };
 
         case Constants.PUBLICCHANNELADD:
-            
-            //If Channel Exists
-            if (state.payload.indexOf(action.payload) > -1){
-                return {
-                    type: action.type,
-                    payload: [...state.payload],
-                    error: false
-                }
-            }    
-        
             return {
                 type: action.type,
-                payload: [...state.payload, ...action.payload],
+                payload: [...action.payload],
                 error: false
             };
 
         case Constants.PUBLICCHANNELEDIT:
+            let newisMessageArrived = true;
+
+            if (action.payload.isCurrentChannel) {
+                newisMessageArrived = false;
+            }
+            state.payload.map((element) => {
+                if (action.payload.channel === element.channel) {
+                    element.isNewMessageArrived = newisMessageArrived
+                    return ;
+                }
+            });
             return {
                 type: action.type,
-                payload: [...state.payload, ...action.payload],
+                payload: [...state.payload],
                 error: false
             };
 

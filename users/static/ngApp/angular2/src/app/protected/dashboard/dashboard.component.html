@@ -1,22 +1,37 @@
 <mat-grid-list cols="5" rowHeight="fit">
 	<!-- SIDEBAR : TITLE -->
   	<mat-grid-tile>
-		<div fxFlexFill fxLayoutAlign="center center" fxLayout="column" class="online-name channel-group">			
-				<div class=" channel-title">
-					<strong>{{this.chatService.globalChannel}}</strong>
-				</div>		
-				<div fxLayoutAlign="start center" fxLayout="column">
-					<div>
-						<mat-icon class="online">
-							fiber_manual_record
-						</mat-icon>
-						<span>
+		<div fxFlexFill fxLayoutAlign="start stretch" fxLayout="column" class="online-name channel-group">			
+					
+				<div fxLayoutAlign="space-around center" fxLayout="row">
+						
+						<div class=" channel-title">
+							<strong>{{this.chatService.globalChannel}}</strong>
+						</div>
+						<div>
+							<button mat-icon-button [matMenuTriggerFor]="menu">
+								<mat-icon>menu</mat-icon>
+							</button>
+							<mat-menu #menu="matMenu">
+								<button mat-menu-item disabled>
+									<mat-icon>person_pin</mat-icon>
+									<span>Profile</span>
+								</button>
+								<button mat-menu-item (click)= "logout()">
+									<mat-icon>flag</mat-icon>
+									<span>Logout</span>
+								</button>
+							</mat-menu>
+						</div>
+						
+				</div>	
+				<div fxLayoutAlign="space-around center" fxLayout="row">
+						<span class="text">
 							{{this.chatService.fullName}}
 						</span>
-					</div>
-					<div>
-						<small class="dull">@{{this.chatService.username}}</small>
-					</div>
+						<span class="dull">
+							@{{this.chatService.username}}
+						</span>
 				</div>								
 		</div>
 	</mat-grid-tile>
@@ -34,15 +49,29 @@
 					<span>
 						<div >
 							<small> Online: </small> | 
-							<small> Fav </small>
+							<small><mat-icon class="dull star">star_border</mat-icon></small>
 						</div>	
 					</span>
 				</div>
 			</div>
 			<div fxFlex fxLayoutAlign="center center" fxLayout="column">
-				<button mat-raised-button (click)="removeChannel()">
-					<mat-icon class="dull">delete</mat-icon>
-				</button>
+				 <!--  -->
+				<div>
+					<button mat-icon-button [matMenuTriggerFor]="menu">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+					<mat-menu #menu="matMenu">
+						<button mat-menu-item (click)="editChannel()">
+							<mat-icon>border_color</mat-icon>
+							<span>Edit Channel</span>
+						</button>
+						<button mat-menu-item (click)="removeChannel()">
+							<mat-icon>delete</mat-icon>
+							<span>Delete Channel</span>
+						</button>
+					</mat-menu>
+				</div>
+				
 			</div>
 		</div>
 		
@@ -80,6 +109,7 @@
 						<div>
 				 			{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}
 							<small class="dull">@{{ occupant.username }} </small>
+							<span *ngIf= "occupant.isNewMessageArrived" class="new"> new </span> 
 						</div>
 					</div>
 					
@@ -152,21 +182,22 @@
 					</div>
 				</div>
 				<mat-divider></mat-divider>
-					<a mat-list-item 
-						routerLinkActive="active" class="online-name"
-						routerLink="/messages/{{channel.channel}}"
-						(click)="channelClicked(channel.channel, channel.isPrivate)"
-						matLine 
-						*ngFor="let channel of this.chatService.publicChats$ | async; let index = index">
+				<a mat-list-item 
+					routerLinkActive="active" class="online-name"
+					routerLink="/messages/{{channel.channel}}"
+					(click)="channelClicked(channel.channel, channel.isPrivate)"
+					matLine
+					fxLayout="row" fxLayoutAlign="space-between center"  
+					*ngFor="let channel of this.chatService.publicChats$ | async; let index = index">
+				
 					
-						<div fxLayout="row" fxLayoutAlign="start center">
-							
-							<div>
-								#{{ channel.displayName }}
-							</div>
-						</div>
-					
-					</a>
+						
+					<span>#{{ channel.displayName }} 
+						<span *ngIf= "channel.isNewMessageArrived" class="new"> new </span> 
+					</span>
+										
+
+				</a>
 	
 
 			</mat-nav-list>

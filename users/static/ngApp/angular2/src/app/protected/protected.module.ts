@@ -4,6 +4,7 @@ import { PubNubAngular } from 'pubnub-angular2';
 import { MyOwnCustomMaterialModule} from '../material.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddChannelDialog } from './dialogs/add-channel.dialog';
+import { EditChannelDialog } from './dialogs/edit-channel.dialog';
 import { RemoveChannelDialog } from './dialogs/remove-channel.dialog';
 import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
 import { rootReducer, IAppState } from '../_store/store';
@@ -18,7 +19,8 @@ import { MatDialog } from '@angular/material/dialog';
   declarations: [
     DashboardComponent,
     AddChannelDialog,
-    RemoveChannelDialog
+    RemoveChannelDialog,
+    EditChannelDialog
   ],
   imports: [    
     BrowserModule,
@@ -29,7 +31,7 @@ import { MatDialog } from '@angular/material/dialog';
     FlexLayoutModule
   ],
   providers: [PubNubAngular, MatDialog],
-  bootstrap: [AddChannelDialog, RemoveChannelDialog],
+  bootstrap: [AddChannelDialog, RemoveChannelDialog, EditChannelDialog],
 })
 
 

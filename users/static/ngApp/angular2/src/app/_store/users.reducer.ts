@@ -42,9 +42,22 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
             };
 
         case Constants.USEREDIT:
+            let newisMessageArrived = true;
+
+            if (action.payload.isCurrentChannel) {
+                newisMessageArrived = false;
+            }
+            state.payload.map((element) => {
+
+                if (action.payload.channel === element.channel) {
+                    element.isNewMessageArrived = newisMessageArrived
+                    return;
+                }
+            });
             return {
                 type: action.type,
-                payload: state.payload
+                payload: [...state.payload],
+                error: false
             };
 
         case Constants.USERREMOVE:

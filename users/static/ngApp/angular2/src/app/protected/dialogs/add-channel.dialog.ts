@@ -11,7 +11,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     templateUrl: './add-channel.dialog.html'
 })
 export class AddChannelDialog {
-
+    channel:string;
     constructor(
         public dialogRef: MatDialogRef<AddChannelDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }

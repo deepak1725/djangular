@@ -80,6 +80,24 @@ export class UserService {
             .map((response: Response) => response.json());
     }
 
+    addPublicPrivateChannel = (channelName, displayName, userId=null, isPrivate=false) => {
+        if (!userId) {
+            userId = this.currentUser.user.pk
+        }
+        let body = {            
+            "users" : [
+                { "user": userId, "isAdmin": true }
+            ],
+            "channel": channelName,
+            "createdBy": userId,
+            "isPrivate": isPrivate,
+            "displayName": displayName
+        }
+        return this.http
+            .post(`/api/all-channels/`, body , this.options)
+            .map((response: Response) => response.json());
+    }
+
     getChannelName = () => {
         return this.http
             .get(`/api/channel-name`, this.options)
@@ -92,11 +110,11 @@ export class UserService {
             .map((response: Response) => response.json());
     }
     getUserAllChannels = (userId: string = undefined) => {
-        if (!userId) {
-            userId = this.currentUser.user.pk
-        }     
+        // if (!userId) {
+        //     userId = this.currentUser.user.pk
+        // }     
         return this.http
-            .get(`api/all-channels/${userId}`, this.options)
+            .get(`api/all-channels/`, this.options)
             .map((response: Response) => response.json());
     }
 }

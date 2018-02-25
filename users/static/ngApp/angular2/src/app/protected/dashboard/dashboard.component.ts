@@ -1,16 +1,17 @@
+import { concat } from 'rxjs/operator/concat';
 import { Component, ViewEncapsulation, 
 	OnInit, AfterViewChecked, 
 	ElementRef, ViewChild, 
 	OnChanges, SimpleChanges,
 	AfterViewInit, Inject
 } from '@angular/core';
-import { AuthenticationService } from '../../_services/authentication.service';
 import { NgForm } from '@angular/forms';
 // import { PubNubAngular } from 'pubnub-angular2';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { NewchatService } from '../../_services/newchat.service'
+import { AuthenticationService } from '../../_services/authentication.service'
 import { Router, ActivatedRoute, ParamMap, Event, NavigationStart, NavigationEnd } from '@angular/router';
 import {rootReducer,IAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
@@ -22,6 +23,7 @@ import * as ChatEngineCore from 'chat-engine';
 import {Channel} from '../../_models/channel'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {AddChannelDialog} from '../dialogs/add-channel.dialog'
+import {EditChannelDialog} from '../dialogs/edit-channel.dialog'
 import {RemoveChannelDialog} from '../dialogs/remove-channel.dialog'
 import { MatSnackBar } from '@angular/material';
 import { UserService } from '../../_services/user.service';
@@ -33,7 +35,7 @@ import { UserService } from '../../_services/user.service';
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.css'],
-	providers: [NewchatService ]
+	providers: [NewchatService, AuthenticationService ]
 	// encapsulation: ViewEncapsulation.None,
 
 })
@@ -49,6 +51,8 @@ export class DashboardComponent implements OnInit {
 		room : "no",
 		online: 0
 	}
+	channelNameForDialog: string;
+
 	// currentChannel:string = '#general';
 	currentChat = this.chatService.currentChat
 	@select(['current_channel', 'payload']) readonly currentChannel$: Observable<any[]>;
@@ -61,6 +65,8 @@ export class DashboardComponent implements OnInit {
 		public dialog: MatDialog,
 		private router: Router,
 		private route: ActivatedRoute,
+		public snackBar: MatSnackBar,
+		private auth: AuthenticationService
 		
 	) {
 		
@@ -116,9 +122,34 @@ export class DashboardComponent implements OnInit {
 			data: { name: this.newChannel }
 		});
 
-		dialogRef.afterClosed().subscribe(result => {
+		dialogRef.afterClosed().subscribe((result="") => {
 			result = result.replace(/\s/g, '')
 			if (result) {
+				console.log(result);
+				this.newChannel = result;
+				this.chatService.channelAdd(result)
+				// console.log('result', result);
+			}
+		});
+	}
+
+
+	editChannel(): void {
+		let currentChatDisplayName = this.chatService.currentChatObj.displayName.replace("#", "");
+		let isPrivate = this.chatService.currentChatObj.isPrivate;
+
+		let dialogRef = this.dialog.open(EditChannelDialog, {
+			width: '400px',
+			data: { channel: currentChatDisplayName, isPrivate: isPrivate  }
+		});
+
+		dialogRef.afterClosed().subscribe((result = "") => {
+			console.log("Resukt", result)
+			if (result) {
+				result = result.channelName.replace(/\s/g, '')
+			}
+			if (result) {
+				console.log(result);
 				this.newChannel = result;
 				// this.chatService.channelAdd(result)
 				// console.log('result', result);
@@ -137,6 +168,18 @@ export class DashboardComponent implements OnInit {
 				// console.log('Remove Channel');
 				// this.chatService.removeChannel(this.chatService.channelInfo.name)
 		});
+	}
+	logout(){
+		let logoutUser = this.auth.logout().subscribe(
+			(res) => {
+				this.snackBar.open("Successfully Logged Out", " ", {
+					duration: 2000,
+				}); 
+			}
+		);
+		logoutUser.unsubscribe();
+
+
 	}
 
 	// fetchChannelNameFromString = ():any => {

@@ -148,6 +148,31 @@ class AllChannelsViewSet(viewsets.ModelViewSet):
     queryset = AllChannels.objects.all()
     serializer_class = AllChannelSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        message = 'Data Retrieved Successfully'
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            responseData = self.formatData(serializer.data, message)
+            return self.get_paginated_response(responseData)
+
+        serializer = self.get_serializer(queryset, many=True)
+        responseData = self.formatData(serializer.data, message)
+
+        return Response(responseData)
+
+    def formatData(self, data, message):
+        if not data:
+            message = "No Data Found"
+        responseData = {
+            'message': message,
+            'data': data,
+            'error': None
+        }
+        return responseData
+
     def retrieve(self, request, *args, **kwargs):
 
         queryset = AllChannels.objects.filter(users__user =kwargs['pk'])

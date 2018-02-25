@@ -62,8 +62,7 @@ class UserChannelsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         friends = validated_data.pop('friend')
-        uc = UserChannels.objects.filter(user=validated_data['user'].id)
-
+        uc = UserChannels.objects.filter(user_id=validated_data['user'].id)
         if (uc.exists()):
             uc = uc.first()
         else:
