@@ -9,10 +9,10 @@
 							<strong>{{this.chatService.globalChannel}}</strong>
 						</div>
 						<div>
-							<button mat-icon-button [matMenuTriggerFor]="menu">
+							<button mat-icon-button [matMenuTriggerFor]="ProfileMenu">
 								<mat-icon>menu</mat-icon>
 							</button>
-							<mat-menu #menu="matMenu">
+							<mat-menu #ProfileMenu="matMenu">
 								<button mat-menu-item disabled>
 									<mat-icon>person_pin</mat-icon>
 									<span>Profile</span>
@@ -48,7 +48,7 @@
 				<div fxLayout="row" class="channel-title">
 					<span>
 						<div >
-							<small> Online: </small> | 
+							<a (click)= "onlineUsers()"> <small> Participants: {{ this.currentChannelPayload?.chatusers.length }} </small> </a> | 
 							<small><mat-icon class="dull star">star_border</mat-icon></small>
 						</div>	
 					</span>
@@ -57,7 +57,8 @@
 			<div fxFlex fxLayoutAlign="center center" fxLayout="column">
 				 <!--  -->
 				<div>
-					<button mat-icon-button [matMenuTriggerFor]="menu">
+					<button mat-icon-button [matMenuTriggerFor]="menu" 
+						*ngIf ="!((this.chatService).currentChannel$ | async)?.isDirect" >
 						<mat-icon>more_vert</mat-icon>
 					</button>
 					<mat-menu #menu="matMenu">

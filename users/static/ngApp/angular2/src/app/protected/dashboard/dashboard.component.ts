@@ -1,3 +1,4 @@
+import { OnlineFriendsDialog } from './../dialogs/online-friends.dialog';
 import { concat } from 'rxjs/operator/concat';
 import { Component, ViewEncapsulation, 
 	OnInit, AfterViewChecked, 
@@ -52,11 +53,10 @@ export class DashboardComponent implements OnInit {
 		online: 0
 	}
 	channelNameForDialog: string;
-
+	currentChannelPayload;
 	// currentChannel:string = '#general';
 	currentChat = this.chatService.currentChat
-	@select(['current_channel', 'payload']) readonly currentChannel$: Observable<any[]>;
-
+	@select(['current_channel', 'payload']) readonly currentChannel$: Observable<any>;
 
 
 	constructor(
@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit {
 		this.scrollToBottom();
 		this.events(NavigationEnd);
 		this.chatService.callStack();
+		this.subscribeCurrentChannel();
 		// let channel = this.route.snapshot.paramMap.get('channel');		
 		// this.currentChat = this.fetchChannelNameFromString()
 		// this.currentChannel$.subscribe((event) => {
@@ -128,9 +129,29 @@ export class DashboardComponent implements OnInit {
 				console.log(result);
 				this.newChannel = result;
 				this.chatService.channelAdd(result)
-				// console.log('result', result);
 			}
 		});
+	}
+
+	subscribeCurrentChannel = () => {
+		this.currentChannel$.subscribe(
+			(payload) => {
+				this.currentChannelPayload = payload
+			});
+	}
+	onlineUsers():void{
+		
+		let dialogRef = this.dialog.open(OnlineFriendsDialog, {
+			width: '300px',
+			data: {
+				payload: this.currentChannelPayload
+			},
+		});
+		dialogRef.afterClosed().subscribe((result = "") => {
+		});
+	}
+	onOnlineUserClick = (user) => {
+
 	}
 
 

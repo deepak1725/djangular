@@ -29,6 +29,7 @@ export class NewchatService {
     // allUsers: any = [];
     globalChannel:string = 'keysall'
     me:any;
+    onlineGroupUsers = 0;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
     myDirectChannel: Array<any> = []
     myPPChannels: any = [];
@@ -70,7 +71,7 @@ export class NewchatService {
     }
 
     createChat = (channel = this.currentChat, isPrivate= false) => {
-        let chat = this.ChatEngine.Chat(channel, isPrivate);
+        let chat = new (this).ChatEngine.Chat(channel, isPrivate);
         return chat;
     }
 
@@ -163,9 +164,22 @@ export class NewchatService {
         }
     }
 
+    connectChat = (chat) => {
+        
+        if (chat.hasConnected) {
+            this.history(chat)
+
+        }else{
+            chat.on('$.connected', () => {
+                this.history(chat)                
+            });
+        }
+    }
+
    
 
     history = (currentChatObject) => {
+        
         // wait for our chat to connect
         this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, payload: {} })        
         
@@ -235,15 +249,16 @@ export class NewchatService {
 
 
         this.currentChannel$.subscribe(
-            (payload) => {
+             (payload) => {
+
                 if (payload && payload.channel) {
-                    console.log(payload);
                     this.currentChat = payload.channel;
                     this.currentChatObj = payload;
                     let chatObject = this.createChat(payload.channel, payload.isPrivate);
+
                     if (chatObject) {
-                        this.subscribe(chatObject);   
-                        this.history(chatObject)
+                        this.subscribe(chatObject);
+                        this.connectChat(chatObject);   
                     }
                 } 
             },(error) => {
@@ -252,12 +267,28 @@ export class NewchatService {
         )            
     }
 
+    getChatObj = (channel, isPrivate=false) => {
+        let chat = new (this).ChatEngine.Chat(channel, isPrivate);
+        let darshan = Promise.resolve(chat.users);
+        // let res = new Promise((resolve, reject) => {
+        //                 return chat;
+        //             });
+        return darshan;
+    }
+
     updateUserState = (me) => {
         me.update({
             lastOnline: new Date(),
             nickName: this.username,
             fullName: this.fullName
         });
+    }
+
+    getUserFriendChannel = (friendUserName) => {
+        if (friendUserName) {
+            let result = this.UserServicee.getUserStateDetails(this.username, friendUserName);
+            return result.toPromise();
+        }
     }
 
 
@@ -314,10 +345,13 @@ export class NewchatService {
             this.isPrivate = ppElement.isPrivate;
             //If Channel we tried to shift into is Public/Private Channel
             displayName = '#' + ppElement.displayName;
+            let chat = this.createChat(ppElement.channel);
             let payload = {
                 'channel': ppElement.channel,
                 'isPrivate': ppElement.isPrivate,
-                'displayName': displayName
+                'displayName': displayName,
+                'isDirect': false,
+                'chatusers': Object.keys(chat.users)
             }
             //REMOVING NEW MESSAGE INDICATOR
             let ppChannelEditPayload = { 'channel': ppElement.channel, 'isCurrentChannel' : true};
@@ -327,13 +361,18 @@ export class NewchatService {
         }
         else if(directElement){
             this.isPrivate = true;
+            let chat = this.createChat(directElement.channel);
             
             //If Channel we tried to shift into is Direct Channel
             displayName = '@' + directElement.username;
+
             let payload = {
                 'channel': directElement.channel,
                 'isPrivate': true,
-                'displayName': displayName
+                'displayName': displayName,
+                'isDirect' : true,
+                'chatusers': Object.keys(chat.users)
+                
             }
             //REMOVING NEW MESSAGE INDICATOR
             let userEditPayload = { 'channel': directElement.channel, 'isCurrentChannel': true };

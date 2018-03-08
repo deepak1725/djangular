@@ -92,7 +92,6 @@ class UserChannelsViewSet(viewsets.ModelViewSet):
         return Response(responseData, status=status.HTTP_200_OK)
 
 
-
 class GetChannelNameViewSet(APIView):
     permission_classes = ''
     authentication_classes = ''
@@ -118,18 +117,46 @@ class UserDetailsViewSet(APIView):
     authentication_classes = ''
 
     def get(self, request, *args, **kw):
-        arg_2 = request.GET.get('username')
+        myUsername = request.GET.get('username')
         arg_1 = request.GET.get('id')
+        friendUserName = request.GET.get('friendUserName', None)
+
         message = 'Invalid or missing username.'
         data = {}
 
         if arg_1:
+            if friendUserName:
+                UserChannelInstance = UserChannels.objects.filter(user_id=arg_1).first()
+                print(UserChannelInstance)
             message = 'User Found'
             user = User.objects.get(id = arg_1)
-            data = {'id':user.id, 'first_name' : user.first_name, 'last_name' : user.last_name, 'username': user.username}
 
-        elif isinstance(arg_2, str):
-            user = User.objects.get_by_natural_key(arg_2)
+            data = {
+                'id':user.id,
+                'first_name' : user.first_name,
+                'last_name' : user.last_name,
+                'username': user.username
+            }
+
+        elif isinstance(myUsername, str):
+            user = User.objects.get_by_natural_key(myUsername)
+            if friendUserName:
+                friend = User.objects.get_by_natural_key(friendUserName)
+
+                UserChannelInstance = UserChannels.objects.filter(
+                    user=user, friend__user = friend
+                ).values(
+                    'id', 'user_id', 'user__username', 'friend__user__username', 'friend__channel'
+                ).first()
+
+                data = {
+                    'message': "UserDetails Successfully fetched",
+                    'data': UserChannelInstance,
+                    'error': None,
+                }
+
+                # AllChannelsViewSet.formatData(self, UserChannelInstance, message)
+                return Response(data, status=status.HTTP_200_OK)
 
             message = 'User Details Successfully fetched'
             data = {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'username': user.username}

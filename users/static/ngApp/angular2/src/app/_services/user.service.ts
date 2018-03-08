@@ -117,4 +117,12 @@ export class UserService {
             .get(`api/all-channels/`, this.options)
             .map((response: Response) => response.json());
     }
+    getUserStateDetails = (username, friendUserName) => {
+        if (username && friendUserName) {            
+            return this.http
+                .get(`api/user-details/?username=${username}&friendUserName=${friendUserName}`, this.options)
+                .map((response: Response) => response.json());
+        }
+
+    }
 }

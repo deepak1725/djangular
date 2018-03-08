@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AddChannelDialog } from './dialogs/add-channel.dialog';
 import { EditChannelDialog } from './dialogs/edit-channel.dialog';
 import { RemoveChannelDialog } from './dialogs/remove-channel.dialog';
+import { OnlineFriendsDialog } from './dialogs/online-friends.dialog';
 import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
 import { rootReducer, IAppState } from '../_store/store';
 import { Constants } from '../_store/constants';
@@ -20,7 +21,9 @@ import { MatDialog } from '@angular/material/dialog';
     DashboardComponent,
     AddChannelDialog,
     RemoveChannelDialog,
-    EditChannelDialog
+    EditChannelDialog,
+    OnlineFriendsDialog
+
   ],
   imports: [    
     BrowserModule,
@@ -31,7 +34,7 @@ import { MatDialog } from '@angular/material/dialog';
     FlexLayoutModule
   ],
   providers: [PubNubAngular, MatDialog],
-  bootstrap: [AddChannelDialog, RemoveChannelDialog, EditChannelDialog],
+  bootstrap: [AddChannelDialog, RemoveChannelDialog, EditChannelDialog, OnlineFriendsDialog],
 })
 
 

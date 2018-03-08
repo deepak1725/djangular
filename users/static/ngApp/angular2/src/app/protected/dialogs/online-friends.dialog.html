@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>{{ data?.payload?.displayName }}</h1>
+
+<div mat-dialog-content>
+    <p>All Group Participants</p>
+</div>
+<mat-nav-list>
+    <div *ngIf="data.payload?.chatusers.length; else elseBlock">
+        <mat-list-item *ngFor="let user of data.payload?.chatusers">
+            <mat-icon color="accent" mat-list-icon class="f-s-40">account_box</mat-icon>
+            
+            <mat-icon mat-list-icon class="dialog-online">
+                fiber_manual_record
+            </mat-icon>
+            
+            <a matLine (click)="onOnlineUserClick(user)">
+                {{ user }}
+            </a>
+            
+        </mat-list-item>
+    </div>
+    <ng-template #elseBlock>
+        <mat-list-item>
+
+            No Users Found
+            
+        </mat-list-item>
+    </ng-template>
+</mat-nav-list>
