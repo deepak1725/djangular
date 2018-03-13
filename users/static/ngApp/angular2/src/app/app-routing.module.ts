@@ -24,7 +24,7 @@ export const APPROUTES : Routes = [
             { path: 'messages/:channel/:type', component: DashboardComponent },
             { path: 'messages/:channel', component: DashboardComponent },
             { path: 'messages', redirectTo: 'messages/general', pathMatch: 'full' },
-            { path: '', redirectTo: 'messages/general', pathMatch: 'full' },
+            { path: '', redirectTo: 'messages/general', pathMatch: 'full'  },
             { path: 'dashboard', redirectTo: 'messages/general', pathMatch: 'full' },
         ]  
     },
