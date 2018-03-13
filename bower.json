@@ -1,5 +1,5 @@
 {
-  "name": "crudapi",
+  "name": "djangular",
   "authors": [
     "Deepak Sharma <sharma1725@gmail.com>"
   ],
@@ -14,8 +14,5 @@
     "test",
     "tests",
     "crudapi/static/bower_components"
-  ],
-  "dependencies": {
-    "AdminLTE": "admin-lte#^2.3.11"
-  }
+  ]
 }
