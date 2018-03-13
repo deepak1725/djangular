@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
-INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('*',)
 
 ROOT_URLCONF = 'crudapi.urls'
 
@@ -116,7 +116,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'HOST':'*',
         'PASSWORD': '123456',
         'PORT': '5432',
     }
