@@ -103,9 +103,9 @@ class UserChannelsSerializer(serializers.ModelSerializer):
 
 
 class AllChannelSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(read_only=True, source='createdBy.user.first_name')
-    username = serializers.CharField(read_only=True, source='createdBy.user.username')
-    last_name = serializers.CharField(read_only=True, source='createdBy.user.last_name')
+    # first_name = serializers.CharField(read_only=True, source='createdBy.user.first_name')
+    # username = serializers.CharField(read_only=True, source='createdBy.user.username')
+    # last_name = serializers.CharField(read_only=True, source='createdBy.user.last_name')
     # users = GroupUserField(many=True)
 
 
