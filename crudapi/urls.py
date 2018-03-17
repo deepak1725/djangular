@@ -24,7 +24,7 @@ urlpatterns = [
     name='account_confirm_email'),
 
 
-    url(r'^',RedirectView.as_view(url = '/app/', permanent=True) ),
+    url(r'^$', RedirectView.as_view(url = '/app/', permanent=True) ),
 
 ]
 
