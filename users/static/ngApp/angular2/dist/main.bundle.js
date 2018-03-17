@@ -1763,7 +1763,7 @@ var newchat_service_NewchatService = (function () {
             else {
                 // If none of above condition is met, the channel is invalid, hence redirect user
                 _this.router.navigate(["../messages", '6DYI4X']);
-                _this.shiftChannel("6DYI4X", false);
+                // this.shiftChannel("6DYI4X", false)
                 console.log("This is not a valid channel :", channelInput);
             }
         };

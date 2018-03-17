@@ -103,17 +103,19 @@ class GroupUserField(serializers.ModelSerializer):
 
 
 class AllChannelSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(read_only=True, source='createdBy.first_name')
-    username = serializers.CharField(read_only=True, source='createdBy.username')
-    last_name = serializers.CharField(read_only=True, source='createdBy.last_name')
+    first_name = serializers.CharField(read_only=True, source='createdBy.user.first_name')
+    username = serializers.CharField(read_only=True, source='createdBy.user.username')
+    last_name = serializers.CharField(read_only=True, source='createdBy.user.last_name')
     users = GroupUserField(many=True)
 
 
     class Meta:
         model = AllChannels
-        fields = ('id','users', 'channel','isPrivate', 'displayName','createdBy','first_name', 'last_name', 'username')
+        fields = '__all__'
+        # fields = ('id','users', 'channel','isPrivate', 'displayName','createdBy','first_name', 'last_name', 'username')
 
     def create(self, validated_data):
+        print("Hello in create")
         users = validated_data.pop('users')
         instanceAllChannels = AllChannels.objects.filter(channel=validated_data['channel'])
 

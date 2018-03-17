@@ -383,7 +383,7 @@ export class NewchatService {
         }else{
             // If none of above condition is met, the channel is invalid, hence redirect user
             this.router.navigate([`../messages`, '6DYI4X']);
-            this.shiftChannel("6DYI4X", false)
+            // this.shiftChannel("6DYI4X", false)
             console.log("This is not a valid channel :", channelInput);
         }
     }
