@@ -16,6 +16,7 @@ from django.core.mail.backends.filebased import EmailBackend
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import dj_database_url
 import datetime
+import django_heroku
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -227,5 +228,6 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'my_cdn')
 db_from_env = dj_database_url.config(conn_max_age=500)
 
 DATABASES['default'].update(db_from_env)
+django_heroku.settings(locals())
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
