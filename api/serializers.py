@@ -92,21 +92,21 @@ class UserChannelsSerializer(serializers.ModelSerializer):
 
 
 
-class GroupUserField(serializers.ModelSerializer):
-    first_name = serializers.CharField(read_only=True, source="user.first_name")
-    last_name = serializers.CharField(read_only=True, source="user.last_name")
-    username = serializers.CharField(read_only=True, source="user.username")
-
-    class Meta:
-        model = GroupUsers
-        fields = ('user','isAdmin', 'first_name', 'last_name', 'username')
+# class GroupUserField(serializers.ModelSerializer):
+#     first_name = serializers.CharField(read_only=True, source="user.first_name")
+#     last_name = serializers.CharField(read_only=True, source="user.last_name")
+#     username = serializers.CharField(read_only=True, source="user.username")
+#
+#     class Meta:
+#         model = GroupUsers
+#         fields = ('user','isAdmin', 'first_name', 'last_name', 'username')
 
 
 class AllChannelSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(read_only=True, source='createdBy.user.first_name')
     username = serializers.CharField(read_only=True, source='createdBy.user.username')
     last_name = serializers.CharField(read_only=True, source='createdBy.user.last_name')
-    users = GroupUserField(many=True)
+    # users = GroupUserField(many=True)
 
 
     class Meta:
