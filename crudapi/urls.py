@@ -8,6 +8,7 @@ from rest_auth.registration.views import VerifyEmailView
 from rest_auth.views import PasswordResetConfirmView
 # from ngApp.views import ResetPasswordConfirm
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
@@ -23,7 +24,7 @@ urlpatterns = [
     name='account_confirm_email'),
 
 
-    url(r'^', include('users.urls', namespace='users')),
+    url(r'^',RedirectView.as_view(url = '/app/', permanent=True) ),
 
 ]
 
