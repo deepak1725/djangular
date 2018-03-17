@@ -6,15 +6,18 @@
     {% load staticfiles %}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link href="{%  static 'ngApp/angular2/prod/styles.bundle.css' %}" rel="stylesheet"/>
-    <base href="/app">
+     {% block content %}
+      <base href="/app">
 
 
-    <app-root></app-root>
+      <app-root></app-root>
 
-    <script src="{% static 'ngApp/angular2/prod/common.js' %}"></script>
-    <script src="{% static 'ngApp/angular2/prod/polyfills.bundle.js' %}"></script>
-    <script src="{% static 'ngApp/angular2/prod/main.bundle.js' %}"></script>
+      <script src="{% static 'ngApp/angular2/dist/inline.bundle.js' %}"></script>
+      <script src="{% static 'ngApp/angular2/prod/polyfills.bundle.js' %}"></script>
+      <script src="{% static 'ngApp/angular2/dist/styles.bundle.js' %}"></script>    
+      <script src="{% static 'ngApp/angular2/dist/vendor.bundle.js' %}"></script>    
+      <script src="{% static 'ngApp/angular2/prod/main.bundle.js' %}"></script>
+      {% endblock content %}
 
   <script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
 </html>
