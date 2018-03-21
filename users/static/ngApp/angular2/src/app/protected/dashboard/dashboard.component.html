@@ -48,8 +48,13 @@
 				<div fxLayout="row" class="channel-title">
 					<span>
 						<div >
-							<a (click)= "onlineUsers()"> <small> Participants: {{ this.currentChannelPayload?.chatusers.length }} </small> </a> | 
-							<small><mat-icon class="dull star">star_border</mat-icon></small>
+							<a (click)= "onlineUsers()"> 
+								<small>
+									<mat-icon class="dull star" title="Participants">face</mat-icon>
+									{{ this.currentChannelPayload?.chatusers.length }}
+								</small>
+							</a> | 
+							<small><mat-icon class="dull star" title="Add to Favorite">star_border</mat-icon></small>
 						</div>	
 					</span>
 				</div>
@@ -83,7 +88,7 @@
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
-					<h3 mat-subheader>UNICAST</h3>
+					<h3 mat-subheader>DIRECT</h3>
 					<div>
 						<button mat-raised-button (click)="addChannel()">
 							<mat-icon class="dull">add_circle_outline</mat-icon>
@@ -175,7 +180,7 @@
 		<div fxLayoutAlign="start stretch" fxLayout="column" class="sidebar-container">
 			<mat-nav-list dense >
 				<div fxLayoutAlign="space-between center" fxLayout="row">
-					<h3 mat-subheader>MULTICAST</h3>
+					<h3 mat-subheader>GROUPS</h3>
 					<div>
 						<button mat-raised-button (click)="addChannel()">
 							<mat-icon class="dull">add_circle_outline</mat-icon>

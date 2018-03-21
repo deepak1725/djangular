@@ -169,9 +169,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
 
 SITE_ID = 1
-LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'users:index'
-LOGOUT_REDIRECT_URL = 'users:login'
+LOGIN_URL = 'app:app_index'
+LOGIN_REDIRECT_URL = 'app:app_index'
+LOGOUT_REDIRECT_URL = 'app:app_index'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 

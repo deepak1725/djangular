@@ -17,7 +17,9 @@ export class UserService {
 
         this.options.headers.append('Content-Type', 'application/json');
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        this.options.headers.append('Authorization','JWT ' + this.currentUser.token);
+        if (this.currentUser) {
+            this.options.headers.append('Authorization','JWT ' + this.currentUser.token);
+        }
     }
     
 
@@ -61,8 +63,7 @@ export class UserService {
             .map((response: Response) => response.json());
     }
 
-    addDirectChannelDetails = (friendId, channelName) => {
-        let id = null;
+    addDirectChannelDetails = (friendId, channelName, id=null) => {
         if (!id) {
             id = this.currentUser.user.pk
         }

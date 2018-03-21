@@ -1,3 +1,4 @@
+import { UserService } from './../../../_services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../../../_services/authentication.service';
@@ -8,9 +9,10 @@ import {MatSnackBar} from '@angular/material';
 
 
 @Component({
-  selector : 'app-register',
-  templateUrl : './register.component.html',
-  styleUrls: ['./register.component.css']
+ 	selector : 'app-register',
+  	templateUrl : './register.component.html',
+  	styleUrls: ['./register.component.css'],
+	providers: [UserService]
 
 })
 export class RegisterComponent implements OnInit{
@@ -25,7 +27,9 @@ constructor(
     private router: Router,
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
-    public snackBar: MatSnackBar
+	public snackBar: MatSnackBar,
+	private UserServicee: UserService,
+	
 
     ) { }
 
@@ -56,18 +60,20 @@ registerUser(){
 			email: this.signupForm.controls['email'].value,    
 		};
 
-		console.log(userInputs);
-		let that = this;
 
 		this.authenticationService.register(userInputs)
 			.subscribe(
-				function(response){
-					that.openSnackBar("Successfully Signed up.")							
-					console.log("Success response", response)
+				(response) => {
+					
+					let add = this.UserServicee.addDirectChannelDetails(response.user.pk, response.user.username, response.user.pk)
+						.subscribe(() => this.openSnackBar("Successfully Signed up."))
+					this.router.navigate([`/login`]);
+					
+
 				},
-				function(response){ 
+				(response) => { 
 					response = response.json();
-					that.openSnackBar(response[Object.keys(response)[0]])
+					this.openSnackBar(response[Object.keys(response)[0]])
 					console.log("Error happened", response )
 				}
 			);

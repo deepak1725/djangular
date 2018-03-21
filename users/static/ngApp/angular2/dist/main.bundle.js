@@ -337,7 +337,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/protected/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mat-grid-list cols=\"5\" rowHeight=\"fit\">\n\t<!-- SIDEBAR : TITLE -->\n  \t<mat-grid-tile>\n\t\t<div fxFlexFill fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"online-name channel-group\">\t\t\t\n\t\t\t\t\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\" channel-title\">\n\t\t\t\t\t\t\t<strong>{{this.chatService.globalChannel}}</strong>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"ProfileMenu\">\n\t\t\t\t\t\t\t\t<mat-icon>menu</mat-icon>\n\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t<mat-menu #ProfileMenu=\"matMenu\">\n\t\t\t\t\t\t\t\t<button mat-menu-item disabled>\n\t\t\t\t\t\t\t\t\t<mat-icon>person_pin</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Profile</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t<button mat-menu-item (click)= \"logout()\">\n\t\t\t\t\t\t\t\t\t<mat-icon>flag</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Logout</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</mat-menu>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t</div>\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t<span class=\"text\">\n\t\t\t\t\t\t\t{{this.chatService.fullName}}\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"dull\">\n\t\t\t\t\t\t\t@{{this.chatService.username}}\n\t\t\t\t\t\t</span>\n\t\t\t\t</div>\t\t\t\t\t\t\t\t\n\t\t</div>\n\t</mat-grid-tile>\n\n\t<!-- HEADER -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxFlexFill fxLayoutAlign=\"space-around center\">\n\t\t\t<div fxFlex=90 fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<span>\n\t\t\t\t\t\t<div >\n\t\t\t\t\t\t\t<a (click)= \"onlineUsers()\"> <small> Participants: {{ this.currentChannelPayload?.chatusers.length }} </small> </a> | \n\t\t\t\t\t\t\t<small><mat-icon class=\"dull star\">star_border</mat-icon></small>\n\t\t\t\t\t\t</div>\t\n\t\t\t\t\t</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div fxFlex fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t <!--  -->\n\t\t\t\t<div>\n\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"menu\" \n\t\t\t\t\t\t*ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t<mat-icon>more_vert</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<mat-menu #menu=\"matMenu\">\n\t\t\t\t\t\t<button mat-menu-item (click)=\"editChannel()\">\n\t\t\t\t\t\t\t<mat-icon>border_color</mat-icon>\n\t\t\t\t\t\t\t<span>Edit Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t\t<button mat-menu-item (click)=\"removeChannel()\">\n\t\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t\t\t<span>Delete Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</mat-menu>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: DIRECT MESSAGES -->\n\t<mat-grid-tile rowspan=\"6\">\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>UNICAST</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active-link\" \n\t\t\t\t\tclass=\"online-name\" \n\t\t\t\t\tmatLine \n\t\t\t\t\t[routerLinkActiveOptions]=\"{exact: true}\"\n\t\t\t\t\trouterLink=\"/messages/{{occupant.channel}}\"\n\t\t\t\t\t (click)=\"channelClicked(occupant.channel, true)\"\n \t\t\t\t\t*ngFor=\"let occupant of (this.chatService).users$ | async ; let index = index\">\n\n\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t \t\t\t{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant.username }} </small>\n\t\t\t\t\t\t\t<span *ngIf= \"occupant.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t</a>\n\n\t\t\t\t<!-- <a mat-list-item (click)=\"this.chatService.sendInvite(occupant.uuid)\" \n\t\t\t\trouterLinkActive=\"active-link\" class=\"online-name\"\n\t\t\t\t\tmatLine [routerLinkActiveOptions]=\"{exact: true}\" \n\t\t\t\t\t*ngFor=\"let occupant of this.chatService.privateChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{ occupant }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant}} </small>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t</a> -->\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\t\n\n\t<!-- MessageContainer -->\n  \t<mat-grid-tile rowspan=\"8\" colspan=\"4\" >\n\t\t\n\t\t\t<div style=\"overflow-y: scroll\" fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"content-container\">\n\t\t\t\t\n\t\t\t\t<div *ngFor=\"let element of ((this.chatService).messages$ | async ) let index = index\">\n\t\t\t\t\t<div fxLayout=\"row\" class=\"message-text\">\n\t\t\t\t\t\t<div fxFlex=\"5\">\n\t\t\t\t\t\t\t<mat-icon color=\"accent\" class=\"f-s-40\">account_box</mat-icon>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div fxFlex fxLayout=\"column\" fxLayoutAlign=\"space-evenly stretch\">\n\t\t\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"space-between center\">\n\t\t\t\t\t\t\t\t<span>\n\t\t\t\t\t\t\t\t\t<b>{{ element.data.fullName }}</b>\n\t\t\t\t\t\t\t\t\t<small class=\"dull\">@{{ element.data.nickName}}</small>\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t<div fxFlex class=\"time\" fxFlexAlign=\"center\">\n\t\t\t\t\t\t\t\t\t{{ getReadableTime( element.data.date) }}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div>{{ element.data.text }}</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t\t\t\n\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: GROUP -->\n\t<mat-grid-tile rowspan=\"3\">\n\t\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>MULTICAST</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active\" class=\"online-name\"\n\t\t\t\t\trouterLink=\"/messages/{{channel.channel}}\"\n\t\t\t\t\t(click)=\"channelClicked(channel.channel, channel.isPrivate)\"\n\t\t\t\t\tmatLine\n\t\t\t\t\tfxLayout=\"row\" fxLayoutAlign=\"space-between center\"  \n\t\t\t\t\t*ngFor=\"let channel of this.chatService.publicChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t<span>#{{ channel.displayName }} \n\t\t\t\t\t\t<span *ngIf= \"channel.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t</a>\n\t\n\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\n\t<!-- SEND MESSAGE -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t<form autocomplete=\"off\" #replyForm=\"ngForm\" (ngSubmit)=\"sendMessage(replyForm)\" class=\"reply-form\">\n\t\t\t\t<mat-form-field  class=\"msg-input\" fxFill floatPlaceholder=\"never\">\n\t\t\t\t\t<input tabindex=\"1\" resizeToFitContent name=\"message\" matInput placeholder=\"Message\" ngModel>\n\t\t\t\t\t<mat-hint align=\"end\"> Press Enter to Send</mat-hint>\n\t\t\t\t</mat-form-field>\n\t\t\t</form>\n\t\t</div>\n\t</mat-grid-tile>\n\n</mat-grid-list>\n"
+module.exports = "<mat-grid-list cols=\"5\" rowHeight=\"fit\">\n\t<!-- SIDEBAR : TITLE -->\n  \t<mat-grid-tile>\n\t\t<div fxFlexFill fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"online-name channel-group\">\t\t\t\n\t\t\t\t\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\" channel-title\">\n\t\t\t\t\t\t\t<strong>{{this.chatService.globalChannel}}</strong>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"ProfileMenu\">\n\t\t\t\t\t\t\t\t<mat-icon>menu</mat-icon>\n\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t<mat-menu #ProfileMenu=\"matMenu\">\n\t\t\t\t\t\t\t\t<button mat-menu-item disabled>\n\t\t\t\t\t\t\t\t\t<mat-icon>person_pin</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Profile</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t<button mat-menu-item (click)= \"logout()\">\n\t\t\t\t\t\t\t\t\t<mat-icon>flag</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Logout</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</mat-menu>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t</div>\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t<span class=\"text\">\n\t\t\t\t\t\t\t{{this.chatService.fullName}}\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"dull\">\n\t\t\t\t\t\t\t@{{this.chatService.username}}\n\t\t\t\t\t\t</span>\n\t\t\t\t</div>\t\t\t\t\t\t\t\t\n\t\t</div>\n\t</mat-grid-tile>\n\n\t<!-- HEADER -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxFlexFill fxLayoutAlign=\"space-around center\">\n\t\t\t<div fxFlex=90 fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<span>\n\t\t\t\t\t\t<div >\n\t\t\t\t\t\t\t<a (click)= \"onlineUsers()\"> \n\t\t\t\t\t\t\t\t<small>\n\t\t\t\t\t\t\t\t\t<mat-icon class=\"dull star\" title=\"Participants\">face</mat-icon>\n\t\t\t\t\t\t\t\t\t{{ this.currentChannelPayload?.chatusers.length }}\n\t\t\t\t\t\t\t\t</small>\n\t\t\t\t\t\t\t</a> | \n\t\t\t\t\t\t\t<small><mat-icon class=\"dull star\" title=\"Add to Favorite\">star_border</mat-icon></small>\n\t\t\t\t\t\t</div>\t\n\t\t\t\t\t</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div fxFlex fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t <!--  -->\n\t\t\t\t<div>\n\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"menu\" \n\t\t\t\t\t\t*ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t<mat-icon>more_vert</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<mat-menu #menu=\"matMenu\">\n\t\t\t\t\t\t<button mat-menu-item (click)=\"editChannel()\">\n\t\t\t\t\t\t\t<mat-icon>border_color</mat-icon>\n\t\t\t\t\t\t\t<span>Edit Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t\t<button mat-menu-item (click)=\"removeChannel()\">\n\t\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t\t\t<span>Delete Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</mat-menu>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: DIRECT MESSAGES -->\n\t<mat-grid-tile rowspan=\"6\">\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>DIRECT</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active-link\" \n\t\t\t\t\tclass=\"online-name\" \n\t\t\t\t\tmatLine \n\t\t\t\t\t[routerLinkActiveOptions]=\"{exact: true}\"\n\t\t\t\t\trouterLink=\"/messages/{{occupant.channel}}\"\n\t\t\t\t\t (click)=\"channelClicked(occupant.channel, true)\"\n \t\t\t\t\t*ngFor=\"let occupant of (this.chatService).users$ | async ; let index = index\">\n\n\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t \t\t\t{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant.username }} </small>\n\t\t\t\t\t\t\t<span *ngIf= \"occupant.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t</a>\n\n\t\t\t\t<!-- <a mat-list-item (click)=\"this.chatService.sendInvite(occupant.uuid)\" \n\t\t\t\trouterLinkActive=\"active-link\" class=\"online-name\"\n\t\t\t\t\tmatLine [routerLinkActiveOptions]=\"{exact: true}\" \n\t\t\t\t\t*ngFor=\"let occupant of this.chatService.privateChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{ occupant }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant}} </small>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t</a> -->\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\t\n\n\t<!-- MessageContainer -->\n  \t<mat-grid-tile rowspan=\"8\" colspan=\"4\" >\n\t\t\n\t\t\t<div style=\"overflow-y: scroll\" fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"content-container\">\n\t\t\t\t\n\t\t\t\t<div *ngFor=\"let element of ((this.chatService).messages$ | async ) let index = index\">\n\t\t\t\t\t<div fxLayout=\"row\" class=\"message-text\">\n\t\t\t\t\t\t<div fxFlex=\"5\">\n\t\t\t\t\t\t\t<mat-icon color=\"accent\" class=\"f-s-40\">account_box</mat-icon>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div fxFlex fxLayout=\"column\" fxLayoutAlign=\"space-evenly stretch\">\n\t\t\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"space-between center\">\n\t\t\t\t\t\t\t\t<span>\n\t\t\t\t\t\t\t\t\t<b>{{ element.data.fullName }}</b>\n\t\t\t\t\t\t\t\t\t<small class=\"dull\">@{{ element.data.nickName}}</small>\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t<div fxFlex class=\"time\" fxFlexAlign=\"center\">\n\t\t\t\t\t\t\t\t\t{{ getReadableTime( element.data.date) }}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div>{{ element.data.text }}</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t\t\t\n\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: GROUP -->\n\t<mat-grid-tile rowspan=\"3\">\n\t\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>GROUPS</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active\" class=\"online-name\"\n\t\t\t\t\trouterLink=\"/messages/{{channel.channel}}\"\n\t\t\t\t\t(click)=\"channelClicked(channel.channel, channel.isPrivate)\"\n\t\t\t\t\tmatLine\n\t\t\t\t\tfxLayout=\"row\" fxLayoutAlign=\"space-between center\"  \n\t\t\t\t\t*ngFor=\"let channel of this.chatService.publicChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t<span>#{{ channel.displayName }} \n\t\t\t\t\t\t<span *ngIf= \"channel.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t</a>\n\t\n\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\n\t<!-- SEND MESSAGE -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t<form autocomplete=\"off\" #replyForm=\"ngForm\" (ngSubmit)=\"sendMessage(replyForm)\" class=\"reply-form\">\n\t\t\t\t<mat-form-field  class=\"msg-input\" fxFill floatPlaceholder=\"never\">\n\t\t\t\t\t<input tabindex=\"1\" resizeToFitContent name=\"message\" matInput placeholder=\"Message\" ngModel>\n\t\t\t\t\t<mat-hint align=\"end\"> Press Enter to Send</mat-hint>\n\t\t\t\t</mat-form-field>\n\t\t\t</form>\n\t\t</div>\n\t</mat-grid-tile>\n\n</mat-grid-list>\n"
 
 /***/ }),
 
@@ -580,6 +580,134 @@ var router_es5 = __webpack_require__("./node_modules/@angular/router/@angular/ro
 // EXTERNAL MODULE: ./node_modules/@angular/http/@angular/http.es5.js
 var http_es5 = __webpack_require__("./node_modules/@angular/http/@angular/http.es5.js");
 
+// CONCATENATED MODULE: ./src/app/_services/user.service.ts
+var user_service___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var user_service_UserService = (function () {
+    function UserService(http) {
+        var _this = this;
+        this.http = http;
+        this.getDirectChannelDetails = function (id) {
+            if (id === void 0) { id = undefined; }
+            if (!id) {
+                id = _this.currentUser.user.pk;
+            }
+            return _this.http
+                .get("/api/user-channels/" + id, _this.options)
+                .map(function (response) { return response.json(); });
+        };
+        this.addDirectChannelDetails = function (friendId, channelName, id) {
+            if (id === void 0) { id = null; }
+            if (!id) {
+                id = _this.currentUser.user.pk;
+            }
+            var body = {
+                "user": id,
+                "friend": [
+                    { "user": friendId, "channel": channelName }
+                ],
+                "isDirect": true
+            };
+            return _this.http
+                .post("/api/user-channels/", body, _this.options)
+                .map(function (response) { return response.json(); });
+        };
+        this.addPublicPrivateChannel = function (channelName, displayName, userId, isPrivate) {
+            if (userId === void 0) { userId = null; }
+            if (isPrivate === void 0) { isPrivate = false; }
+            if (!userId) {
+                userId = _this.currentUser.user.pk;
+            }
+            var body = {
+                "users": [
+                    { "user": userId, "isAdmin": true }
+                ],
+                "channel": channelName,
+                "createdBy": userId,
+                "isPrivate": isPrivate,
+                "displayName": displayName
+            };
+            return _this.http
+                .post("/api/all-channels/", body, _this.options)
+                .map(function (response) { return response.json(); });
+        };
+        this.getChannelName = function () {
+            return _this.http
+                .get("/api/channel-name", _this.options)
+                .map(function (response) { return response.json(); });
+        };
+        this.getUserDetails = function (name, param) {
+            if (param === void 0) { param = 'username'; }
+            return _this.http
+                .get("api/user-details/?" + param + "=" + name, _this.options)
+                .map(function (response) { return response.json(); });
+        };
+        this.getUserAllChannels = function (userId) {
+            if (userId === void 0) { userId = undefined; }
+            // if (!userId) {
+            //     userId = this.currentUser.user.pk
+            // }     
+            return _this.http
+                .get("api/all-channels/", _this.options)
+                .map(function (response) { return response.json(); });
+        };
+        this.getUserStateDetails = function (username, friendUserName) {
+            if (username && friendUserName) {
+                return _this.http
+                    .get("api/user-details/?username=" + username + "&friendUserName=" + friendUserName, _this.options)
+                    .map(function (response) { return response.json(); });
+            }
+        };
+        this.options = new http_es5["d" /* RequestOptions */]();
+        if (this.options.headers == null) {
+            this.options.headers = new http_es5["a" /* Headers */]();
+        }
+        this.options.headers.append('Content-Type', 'application/json');
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (this.currentUser) {
+            this.options.headers.append('Authorization', 'JWT ' + this.currentUser.token);
+        }
+    }
+    UserService.prototype.getAll = function () {
+        return this.http.get('/users').map(function (response) { return response.json(); });
+    };
+    UserService.prototype.getUserName = function () {
+        return this.currentUser.user.first_name + ' ' + this.currentUser.user.last_name;
+    };
+    UserService.prototype.create = function (user) {
+        return this.http.post('/users/register', user);
+    };
+    // update(user: User) {
+    //     return this.http.put('/users/' + user._id, user);
+    // }
+    // delete(_id: string) {
+    //     return this.http.delete('/users/' + _id);
+    // }
+    UserService.prototype.getAllUsers = function () {
+        return this.http.get('api/users', this.options)
+            .map(function (response) {
+            var apiresponse = JSON.stringify(response);
+            return apiresponse;
+        });
+    };
+    return UserService;
+}());
+user_service_UserService = user_service___decorate([
+    Object(core_es5["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (user_service__a = typeof http_es5["b" /* Http */] !== "undefined" && http_es5["b" /* Http */]) === "function" && user_service__a || Object])
+], user_service_UserService);
+
+var user_service__a;
+//# sourceMappingURL=user.service.js.map
 // EXTERNAL MODULE: ./node_modules/rxjs/add/operator/map.js
 var map = __webpack_require__("./node_modules/rxjs/add/operator/map.js");
 var map_default = /*#__PURE__*/__webpack_require__.n(map);
@@ -595,7 +723,7 @@ var authentication_service___decorate = (this && this.__decorate) || function (d
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
+var authentication_service___metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
@@ -687,7 +815,7 @@ var authentication_service_AuthenticationService = (function () {
 }());
 authentication_service_AuthenticationService = authentication_service___decorate([
     Object(core_es5["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (authentication_service__a = typeof http_es5["b" /* Http */] !== "undefined" && http_es5["b" /* Http */]) === "function" && authentication_service__a || Object, typeof (_b = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && _b || Object])
+    authentication_service___metadata("design:paramtypes", [typeof (authentication_service__a = typeof http_es5["b" /* Http */] !== "undefined" && http_es5["b" /* Http */]) === "function" && authentication_service__a || Object, typeof (_b = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && _b || Object])
 ], authentication_service_AuthenticationService);
 
 var authentication_service__a, _b;
@@ -710,13 +838,15 @@ var register_component___metadata = (this && this.__metadata) || function (k, v)
 
 
 
+
 var register_component_RegisterComponent = (function () {
-    function RegisterComponent(route, router, formBuilder, authenticationService, snackBar) {
+    function RegisterComponent(route, router, formBuilder, authenticationService, snackBar, UserServicee) {
         this.route = route;
         this.router = router;
         this.formBuilder = formBuilder;
         this.authenticationService = authenticationService;
         this.snackBar = snackBar;
+        this.UserServicee = UserServicee;
         this.title = 'Register';
         this.loading = false;
         this.openSnackBar = function (message) {
@@ -735,6 +865,7 @@ var register_component_RegisterComponent = (function () {
         });
     };
     RegisterComponent.prototype.registerUser = function () {
+        var _this = this;
         var userInputs = {
             username: this.signupForm.controls['username'].value,
             password1: this.signupForm.controls['password'].value,
@@ -743,15 +874,14 @@ var register_component_RegisterComponent = (function () {
             last_name: this.signupForm.controls['last_name'].value,
             email: this.signupForm.controls['email'].value,
         };
-        console.log(userInputs);
-        var that = this;
         this.authenticationService.register(userInputs)
             .subscribe(function (response) {
-            that.openSnackBar("Successfully Signed up.");
-            console.log("Success response", response);
+            var add = _this.UserServicee.addDirectChannelDetails(response.user.pk, response.user.username, response.user.pk)
+                .subscribe(function () { return _this.openSnackBar("Successfully Signed up."); });
+            _this.router.navigate(["/login"]);
         }, function (response) {
             response = response.json();
-            that.openSnackBar(response[Object.keys(response)[0]]);
+            _this.openSnackBar(response[Object.keys(response)[0]]);
             console.log("Error happened", response);
         });
     };
@@ -761,12 +891,13 @@ register_component_RegisterComponent = register_component___decorate([
     Object(core_es5["Component"])({
         selector: 'app-register',
         template: __webpack_require__("./src/app/public/auth/register/register.component.html"),
-        styles: [__webpack_require__("./src/app/public/auth/register/register.component.css")]
+        styles: [__webpack_require__("./src/app/public/auth/register/register.component.css")],
+        providers: [user_service_UserService]
     }),
-    register_component___metadata("design:paramtypes", [typeof (register_component__a = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && register_component__a || Object, typeof (register_component__b = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && register_component__b || Object, typeof (_c = typeof forms_es5["b" /* FormBuilder */] !== "undefined" && forms_es5["b" /* FormBuilder */]) === "function" && _c || Object, typeof (_d = typeof authentication_service_AuthenticationService !== "undefined" && authentication_service_AuthenticationService) === "function" && _d || Object, typeof (_e = typeof material_es5["n" /* MatSnackBar */] !== "undefined" && material_es5["n" /* MatSnackBar */]) === "function" && _e || Object])
+    register_component___metadata("design:paramtypes", [typeof (register_component__a = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && register_component__a || Object, typeof (register_component__b = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && register_component__b || Object, typeof (_c = typeof forms_es5["b" /* FormBuilder */] !== "undefined" && forms_es5["b" /* FormBuilder */]) === "function" && _c || Object, typeof (_d = typeof authentication_service_AuthenticationService !== "undefined" && authentication_service_AuthenticationService) === "function" && _d || Object, typeof (_e = typeof material_es5["n" /* MatSnackBar */] !== "undefined" && material_es5["n" /* MatSnackBar */]) === "function" && _e || Object, typeof (_f = typeof user_service_UserService !== "undefined" && user_service_UserService) === "function" && _f || Object])
 ], register_component_RegisterComponent);
 
-var register_component__a, register_component__b, _c, _d, _e;
+var register_component__a, register_component__b, _c, _d, _e, _f;
 //# sourceMappingURL=register.component.js.map
 // CONCATENATED MODULE: ./src/app/public/auth/login/login.component.ts
 var login_component___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1341,132 +1472,6 @@ var environment = {
     PUBNUB_SUB_KEY: 'sub-c-84542174-df69-11e7-b2f6-c631ab9345b9'
 };
 //# sourceMappingURL=environment.js.map
-// CONCATENATED MODULE: ./src/app/_services/user.service.ts
-var user_service___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var user_service___metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var user_service_UserService = (function () {
-    function UserService(http) {
-        var _this = this;
-        this.http = http;
-        this.getDirectChannelDetails = function (id) {
-            if (id === void 0) { id = undefined; }
-            if (!id) {
-                id = _this.currentUser.user.pk;
-            }
-            return _this.http
-                .get("/api/user-channels/" + id, _this.options)
-                .map(function (response) { return response.json(); });
-        };
-        this.addDirectChannelDetails = function (friendId, channelName) {
-            var id = null;
-            if (!id) {
-                id = _this.currentUser.user.pk;
-            }
-            var body = {
-                "user": id,
-                "friend": [
-                    { "user": friendId, "channel": channelName }
-                ],
-                "isDirect": true
-            };
-            return _this.http
-                .post("/api/user-channels/", body, _this.options)
-                .map(function (response) { return response.json(); });
-        };
-        this.addPublicPrivateChannel = function (channelName, displayName, userId, isPrivate) {
-            if (userId === void 0) { userId = null; }
-            if (isPrivate === void 0) { isPrivate = false; }
-            if (!userId) {
-                userId = _this.currentUser.user.pk;
-            }
-            var body = {
-                "users": [
-                    { "user": userId, "isAdmin": true }
-                ],
-                "channel": channelName,
-                "createdBy": userId,
-                "isPrivate": isPrivate,
-                "displayName": displayName
-            };
-            return _this.http
-                .post("/api/all-channels/", body, _this.options)
-                .map(function (response) { return response.json(); });
-        };
-        this.getChannelName = function () {
-            return _this.http
-                .get("/api/channel-name", _this.options)
-                .map(function (response) { return response.json(); });
-        };
-        this.getUserDetails = function (name, param) {
-            if (param === void 0) { param = 'username'; }
-            return _this.http
-                .get("api/user-details/?" + param + "=" + name, _this.options)
-                .map(function (response) { return response.json(); });
-        };
-        this.getUserAllChannels = function (userId) {
-            if (userId === void 0) { userId = undefined; }
-            // if (!userId) {
-            //     userId = this.currentUser.user.pk
-            // }     
-            return _this.http
-                .get("api/all-channels/", _this.options)
-                .map(function (response) { return response.json(); });
-        };
-        this.getUserStateDetails = function (username, friendUserName) {
-            if (username && friendUserName) {
-                return _this.http
-                    .get("api/user-details/?username=" + username + "&friendUserName=" + friendUserName, _this.options)
-                    .map(function (response) { return response.json(); });
-            }
-        };
-        this.options = new http_es5["d" /* RequestOptions */]();
-        if (this.options.headers == null) {
-            this.options.headers = new http_es5["a" /* Headers */]();
-        }
-        this.options.headers.append('Content-Type', 'application/json');
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        this.options.headers.append('Authorization', 'JWT ' + this.currentUser.token);
-    }
-    UserService.prototype.getAll = function () {
-        return this.http.get('/users').map(function (response) { return response.json(); });
-    };
-    UserService.prototype.getUserName = function () {
-        return this.currentUser.user.first_name + ' ' + this.currentUser.user.last_name;
-    };
-    UserService.prototype.create = function (user) {
-        return this.http.post('/users/register', user);
-    };
-    // update(user: User) {
-    //     return this.http.put('/users/' + user._id, user);
-    // }
-    // delete(_id: string) {
-    //     return this.http.delete('/users/' + _id);
-    // }
-    UserService.prototype.getAllUsers = function () {
-        return this.http.get('api/users', this.options)
-            .map(function (response) {
-            var apiresponse = JSON.stringify(response);
-            return apiresponse;
-        });
-    };
-    return UserService;
-}());
-user_service_UserService = user_service___decorate([
-    Object(core_es5["Injectable"])(),
-    user_service___metadata("design:paramtypes", [typeof (user_service__a = typeof http_es5["b" /* Http */] !== "undefined" && http_es5["b" /* Http */]) === "function" && user_service__a || Object])
-], user_service_UserService);
-
-var user_service__a;
-//# sourceMappingURL=user.service.js.map
 // CONCATENATED MODULE: ./src/app/_services/newchat.service.ts
 var newchat_service___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1842,14 +1847,14 @@ newchat_service___decorate([
 ], newchat_service_NewchatService.prototype, "currentChannel$", void 0);
 newchat_service___decorate([
     Object(src["select"])(['message', 'payload']),
-    newchat_service___metadata("design:type", typeof (_f = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && _f || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__f = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__f || Object)
 ], newchat_service_NewchatService.prototype, "messages$", void 0);
 newchat_service_NewchatService = newchat_service___decorate([
     Object(core_es5["Injectable"])(),
     newchat_service___metadata("design:paramtypes", [typeof (_g = typeof src["NgRedux"] !== "undefined" && src["NgRedux"]) === "function" && _g || Object, typeof (_h = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && _h || Object, typeof (_j = typeof user_service_UserService !== "undefined" && user_service_UserService) === "function" && _j || Object, typeof (_k = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && _k || Object])
 ], newchat_service_NewchatService);
 
-var newchat_service__a, newchat_service__b, newchat_service__c, newchat_service__d, newchat_service__e, _f, _g, _h, _j, _k;
+var newchat_service__a, newchat_service__b, newchat_service__c, newchat_service__d, newchat_service__e, newchat_service__f, _g, _h, _j, _k;
 //# sourceMappingURL=newchat.service.js.map
 // CONCATENATED MODULE: ./src/app/protected/dialogs/add-channel.dialog.ts
 var add_channel_dialog___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2131,12 +2136,11 @@ var dashboard_component_DashboardComponent = (function () {
     };
     DashboardComponent.prototype.logout = function () {
         var _this = this;
-        var logoutUser = this.auth.logout().subscribe(function (res) {
+        this.auth.logout().subscribe(function (res) {
             _this.snackBar.open("Successfully Logged Out", " ", {
                 duration: 2000,
             });
         });
-        logoutUser.unsubscribe();
     };
     return DashboardComponent;
 }());

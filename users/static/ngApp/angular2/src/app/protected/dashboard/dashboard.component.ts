@@ -191,14 +191,13 @@ export class DashboardComponent implements OnInit {
 		});
 	}
 	logout(){
-		let logoutUser = this.auth.logout().subscribe(
+		this.auth.logout().subscribe(
 			(res) => {
 				this.snackBar.open("Successfully Logged Out", " ", {
 					duration: 2000,
 				}); 
 			}
 		);
-		logoutUser.unsubscribe();
 
 
 	}
