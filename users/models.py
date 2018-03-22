@@ -43,8 +43,8 @@ class FriendChannels(models.Model):
 class UserChannels(models.Model):
     user = models.ForeignKey(User, related_name='UserChannel')
     friend = models.ManyToManyField(FriendChannels, related_name='FriendChannel')
-    created = models.DateTimeField(auto_created=True, auto_now=True)
-    modified = models.DateTimeField(auto_created=True, auto_now_add=True)
+    created = models.DateTimeField(auto_created=True, auto_now_add=True)
+    modified = models.DateTimeField(auto_created=True, auto_now=True)
 
     def __str__(self):
         return self.user.first_name

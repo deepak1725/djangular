@@ -47,7 +47,7 @@
 				</div>
 				<div fxLayout="row" class="channel-title">
 					<span>
-						<div >
+						<div *ngIf ="!((this.chatService).currentChannel$ | async)?.isDirect" >
 							<a (click)= "onlineUsers()"> 
 								<small>
 									<mat-icon class="dull star" title="Participants">face</mat-icon>
@@ -147,7 +147,9 @@
   	<mat-grid-tile rowspan="8" colspan="4" >
 		
 			<div style="overflow-y: scroll" fxLayoutAlign="start stretch" fxLayout="column" class="content-container">
-				
+				<div *ngIf="this.chatService.noticeData.showNotice" fxLayout="row" fxLayoutAlign="center center">
+					{{this.chatService.noticeData.message}}
+				</div>
 				<div *ngFor="let element of ((this.chatService).messages$ | async ) let index = index">
 					<div fxLayout="row" class="message-text">
 						<div fxFlex="5">

@@ -27,7 +27,7 @@ export class NewchatService {
     currentChat:any;
     basicRooms:any;
     // allUsers: any = [];
-    globalChannel:string = 'keysall'
+    globalChannel:string = 'Djangular'
     me:any;
     onlineGroupUsers = 0;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
@@ -37,6 +37,11 @@ export class NewchatService {
     isPrivate:boolean = false;
     subscribedRooms = [];
     currentChatObj :any;
+    noticeData = {
+        showNotice: false,
+        isMine: false,
+        message: "d"
+    }
 
     @select(['public_channel','payload']) readonly publicChats$: Observable<any[]>;
     @select(['private_channel','payload']) readonly privateChats$: Observable<any[]>;
@@ -66,7 +71,8 @@ export class NewchatService {
             publishKey: environment.PUBNUB_PUB_KEY,
             subscribeKey: environment.PUBNUB_SUB_KEY,
         },{
-            globalChannel: this.globalChannel
+            globalChannel: this.globalChannel,
+            debug: false
         });   
     }
 
@@ -150,9 +156,10 @@ export class NewchatService {
         if (!isAlreadySubscribed) {
             this.subscribedRooms.push(chatRoom.channel);
             chatRoom.on('message', (payload) => {
+                this.noticeData.showNotice = false
                 console.log("A new MEssage is received");
                 if (this.currentChat === payload.data.channel ){
-                    this.renderMessage(payload)
+                    this.renderMessage(payload.data)
                 }else{
                     console.log("A new Payload", payload);
                     var myPayload = payload.data;
@@ -182,22 +189,48 @@ export class NewchatService {
         
         // wait for our chat to connect
         this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, payload: {} })        
-        
-            currentChatObject.search({
-                reverse: true,
-                event: 'message',
-                limit: 50
-            }).on('message', (data) => {
-                this.renderMessage(data);
+        let data = null;
 
-            });   
+        currentChatObject.search({
+            event: 'message',
+            limit: 50
+        }).on('message', (response) => {
+            console.log("res", response.data);
+            data = response.data;
+            this.renderMessage(response.data);
+
+        }).on('$.search.finish', () => {
+            if (!data) {
+                if (this.currentChat == this.username) {
+                    this.noticeData =  {
+                        showNotice : true,
+                        isMine : true,
+                        message:"This is your Space! Start typing Anything."
+                    }
+                }else{
+                    this.noticeData = {
+                        showNotice: true,
+                        isMine: false,
+                        message: "This is starting of your conversation. Why not start with a Hello.."
+                    }
+                }
+                
+            }else{
+                this.noticeData = {
+                    showNotice: false,
+                    isMine: false,
+                    message: ""
+                }
+            }
+        });
+               
     }
 
     renderMessage = (payload) => {
         
         let newData = {
             channel: this.channelInput,
-            data: payload.data,
+            data: payload,
             // sender: payload.sender
         }
         this.ngRedux.dispatch({ type: Constants.MESSAGEADD, newData })
@@ -267,14 +300,14 @@ export class NewchatService {
         )            
     }
 
-    getChatObj = (channel, isPrivate=false) => {
-        let chat = new (this).ChatEngine.Chat(channel, isPrivate);
-        let darshan = Promise.resolve(chat.users);
-        // let res = new Promise((resolve, reject) => {
-        //                 return chat;
-        //             });
-        return darshan;
-    }
+    // getChatObj = (channel, isPrivate=false) => {
+    //     let chat = new (this).ChatEngine.Chat(channel, isPrivate);
+    //     let darshan = Promise.resolve(chat.users);
+    //     // let res = new Promise((resolve, reject) => {
+    //     //                 return chat;
+    //     //             });
+    //     return darshan;
+    // }
 
     updateUserState = (me) => {
         me.update({
@@ -382,8 +415,8 @@ export class NewchatService {
 
         }else{
             // If none of above condition is met, the channel is invalid, hence redirect user
-            this.router.navigate([`../messages`, '6DYI4X']);
-            // this.shiftChannel("6DYI4X", false)
+            this.router.navigate([`../messages`, this.username]);
+            this.shiftChannel(this.username, true)
             console.log("This is not a valid channel :", channelInput);
         }
     }

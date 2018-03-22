@@ -337,7 +337,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/protected/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mat-grid-list cols=\"5\" rowHeight=\"fit\">\n\t<!-- SIDEBAR : TITLE -->\n  \t<mat-grid-tile>\n\t\t<div fxFlexFill fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"online-name channel-group\">\t\t\t\n\t\t\t\t\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\" channel-title\">\n\t\t\t\t\t\t\t<strong>{{this.chatService.globalChannel}}</strong>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"ProfileMenu\">\n\t\t\t\t\t\t\t\t<mat-icon>menu</mat-icon>\n\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t<mat-menu #ProfileMenu=\"matMenu\">\n\t\t\t\t\t\t\t\t<button mat-menu-item disabled>\n\t\t\t\t\t\t\t\t\t<mat-icon>person_pin</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Profile</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t<button mat-menu-item (click)= \"logout()\">\n\t\t\t\t\t\t\t\t\t<mat-icon>flag</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Logout</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</mat-menu>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t</div>\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t<span class=\"text\">\n\t\t\t\t\t\t\t{{this.chatService.fullName}}\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"dull\">\n\t\t\t\t\t\t\t@{{this.chatService.username}}\n\t\t\t\t\t\t</span>\n\t\t\t\t</div>\t\t\t\t\t\t\t\t\n\t\t</div>\n\t</mat-grid-tile>\n\n\t<!-- HEADER -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxFlexFill fxLayoutAlign=\"space-around center\">\n\t\t\t<div fxFlex=90 fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<span>\n\t\t\t\t\t\t<div >\n\t\t\t\t\t\t\t<a (click)= \"onlineUsers()\"> \n\t\t\t\t\t\t\t\t<small>\n\t\t\t\t\t\t\t\t\t<mat-icon class=\"dull star\" title=\"Participants\">face</mat-icon>\n\t\t\t\t\t\t\t\t\t{{ this.currentChannelPayload?.chatusers.length }}\n\t\t\t\t\t\t\t\t</small>\n\t\t\t\t\t\t\t</a> | \n\t\t\t\t\t\t\t<small><mat-icon class=\"dull star\" title=\"Add to Favorite\">star_border</mat-icon></small>\n\t\t\t\t\t\t</div>\t\n\t\t\t\t\t</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div fxFlex fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t <!--  -->\n\t\t\t\t<div>\n\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"menu\" \n\t\t\t\t\t\t*ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t<mat-icon>more_vert</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<mat-menu #menu=\"matMenu\">\n\t\t\t\t\t\t<button mat-menu-item (click)=\"editChannel()\">\n\t\t\t\t\t\t\t<mat-icon>border_color</mat-icon>\n\t\t\t\t\t\t\t<span>Edit Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t\t<button mat-menu-item (click)=\"removeChannel()\">\n\t\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t\t\t<span>Delete Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</mat-menu>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: DIRECT MESSAGES -->\n\t<mat-grid-tile rowspan=\"6\">\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>DIRECT</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active-link\" \n\t\t\t\t\tclass=\"online-name\" \n\t\t\t\t\tmatLine \n\t\t\t\t\t[routerLinkActiveOptions]=\"{exact: true}\"\n\t\t\t\t\trouterLink=\"/messages/{{occupant.channel}}\"\n\t\t\t\t\t (click)=\"channelClicked(occupant.channel, true)\"\n \t\t\t\t\t*ngFor=\"let occupant of (this.chatService).users$ | async ; let index = index\">\n\n\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t \t\t\t{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant.username }} </small>\n\t\t\t\t\t\t\t<span *ngIf= \"occupant.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t</a>\n\n\t\t\t\t<!-- <a mat-list-item (click)=\"this.chatService.sendInvite(occupant.uuid)\" \n\t\t\t\trouterLinkActive=\"active-link\" class=\"online-name\"\n\t\t\t\t\tmatLine [routerLinkActiveOptions]=\"{exact: true}\" \n\t\t\t\t\t*ngFor=\"let occupant of this.chatService.privateChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{ occupant }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant}} </small>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t</a> -->\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\t\n\n\t<!-- MessageContainer -->\n  \t<mat-grid-tile rowspan=\"8\" colspan=\"4\" >\n\t\t\n\t\t\t<div style=\"overflow-y: scroll\" fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"content-container\">\n\t\t\t\t\n\t\t\t\t<div *ngFor=\"let element of ((this.chatService).messages$ | async ) let index = index\">\n\t\t\t\t\t<div fxLayout=\"row\" class=\"message-text\">\n\t\t\t\t\t\t<div fxFlex=\"5\">\n\t\t\t\t\t\t\t<mat-icon color=\"accent\" class=\"f-s-40\">account_box</mat-icon>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div fxFlex fxLayout=\"column\" fxLayoutAlign=\"space-evenly stretch\">\n\t\t\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"space-between center\">\n\t\t\t\t\t\t\t\t<span>\n\t\t\t\t\t\t\t\t\t<b>{{ element.data.fullName }}</b>\n\t\t\t\t\t\t\t\t\t<small class=\"dull\">@{{ element.data.nickName}}</small>\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t<div fxFlex class=\"time\" fxFlexAlign=\"center\">\n\t\t\t\t\t\t\t\t\t{{ getReadableTime( element.data.date) }}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div>{{ element.data.text }}</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t\t\t\n\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: GROUP -->\n\t<mat-grid-tile rowspan=\"3\">\n\t\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>GROUPS</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active\" class=\"online-name\"\n\t\t\t\t\trouterLink=\"/messages/{{channel.channel}}\"\n\t\t\t\t\t(click)=\"channelClicked(channel.channel, channel.isPrivate)\"\n\t\t\t\t\tmatLine\n\t\t\t\t\tfxLayout=\"row\" fxLayoutAlign=\"space-between center\"  \n\t\t\t\t\t*ngFor=\"let channel of this.chatService.publicChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t<span>#{{ channel.displayName }} \n\t\t\t\t\t\t<span *ngIf= \"channel.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t</a>\n\t\n\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\n\t<!-- SEND MESSAGE -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t<form autocomplete=\"off\" #replyForm=\"ngForm\" (ngSubmit)=\"sendMessage(replyForm)\" class=\"reply-form\">\n\t\t\t\t<mat-form-field  class=\"msg-input\" fxFill floatPlaceholder=\"never\">\n\t\t\t\t\t<input tabindex=\"1\" resizeToFitContent name=\"message\" matInput placeholder=\"Message\" ngModel>\n\t\t\t\t\t<mat-hint align=\"end\"> Press Enter to Send</mat-hint>\n\t\t\t\t</mat-form-field>\n\t\t\t</form>\n\t\t</div>\n\t</mat-grid-tile>\n\n</mat-grid-list>\n"
+module.exports = "<mat-grid-list cols=\"5\" rowHeight=\"fit\">\n\t<!-- SIDEBAR : TITLE -->\n  \t<mat-grid-tile>\n\t\t<div fxFlexFill fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"online-name channel-group\">\t\t\t\n\t\t\t\t\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\" channel-title\">\n\t\t\t\t\t\t\t<strong>{{this.chatService.globalChannel}}</strong>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"ProfileMenu\">\n\t\t\t\t\t\t\t\t<mat-icon>menu</mat-icon>\n\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t<mat-menu #ProfileMenu=\"matMenu\">\n\t\t\t\t\t\t\t\t<button mat-menu-item disabled>\n\t\t\t\t\t\t\t\t\t<mat-icon>person_pin</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Profile</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t<button mat-menu-item (click)= \"logout()\">\n\t\t\t\t\t\t\t\t\t<mat-icon>flag</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Logout</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</mat-menu>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t</div>\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t<span class=\"text\">\n\t\t\t\t\t\t\t{{this.chatService.fullName}}\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"dull\">\n\t\t\t\t\t\t\t@{{this.chatService.username}}\n\t\t\t\t\t\t</span>\n\t\t\t\t</div>\t\t\t\t\t\t\t\t\n\t\t</div>\n\t</mat-grid-tile>\n\n\t<!-- HEADER -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxFlexFill fxLayoutAlign=\"space-around center\">\n\t\t\t<div fxFlex=90 fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<span>\n\t\t\t\t\t\t<div *ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t\t<a (click)= \"onlineUsers()\"> \n\t\t\t\t\t\t\t\t<small>\n\t\t\t\t\t\t\t\t\t<mat-icon class=\"dull star\" title=\"Participants\">face</mat-icon>\n\t\t\t\t\t\t\t\t\t{{ this.currentChannelPayload?.chatusers.length }}\n\t\t\t\t\t\t\t\t</small>\n\t\t\t\t\t\t\t</a> | \n\t\t\t\t\t\t\t<small><mat-icon class=\"dull star\" title=\"Add to Favorite\">star_border</mat-icon></small>\n\t\t\t\t\t\t</div>\t\n\t\t\t\t\t</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div fxFlex fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t <!--  -->\n\t\t\t\t<div>\n\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"menu\" \n\t\t\t\t\t\t*ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t<mat-icon>more_vert</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<mat-menu #menu=\"matMenu\">\n\t\t\t\t\t\t<button mat-menu-item (click)=\"editChannel()\">\n\t\t\t\t\t\t\t<mat-icon>border_color</mat-icon>\n\t\t\t\t\t\t\t<span>Edit Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t\t<button mat-menu-item (click)=\"removeChannel()\">\n\t\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t\t\t<span>Delete Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</mat-menu>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: DIRECT MESSAGES -->\n\t<mat-grid-tile rowspan=\"6\">\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>DIRECT</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active-link\" \n\t\t\t\t\tclass=\"online-name\" \n\t\t\t\t\tmatLine \n\t\t\t\t\t[routerLinkActiveOptions]=\"{exact: true}\"\n\t\t\t\t\trouterLink=\"/messages/{{occupant.channel}}\"\n\t\t\t\t\t (click)=\"channelClicked(occupant.channel, true)\"\n \t\t\t\t\t*ngFor=\"let occupant of (this.chatService).users$ | async ; let index = index\">\n\n\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t \t\t\t{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant.username }} </small>\n\t\t\t\t\t\t\t<span *ngIf= \"occupant.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t</a>\n\n\t\t\t\t<!-- <a mat-list-item (click)=\"this.chatService.sendInvite(occupant.uuid)\" \n\t\t\t\trouterLinkActive=\"active-link\" class=\"online-name\"\n\t\t\t\t\tmatLine [routerLinkActiveOptions]=\"{exact: true}\" \n\t\t\t\t\t*ngFor=\"let occupant of this.chatService.privateChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{ occupant }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant}} </small>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t</a> -->\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\t\n\n\t<!-- MessageContainer -->\n  \t<mat-grid-tile rowspan=\"8\" colspan=\"4\" >\n\t\t\n\t\t\t<div style=\"overflow-y: scroll\" fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"content-container\">\n\t\t\t\t<div *ngIf=\"this.chatService.noticeData.showNotice\" fxLayout=\"row\" fxLayoutAlign=\"center center\">\n\t\t\t\t\t{{this.chatService.noticeData.message}}\n\t\t\t\t</div>\n\t\t\t\t<div *ngFor=\"let element of ((this.chatService).messages$ | async ) let index = index\">\n\t\t\t\t\t<div fxLayout=\"row\" class=\"message-text\">\n\t\t\t\t\t\t<div fxFlex=\"5\">\n\t\t\t\t\t\t\t<mat-icon color=\"accent\" class=\"f-s-40\">account_box</mat-icon>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div fxFlex fxLayout=\"column\" fxLayoutAlign=\"space-evenly stretch\">\n\t\t\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"space-between center\">\n\t\t\t\t\t\t\t\t<span>\n\t\t\t\t\t\t\t\t\t<b>{{ element.data.fullName }}</b>\n\t\t\t\t\t\t\t\t\t<small class=\"dull\">@{{ element.data.nickName}}</small>\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t<div fxFlex class=\"time\" fxFlexAlign=\"center\">\n\t\t\t\t\t\t\t\t\t{{ getReadableTime( element.data.date) }}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div>{{ element.data.text }}</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t\t\t\n\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: GROUP -->\n\t<mat-grid-tile rowspan=\"3\">\n\t\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>GROUPS</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active\" class=\"online-name\"\n\t\t\t\t\trouterLink=\"/messages/{{channel.channel}}\"\n\t\t\t\t\t(click)=\"channelClicked(channel.channel, channel.isPrivate)\"\n\t\t\t\t\tmatLine\n\t\t\t\t\tfxLayout=\"row\" fxLayoutAlign=\"space-between center\"  \n\t\t\t\t\t*ngFor=\"let channel of this.chatService.publicChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t<span>#{{ channel.displayName }} \n\t\t\t\t\t\t<span *ngIf= \"channel.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t</a>\n\t\n\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\n\t<!-- SEND MESSAGE -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t<form autocomplete=\"off\" #replyForm=\"ngForm\" (ngSubmit)=\"sendMessage(replyForm)\" class=\"reply-form\">\n\t\t\t\t<mat-form-field  class=\"msg-input\" fxFill floatPlaceholder=\"never\">\n\t\t\t\t\t<input tabindex=\"1\" resizeToFitContent name=\"message\" matInput placeholder=\"Message\" ngModel>\n\t\t\t\t\t<mat-hint align=\"end\"> Press Enter to Send</mat-hint>\n\t\t\t\t</mat-form-field>\n\t\t\t</form>\n\t\t</div>\n\t</mat-grid-tile>\n\n</mat-grid-list>\n"
 
 /***/ }),
 
@@ -1502,13 +1502,18 @@ var newchat_service_NewchatService = (function () {
         this.rooms = ['general', 'annoucement'];
         this.privateRooms = [];
         // allUsers: any = [];
-        this.globalChannel = 'keysall';
+        this.globalChannel = 'Djangular';
         this.onlineGroupUsers = 0;
         this.channelInput = this.route.snapshot.paramMap.get('channel');
         this.myDirectChannel = [];
         this.myPPChannels = [];
         this.isPrivate = false;
         this.subscribedRooms = [];
+        this.noticeData = {
+            showNotice: false,
+            isMine: false,
+            message: "d"
+        };
         this.callStack = function () {
             _this.initialize();
             _this.lobby();
@@ -1518,7 +1523,8 @@ var newchat_service_NewchatService = (function () {
                 publishKey: environment.PUBNUB_PUB_KEY,
                 subscribeKey: environment.PUBNUB_SUB_KEY,
             }, {
-                globalChannel: _this.globalChannel
+                globalChannel: _this.globalChannel,
+                debug: false
             });
         };
         this.createChat = function (channel, isPrivate) {
@@ -1581,9 +1587,10 @@ var newchat_service_NewchatService = (function () {
             if (!isAlreadySubscribed) {
                 _this.subscribedRooms.push(chatRoom.channel);
                 chatRoom.on('message', function (payload) {
+                    _this.noticeData.showNotice = false;
                     console.log("A new MEssage is received");
                     if (_this.currentChat === payload.data.channel) {
-                        _this.renderMessage(payload);
+                        _this.renderMessage(payload.data);
                     }
                     else {
                         console.log("A new Payload", payload);
@@ -1607,18 +1614,44 @@ var newchat_service_NewchatService = (function () {
         this.history = function (currentChatObject) {
             // wait for our chat to connect
             _this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, payload: {} });
+            var data = null;
             currentChatObject.search({
-                reverse: true,
                 event: 'message',
                 limit: 50
-            }).on('message', function (data) {
-                _this.renderMessage(data);
+            }).on('message', function (response) {
+                console.log("res", response.data);
+                data = response.data;
+                _this.renderMessage(response.data);
+            }).on('$.search.finish', function () {
+                if (!data) {
+                    if (_this.currentChat == _this.username) {
+                        _this.noticeData = {
+                            showNotice: true,
+                            isMine: true,
+                            message: "This is your Space! Start typing Anything."
+                        };
+                    }
+                    else {
+                        _this.noticeData = {
+                            showNotice: true,
+                            isMine: false,
+                            message: "This is starting of your conversation. Why not start with a Hello.."
+                        };
+                    }
+                }
+                else {
+                    _this.noticeData = {
+                        showNotice: false,
+                        isMine: false,
+                        message: ""
+                    };
+                }
             });
         };
         this.renderMessage = function (payload) {
             var newData = {
                 channel: _this.channelInput,
-                data: payload.data,
+                data: payload,
             };
             _this.ngRedux.dispatch({ type: Constants.MESSAGEADD, newData: newData });
         };
@@ -1668,15 +1701,14 @@ var newchat_service_NewchatService = (function () {
                 console.log("Error in current channel", error);
             });
         };
-        this.getChatObj = function (channel, isPrivate) {
-            if (isPrivate === void 0) { isPrivate = false; }
-            var chat = new (_this).ChatEngine.Chat(channel, isPrivate);
-            var darshan = Promise.resolve(chat.users);
-            // let res = new Promise((resolve, reject) => {
-            //                 return chat;
-            //             });
-            return darshan;
-        };
+        // getChatObj = (channel, isPrivate=false) => {
+        //     let chat = new (this).ChatEngine.Chat(channel, isPrivate);
+        //     let darshan = Promise.resolve(chat.users);
+        //     // let res = new Promise((resolve, reject) => {
+        //     //                 return chat;
+        //     //             });
+        //     return darshan;
+        // }
         this.updateUserState = function (me) {
             me.update({
                 lastOnline: new Date(),
@@ -1767,8 +1799,8 @@ var newchat_service_NewchatService = (function () {
             }
             else {
                 // If none of above condition is met, the channel is invalid, hence redirect user
-                _this.router.navigate(["../messages", '6DYI4X']);
-                // this.shiftChannel("6DYI4X", false)
+                _this.router.navigate(["../messages", _this.username]);
+                _this.shiftChannel(_this.username, true);
                 console.log("This is not a valid channel :", channelInput);
             }
         };

@@ -98,24 +98,11 @@ export class ChatService {
 
     callStack = () => {
         this.chatInit();
-        // this.listChannels(this.channelGroup);
         this.channelListen();
         this.channelSubscribe();
         this.channelHistory(this.channelInput);
-        // this.channelAdd('general');
-        // this.channelWhereNow();
         this.channelGrant();
-        // this.presenceChannel();
-        // this.getState();
-        // this.listChannels(this.channelGroup);
-        // this.removeChannel('ch-deepak-present');
-        // this.removeGroup();
         
-		// this.channelHerenow()
-		// this.channelWhereNow()
-		// console.log(channelInput);
-		// console.log(this.channelList);
-		// this.channelAdd(this.channelGroup, "general")        
     }
 
     chatInit(){
@@ -136,12 +123,9 @@ export class ChatService {
             }, 
             (status) => {
                 if (status.error) {
-                    // console.log("operation failed w/ status: ");
                     return;
                 }   
-                // console.log("channel added to group Done");
-                this.channelSubscribe(channel)
-                 
+                this.channelSubscribe(channel)    
             }
         );
     };

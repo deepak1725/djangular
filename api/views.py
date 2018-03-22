@@ -170,8 +170,7 @@ class UserDetailsViewSet(APIView):
 
 
 class AllChannelsViewSet(viewsets.ModelViewSet):
-    permission_classes = ''
-    authentication_classes = [BasicAuthentication]
+    # authentication_classes = ''
     queryset = AllChannels.objects.all()
     serializer_class = AllChannelSerializer
 
@@ -227,12 +226,19 @@ class AllChannelsViewSet(viewsets.ModelViewSet):
         return Response(responseData, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
-        response = super(AllChannelsViewSet, self).update(request, args, kwargs)
-        message = 'Channel Successfully Updated'
+        qs = AllChannels.objects.filter(id=kwargs['pk']).first()
+        message = 'No Data Found'
+        response = {}
+        if qs:
+            if qs.createdBy.id == request.user.id:
+                response = super(AllChannelsViewSet, self).update(request, args, kwargs).data
+                message = 'Channel Successfully Updated'
+            else:
+                message = 'You are not allowed to perform this action'
 
         responseData = {
             'message': message,
-            'data': response.data,
+            'data': response,
             'error': None
         }
         return Response(responseData, status=status.HTTP_201_CREATED)
