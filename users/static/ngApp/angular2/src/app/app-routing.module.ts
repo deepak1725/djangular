@@ -17,15 +17,17 @@ import { AuthGuard }                 from './auth-guard.service';
 import { ProtectedComponent }        from './protected/protected.component';
 import { PublicComponent }        from './public/public.component';
 
+export const userName = 'general';
+            
 export const APPROUTES : Routes = [
     { 
         path: '', component: ProtectedComponent, canActivate: [AuthGuard], children:
         [
             { path: 'messages/:channel/:type', component: DashboardComponent },
             { path: 'messages/:channel', component: DashboardComponent },
-            { path: 'messages', redirectTo: 'messages/general', pathMatch: 'full' },
-            { path: '', redirectTo: 'messages/general', pathMatch: 'full'  },
-            { path: 'dashboard', redirectTo: 'messages/general', pathMatch: 'full' },
+                { path: 'messages', redirectTo: `messages/${userName}`, pathMatch: 'full' },
+                { path: '', redirectTo: `messages/${userName}`, pathMatch: 'full'  },
+                { path: 'dashboard', redirectTo: `messages/${userName}`, pathMatch: 'full' },
         ]  
     },
     { 

@@ -12,13 +12,14 @@ import { FormsModule } from '@angular/forms';
     templateUrl: './edit-channel.dialog.html'
 })
 export class EditChannelDialog {
-    channelName: string;
-    isPrivate: boolean = false;
+    myData:any
 
     constructor(
         public dialogRef: MatDialogRef<EditChannelDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any
-    ) { }
+    ) { 
+        this.myData = data;
+    }
 
     onNoClick(): void {
         this.dialogRef.close();

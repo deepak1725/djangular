@@ -5,16 +5,16 @@
         <div>
 
             <mat-form-field fxFlexFill>
-                <input matInput tabindex="1" value="{{ data.channel }}" placeholder="Channel Name" required name="channelName">
+                <input matInput tabindex="1" [(ngModel)]="myData.channel" placeholder="Channel Name" required name="channelName">
                 <mat-error>Channel Name is invalid</mat-error>   
             </mat-form-field>
-            <mat-checkbox name="isPrivate" checked="{{ data.isPrivate }}" >Private Channel</mat-checkbox>
+            <!-- <mat-checkbox name="isPrivate" checked="{{ data.isPrivate }}" >Private Channel</mat-checkbox> -->
         
         </div>
         
     </div>
     <div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
-        <button mat-button [mat-dialog-close]='{channelName: channelName, isPrivate:isPrivate}' tabindex="2" [disabled]="!addChannel.form.valid">OK</button>
+        <button mat-button [mat-dialog-close]='{channelName: myData.channel, isPrivate: myData.isPrivate}' tabindex="2" [disabled]="!addChannel.form.valid">OK</button>
         <button mat-button (click)="onNoClick()" tabindex="-1">CANCEL</button>
     </div>
 </form>

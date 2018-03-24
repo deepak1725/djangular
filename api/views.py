@@ -170,7 +170,9 @@ class UserDetailsViewSet(APIView):
 
 
 class AllChannelsViewSet(viewsets.ModelViewSet):
-    # authentication_classes = ''
+    authentication_classes = ''
+    permission_classes = ''
+
     queryset = AllChannels.objects.all()
     serializer_class = AllChannelSerializer
 
@@ -229,8 +231,9 @@ class AllChannelsViewSet(viewsets.ModelViewSet):
         qs = AllChannels.objects.filter(id=kwargs['pk']).first()
         message = 'No Data Found'
         response = {}
+        userId = int(request.GET.get('userId', None))
         if qs:
-            if qs.createdBy.id == request.user.id:
+            if (qs.createdBy.id == userId or qs.createdBy.id == request.user.id):
                 response = super(AllChannelsViewSet, self).update(request, args, kwargs).data
                 message = 'Channel Successfully Updated'
             else:

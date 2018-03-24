@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
- 
+import { Observable } from "rxjs/Rx"
+
 import { User } from '../_models/user';
  
 @Injectable()
@@ -51,7 +52,8 @@ export class UserService {
         .map((response: Response) => {
             var apiresponse = JSON.stringify(response);
             return apiresponse;
-        });
+        })
+            .catch(this.handleError);
     }
 
     getDirectChannelDetails = (id=undefined) => { 
@@ -60,7 +62,8 @@ export class UserService {
         }      
         return this.http
             .get(`/api/user-channels/${ id }`, this.options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => response.json())
+            .catch (this.handleError);
     }
 
     addDirectChannelDetails = (friendId, channelName, id=null) => {
@@ -78,7 +81,8 @@ export class UserService {
         }
         return this.http
             .post(`/api/user-channels/`, body , this.options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
     }
 
     addPublicPrivateChannel = (channelName, displayName, userId=null, isPrivate=false) => {
@@ -96,34 +100,65 @@ export class UserService {
         }
         return this.http
             .post(`/api/all-channels/`, body , this.options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => response.json())
+            .catch(this.handleError);      
+    }
+
+    editPublicPrivateChannel = (cId, displayName, isPrivate, channel) => {
+        let body = {
+            "users": [
+                { "user": this.currentUser.user.pk,"isAdmin" : false }
+            ],
+            "displayName": displayName,
+            "channel": channel,
+            "createdBy": 1, //sending constant as it will have no change in Backend
+            "isPrivate": isPrivate,
+        }
+        console.log(body);
+        
+        return this.http
+            .put(`/api/all-channels/${cId}/?userId=${this.currentUser.user.pk}`, body, this.options)
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
     }
 
     getChannelName = () => {
         return this.http
             .get(`/api/channel-name`, this.options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
     }
 
     getUserDetails = (name: string, param='username') => {
         return this.http
             .get(`api/user-details/?${param}=${ name}`, this.options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
     }
+
     getUserAllChannels = (userId: string = undefined) => {
-        // if (!userId) {
-        //     userId = this.currentUser.user.pk
-        // }     
+        if (!userId) {
+            userId = this.currentUser.user.pk
+        }
         return this.http
-            .get(`api/all-channels/`, this.options)
-            .map((response: Response) => response.json());
+            .get(`api/all-channels/${userId}`, this.options)
+            .map((response: Response) => response.json())
+            .catch(this.handleError);
     }
+
     getUserStateDetails = (username, friendUserName) => {
         if (username && friendUserName) {            
             return this.http
                 .get(`api/user-details/?username=${username}&friendUserName=${friendUserName}`, this.options)
-                .map((response: Response) => response.json());
+                .map((response: Response) => response.json())
+                .catch(this.handleError);
         }
 
+    }
+    
+    public handleError = (error: Response) => {
+
+        console.log(error, "error2");
+        return Observable.throw(error)
     }
 }

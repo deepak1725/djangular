@@ -1,6 +1,6 @@
+import { Observable } from 'rxjs/Observable';
 import { element } from 'protractor';
-import { Observable } from 'rxjs/Rx';
-import { Injectable } from '@angular/core';
+import { Injectable, assertPlatform } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Constants } from '../_store/constants'
 import { User } from '../_models/user';
@@ -13,6 +13,10 @@ import * as ChatEngineCore from 'chat-engine';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
 import { concat } from 'rxjs/operator/concat';
+import { log } from 'util';
+import { MatSnackBar } from '@angular/material';
+import { AuthenticationService } from './authentication.service'
+
 // import 'rxjs/add/operator/switchMap';
 
 @Injectable()
@@ -20,16 +24,11 @@ export class NewchatService {
     username: string;
     fullName: string;
     ChatEngine:any;
-    // room: string = 'general';
-    rooms: Array<any> = ['general', 'annoucement']; 
-    privateRooms: Array<any> = [];
     currentChatObject:any;
     currentChat:any;
-    basicRooms:any;
-    // allUsers: any = [];
     globalChannel:string = 'Djangular'
     me:any;
-    onlineGroupUsers = 0;
+    // onlineGroupUsers = 0;
     channelInput: string = this.route.snapshot.paramMap.get('channel');
     myDirectChannel: Array<any> = []
     myPPChannels: any = [];
@@ -54,7 +53,10 @@ export class NewchatService {
         private ngRedux: NgRedux<IAppState>,
         private route: ActivatedRoute,
         private UserServicee: UserService,
-        private router: Router
+        private router: Router,
+        public snackBar: MatSnackBar,
+        private auth: AuthenticationService
+        
     ) {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.username = currentUser.user.username;
@@ -62,7 +64,7 @@ export class NewchatService {
     }
 
     callStack = () => {
-        this.initialize();
+        this.initialize()
         this.lobby();   
     }
     
@@ -140,7 +142,7 @@ export class NewchatService {
 
             },
             (error) => {
-                console.log("Error", error)
+                    console.log("Error");                
             },
             () => {
                 //Completed        
@@ -154,7 +156,7 @@ export class NewchatService {
     subscribe = (chatRoom) => {
         let isAlreadySubscribed = this.subscribedRooms.includes(chatRoom.channel);
         if (!isAlreadySubscribed) {
-            this.subscribedRooms.push(chatRoom.channel);
+            this.subscribedRooms.push(chatRoom.chapynnel);
             chatRoom.on('message', (payload) => {
                 this.noticeData.showNotice = false
                 console.log("A new MEssage is received");
@@ -172,6 +174,7 @@ export class NewchatService {
     }
 
     connectChat = (chat) => {
+        console.log("In COnnect");
         
         if (chat.hasConnected) {
             this.history(chat)
@@ -365,6 +368,11 @@ export class NewchatService {
         }
     }
 
+    // chatUser = (chat) => {
+    //     return new Promise((resolve, reject) => {
+    //         resolve(Object.keys(chat.users));
+    //     })
+    // }
     // Input: Current Opened Channel or CHannel we tried to shift into
     isChannelCurrent = (channelInput = undefined) => {
         if(! channelInput){
@@ -379,12 +387,17 @@ export class NewchatService {
             //If Channel we tried to shift into is Public/Private Channel
             displayName = '#' + ppElement.displayName;
             let chat = this.createChat(ppElement.channel);
+            
+            // this.chatUser(chat).then((res) => console.log(res));
+            
+            console.log("PP")
             let payload = {
                 'channel': ppElement.channel,
                 'isPrivate': ppElement.isPrivate,
                 'displayName': displayName,
                 'isDirect': false,
-                'chatusers': Object.keys(chat.users)
+                'chatusers': Object.keys(chat.users),
+                'cId' : ppElement.id
             }
             //REMOVING NEW MESSAGE INDICATOR
             let ppChannelEditPayload = { 'channel': ppElement.channel, 'isCurrentChannel' : true};
@@ -395,6 +408,7 @@ export class NewchatService {
         else if(directElement){
             this.isPrivate = true;
             let chat = this.createChat(directElement.channel);
+            console.log("DP", directElement)
             
             //If Channel we tried to shift into is Direct Channel
             displayName = '@' + directElement.username;
@@ -404,7 +418,8 @@ export class NewchatService {
                 'isPrivate': true,
                 'displayName': displayName,
                 'isDirect' : true,
-                'chatusers': Object.keys(chat.users)
+                'chatusers': Object.keys(chat.users),
+                'cId': null
                 
             }
             //REMOVING NEW MESSAGE INDICATOR
@@ -467,17 +482,32 @@ export class NewchatService {
         })                       
     }
 
-    channelEdit = (channelDisplayName) => {
-        let channelName = this.UserServicee.getChannelName()
-            .switchMap((response) => {
-                return this.UserServicee.addPublicPrivateChannel(response.data.name, channelDisplayName, false)
-            });
+    channelEdit = (dataObj) => {
+        if (this.currentChatObj.cId) {
+            let channelName = this.UserServicee.editPublicPrivateChannel(
+                this.currentChatObj.cId,
+                dataObj.channelName,
+                dataObj.isPrivate,
+                this.currentChatObj.channel
+            )
+            channelName.subscribe(
+                (responseData) => {
+                    window.location.reload();
+            })
+            
+        }
 
-        channelName.subscribe(response => {
-            let allChannels = this.getAllChannelDetails(this.createChat(response.data.channel, false));
-            this.handleAllChannels(allChannels);
-            this.router.navigate([`../messages`, response.data.channel]);
-        })
+    }
+
+    logout(subscribe = false) {
+        console.log("Logout");
+        return this.auth.logout().subscribe(
+            (res) => {
+                this.snackBar.open("Successfully Logged Out", " ", {
+                    duration: 2000,
+                });
+            }
+        );
     }
         
     

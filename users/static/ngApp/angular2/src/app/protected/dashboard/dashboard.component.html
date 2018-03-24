@@ -51,7 +51,7 @@
 							<a (click)= "onlineUsers()"> 
 								<small>
 									<mat-icon class="dull star" title="Participants">face</mat-icon>
-									{{ this.currentChannelPayload?.chatusers.length }}
+									
 								</small>
 							</a> | 
 							<small><mat-icon class="dull star" title="Add to Favorite">star_border</mat-icon></small>
@@ -147,7 +147,7 @@
   	<mat-grid-tile rowspan="8" colspan="4" >
 		
 			<div style="overflow-y: scroll" fxLayoutAlign="start stretch" fxLayout="column" class="content-container">
-				<div *ngIf="this.chatService.noticeData.showNotice" fxLayout="row" fxLayoutAlign="center center">
+				<div *ngIf="this.chatService.noticeData.showNotice" fxLayout="row" fxLayoutAlign="center center" class="dull">
 					{{this.chatService.noticeData.message}}
 				</div>
 				<div *ngFor="let element of ((this.chatService).messages$ | async ) let index = index">

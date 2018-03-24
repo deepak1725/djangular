@@ -337,7 +337,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/protected/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<mat-grid-list cols=\"5\" rowHeight=\"fit\">\n\t<!-- SIDEBAR : TITLE -->\n  \t<mat-grid-tile>\n\t\t<div fxFlexFill fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"online-name channel-group\">\t\t\t\n\t\t\t\t\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\" channel-title\">\n\t\t\t\t\t\t\t<strong>{{this.chatService.globalChannel}}</strong>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"ProfileMenu\">\n\t\t\t\t\t\t\t\t<mat-icon>menu</mat-icon>\n\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t<mat-menu #ProfileMenu=\"matMenu\">\n\t\t\t\t\t\t\t\t<button mat-menu-item disabled>\n\t\t\t\t\t\t\t\t\t<mat-icon>person_pin</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Profile</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t<button mat-menu-item (click)= \"logout()\">\n\t\t\t\t\t\t\t\t\t<mat-icon>flag</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Logout</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</mat-menu>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t</div>\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t<span class=\"text\">\n\t\t\t\t\t\t\t{{this.chatService.fullName}}\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"dull\">\n\t\t\t\t\t\t\t@{{this.chatService.username}}\n\t\t\t\t\t\t</span>\n\t\t\t\t</div>\t\t\t\t\t\t\t\t\n\t\t</div>\n\t</mat-grid-tile>\n\n\t<!-- HEADER -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxFlexFill fxLayoutAlign=\"space-around center\">\n\t\t\t<div fxFlex=90 fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<span>\n\t\t\t\t\t\t<div *ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t\t<a (click)= \"onlineUsers()\"> \n\t\t\t\t\t\t\t\t<small>\n\t\t\t\t\t\t\t\t\t<mat-icon class=\"dull star\" title=\"Participants\">face</mat-icon>\n\t\t\t\t\t\t\t\t\t{{ this.currentChannelPayload?.chatusers.length }}\n\t\t\t\t\t\t\t\t</small>\n\t\t\t\t\t\t\t</a> | \n\t\t\t\t\t\t\t<small><mat-icon class=\"dull star\" title=\"Add to Favorite\">star_border</mat-icon></small>\n\t\t\t\t\t\t</div>\t\n\t\t\t\t\t</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div fxFlex fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t <!--  -->\n\t\t\t\t<div>\n\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"menu\" \n\t\t\t\t\t\t*ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t<mat-icon>more_vert</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<mat-menu #menu=\"matMenu\">\n\t\t\t\t\t\t<button mat-menu-item (click)=\"editChannel()\">\n\t\t\t\t\t\t\t<mat-icon>border_color</mat-icon>\n\t\t\t\t\t\t\t<span>Edit Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t\t<button mat-menu-item (click)=\"removeChannel()\">\n\t\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t\t\t<span>Delete Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</mat-menu>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: DIRECT MESSAGES -->\n\t<mat-grid-tile rowspan=\"6\">\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>DIRECT</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active-link\" \n\t\t\t\t\tclass=\"online-name\" \n\t\t\t\t\tmatLine \n\t\t\t\t\t[routerLinkActiveOptions]=\"{exact: true}\"\n\t\t\t\t\trouterLink=\"/messages/{{occupant.channel}}\"\n\t\t\t\t\t (click)=\"channelClicked(occupant.channel, true)\"\n \t\t\t\t\t*ngFor=\"let occupant of (this.chatService).users$ | async ; let index = index\">\n\n\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t \t\t\t{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant.username }} </small>\n\t\t\t\t\t\t\t<span *ngIf= \"occupant.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t</a>\n\n\t\t\t\t<!-- <a mat-list-item (click)=\"this.chatService.sendInvite(occupant.uuid)\" \n\t\t\t\trouterLinkActive=\"active-link\" class=\"online-name\"\n\t\t\t\t\tmatLine [routerLinkActiveOptions]=\"{exact: true}\" \n\t\t\t\t\t*ngFor=\"let occupant of this.chatService.privateChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{ occupant }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant}} </small>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t</a> -->\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\t\n\n\t<!-- MessageContainer -->\n  \t<mat-grid-tile rowspan=\"8\" colspan=\"4\" >\n\t\t\n\t\t\t<div style=\"overflow-y: scroll\" fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"content-container\">\n\t\t\t\t<div *ngIf=\"this.chatService.noticeData.showNotice\" fxLayout=\"row\" fxLayoutAlign=\"center center\">\n\t\t\t\t\t{{this.chatService.noticeData.message}}\n\t\t\t\t</div>\n\t\t\t\t<div *ngFor=\"let element of ((this.chatService).messages$ | async ) let index = index\">\n\t\t\t\t\t<div fxLayout=\"row\" class=\"message-text\">\n\t\t\t\t\t\t<div fxFlex=\"5\">\n\t\t\t\t\t\t\t<mat-icon color=\"accent\" class=\"f-s-40\">account_box</mat-icon>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div fxFlex fxLayout=\"column\" fxLayoutAlign=\"space-evenly stretch\">\n\t\t\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"space-between center\">\n\t\t\t\t\t\t\t\t<span>\n\t\t\t\t\t\t\t\t\t<b>{{ element.data.fullName }}</b>\n\t\t\t\t\t\t\t\t\t<small class=\"dull\">@{{ element.data.nickName}}</small>\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t<div fxFlex class=\"time\" fxFlexAlign=\"center\">\n\t\t\t\t\t\t\t\t\t{{ getReadableTime( element.data.date) }}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div>{{ element.data.text }}</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t\t\t\n\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: GROUP -->\n\t<mat-grid-tile rowspan=\"3\">\n\t\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>GROUPS</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active\" class=\"online-name\"\n\t\t\t\t\trouterLink=\"/messages/{{channel.channel}}\"\n\t\t\t\t\t(click)=\"channelClicked(channel.channel, channel.isPrivate)\"\n\t\t\t\t\tmatLine\n\t\t\t\t\tfxLayout=\"row\" fxLayoutAlign=\"space-between center\"  \n\t\t\t\t\t*ngFor=\"let channel of this.chatService.publicChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t<span>#{{ channel.displayName }} \n\t\t\t\t\t\t<span *ngIf= \"channel.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t</a>\n\t\n\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\n\t<!-- SEND MESSAGE -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t<form autocomplete=\"off\" #replyForm=\"ngForm\" (ngSubmit)=\"sendMessage(replyForm)\" class=\"reply-form\">\n\t\t\t\t<mat-form-field  class=\"msg-input\" fxFill floatPlaceholder=\"never\">\n\t\t\t\t\t<input tabindex=\"1\" resizeToFitContent name=\"message\" matInput placeholder=\"Message\" ngModel>\n\t\t\t\t\t<mat-hint align=\"end\"> Press Enter to Send</mat-hint>\n\t\t\t\t</mat-form-field>\n\t\t\t</form>\n\t\t</div>\n\t</mat-grid-tile>\n\n</mat-grid-list>\n"
+module.exports = "<mat-grid-list cols=\"5\" rowHeight=\"fit\">\n\t<!-- SIDEBAR : TITLE -->\n  \t<mat-grid-tile>\n\t\t<div fxFlexFill fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"online-name channel-group\">\t\t\t\n\t\t\t\t\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t\n\t\t\t\t\t\t<div class=\" channel-title\">\n\t\t\t\t\t\t\t<strong>{{this.chatService.globalChannel}}</strong>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"ProfileMenu\">\n\t\t\t\t\t\t\t\t<mat-icon>menu</mat-icon>\n\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t<mat-menu #ProfileMenu=\"matMenu\">\n\t\t\t\t\t\t\t\t<button mat-menu-item disabled>\n\t\t\t\t\t\t\t\t\t<mat-icon>person_pin</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Profile</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t\t<button mat-menu-item (click)= \"logout()\">\n\t\t\t\t\t\t\t\t\t<mat-icon>flag</mat-icon>\n\t\t\t\t\t\t\t\t\t<span>Logout</span>\n\t\t\t\t\t\t\t\t</button>\n\t\t\t\t\t\t\t</mat-menu>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\n\t\t\t\t</div>\t\n\t\t\t\t<div fxLayoutAlign=\"space-around center\" fxLayout=\"row\">\n\t\t\t\t\t\t<span class=\"text\">\n\t\t\t\t\t\t\t{{this.chatService.fullName}}\n\t\t\t\t\t\t</span>\n\t\t\t\t\t\t<span class=\"dull\">\n\t\t\t\t\t\t\t@{{this.chatService.username}}\n\t\t\t\t\t\t</span>\n\t\t\t\t</div>\t\t\t\t\t\t\t\t\n\t\t</div>\n\t</mat-grid-tile>\n\n\t<!-- HEADER -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxFlexFill fxLayoutAlign=\"space-around center\">\n\t\t\t<div fxFlex=90 fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<strong>{{ ((this.chatService).currentChannel$ | async)?.displayName  }}</strong>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<div fxLayout=\"row\" class=\"channel-title\">\n\t\t\t\t\t<span>\n\t\t\t\t\t\t<div *ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t\t<a (click)= \"onlineUsers()\"> \n\t\t\t\t\t\t\t\t<small>\n\t\t\t\t\t\t\t\t\t<mat-icon class=\"dull star\" title=\"Participants\">face</mat-icon>\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t</small>\n\t\t\t\t\t\t\t</a> | \n\t\t\t\t\t\t\t<small><mat-icon class=\"dull star\" title=\"Add to Favorite\">star_border</mat-icon></small>\n\t\t\t\t\t\t</div>\t\n\t\t\t\t\t</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div fxFlex fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t\t <!--  -->\n\t\t\t\t<div>\n\t\t\t\t\t<button mat-icon-button [matMenuTriggerFor]=\"menu\" \n\t\t\t\t\t\t*ngIf =\"!((this.chatService).currentChannel$ | async)?.isDirect\" >\n\t\t\t\t\t\t<mat-icon>more_vert</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<mat-menu #menu=\"matMenu\">\n\t\t\t\t\t\t<button mat-menu-item (click)=\"editChannel()\">\n\t\t\t\t\t\t\t<mat-icon>border_color</mat-icon>\n\t\t\t\t\t\t\t<span>Edit Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t\t<button mat-menu-item (click)=\"removeChannel()\">\n\t\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t\t\t<span>Delete Channel</span>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</mat-menu>\n\t\t\t\t</div>\n\t\t\t\t\n\t\t\t</div>\n\t\t</div>\n\t\t\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: DIRECT MESSAGES -->\n\t<mat-grid-tile rowspan=\"6\">\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>DIRECT</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active-link\" \n\t\t\t\t\tclass=\"online-name\" \n\t\t\t\t\tmatLine \n\t\t\t\t\t[routerLinkActiveOptions]=\"{exact: true}\"\n\t\t\t\t\trouterLink=\"/messages/{{occupant.channel}}\"\n\t\t\t\t\t (click)=\"channelClicked(occupant.channel, true)\"\n \t\t\t\t\t*ngFor=\"let occupant of (this.chatService).users$ | async ; let index = index\">\n\n\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t \t\t\t{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant.username }} </small>\n\t\t\t\t\t\t\t<span *ngIf= \"occupant.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t\n\t\t\t\t</a>\n\n\t\t\t\t<!-- <a mat-list-item (click)=\"this.chatService.sendInvite(occupant.uuid)\" \n\t\t\t\trouterLinkActive=\"active-link\" class=\"online-name\"\n\t\t\t\t\tmatLine [routerLinkActiveOptions]=\"{exact: true}\" \n\t\t\t\t\t*ngFor=\"let occupant of this.chatService.privateChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"start center\">\n\t\t\t\t\t\t<mat-icon mat-list-icon class=\"online\">\n\t\t\t\t\t\t\tfiber_manual_record\n\t\t\t\t\t\t</mat-icon>\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t{{ occupant }}\n\t\t\t\t\t\t\t<small class=\"dull\">@{{ occupant}} </small>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t\n\t\t\t\t</a> -->\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\t\n\n\t<!-- MessageContainer -->\n  \t<mat-grid-tile rowspan=\"8\" colspan=\"4\" >\n\t\t\n\t\t\t<div style=\"overflow-y: scroll\" fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"content-container\">\n\t\t\t\t<div *ngIf=\"this.chatService.noticeData.showNotice\" fxLayout=\"row\" fxLayoutAlign=\"center center\" class=\"dull\">\n\t\t\t\t\t{{this.chatService.noticeData.message}}\n\t\t\t\t</div>\n\t\t\t\t<div *ngFor=\"let element of ((this.chatService).messages$ | async ) let index = index\">\n\t\t\t\t\t<div fxLayout=\"row\" class=\"message-text\">\n\t\t\t\t\t\t<div fxFlex=\"5\">\n\t\t\t\t\t\t\t<mat-icon color=\"accent\" class=\"f-s-40\">account_box</mat-icon>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div fxFlex fxLayout=\"column\" fxLayoutAlign=\"space-evenly stretch\">\n\t\t\t\t\t\t\t<div fxLayout=\"row\" fxLayoutAlign=\"space-between center\">\n\t\t\t\t\t\t\t\t<span>\n\t\t\t\t\t\t\t\t\t<b>{{ element.data.fullName }}</b>\n\t\t\t\t\t\t\t\t\t<small class=\"dull\">@{{ element.data.nickName}}</small>\n\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t<div fxFlex class=\"time\" fxFlexAlign=\"center\">\n\t\t\t\t\t\t\t\t\t{{ getReadableTime( element.data.date) }}\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div>{{ element.data.text }}</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</div>\n\t\t\t\n\t\t\t\t\n\n\t</mat-grid-tile>\n\n\t<!-- SIDEBAR: GROUP -->\n\t<mat-grid-tile rowspan=\"3\">\n\t\n\t\t<div fxLayoutAlign=\"start stretch\" fxLayout=\"column\" class=\"sidebar-container\">\n\t\t\t<mat-nav-list dense >\n\t\t\t\t<div fxLayoutAlign=\"space-between center\" fxLayout=\"row\">\n\t\t\t\t\t<h3 mat-subheader>GROUPS</h3>\n\t\t\t\t\t<div>\n\t\t\t\t\t\t<button mat-raised-button (click)=\"addChannel()\">\n\t\t\t\t\t\t\t<mat-icon class=\"dull\">add_circle_outline</mat-icon>\n\t\t\t\t\t\t</button>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t\t<mat-divider></mat-divider>\n\t\t\t\t<a mat-list-item \n\t\t\t\t\trouterLinkActive=\"active\" class=\"online-name\"\n\t\t\t\t\trouterLink=\"/messages/{{channel.channel}}\"\n\t\t\t\t\t(click)=\"channelClicked(channel.channel, channel.isPrivate)\"\n\t\t\t\t\tmatLine\n\t\t\t\t\tfxLayout=\"row\" fxLayoutAlign=\"space-between center\"  \n\t\t\t\t\t*ngFor=\"let channel of this.chatService.publicChats$ | async; let index = index\">\n\t\t\t\t\n\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t<span>#{{ channel.displayName }} \n\t\t\t\t\t\t<span *ngIf= \"channel.isNewMessageArrived\" class=\"new\"> new </span> \n\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t\t\n\n\t\t\t\t</a>\n\t\n\n\t\t\t</mat-nav-list>\n\t\t</div>\n\t</mat-grid-tile>\n\n\n\t<!-- SEND MESSAGE -->\n  \t<mat-grid-tile colspan=\"4\">\n\t\t<div fxLayoutAlign=\"center center\" fxLayout=\"column\">\n\t\t\t<form autocomplete=\"off\" #replyForm=\"ngForm\" (ngSubmit)=\"sendMessage(replyForm)\" class=\"reply-form\">\n\t\t\t\t<mat-form-field  class=\"msg-input\" fxFill floatPlaceholder=\"never\">\n\t\t\t\t\t<input tabindex=\"1\" resizeToFitContent name=\"message\" matInput placeholder=\"Message\" ngModel>\n\t\t\t\t\t<mat-hint align=\"end\"> Press Enter to Send</mat-hint>\n\t\t\t\t</mat-form-field>\n\t\t\t</form>\n\t\t</div>\n\t</mat-grid-tile>\n\n</mat-grid-list>\n"
 
 /***/ }),
 
@@ -351,7 +351,7 @@ module.exports = "<h1 mat-dialog-title>Add Channel</h1>\n\n<form #addChannel=\"n
 /***/ "./src/app/protected/dialogs/edit-channel.dialog.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 mat-dialog-title>Edit Channell</h1>\n\n<form #addChannel=\"ngForm\">\n    <div mat-dialog-content class=\"dialog-setting\" style=\"min-height: 105px;\">\n        <div>\n\n            <mat-form-field fxFlexFill>\n                <input matInput tabindex=\"1\" value=\"{{ data.channel }}\" placeholder=\"Channel Name\" required name=\"channelName\">\n                <mat-error>Channel Name is invalid</mat-error>   \n            </mat-form-field>\n            <mat-checkbox name=\"isPrivate\" checked=\"{{ data.isPrivate }}\" >Private Channel</mat-checkbox>\n        \n        </div>\n        \n    </div>\n    <div mat-dialog-actions fxLayout=\"row\" fxLayoutAlign=\"space-around center\">\n        <button mat-button [mat-dialog-close]='{channelName: channelName, isPrivate:isPrivate}' tabindex=\"2\" [disabled]=\"!addChannel.form.valid\">OK</button>\n        <button mat-button (click)=\"onNoClick()\" tabindex=\"-1\">CANCEL</button>\n    </div>\n</form>"
+module.exports = "<h1 mat-dialog-title>Edit Channell</h1>\n\n<form #addChannel=\"ngForm\">\n    <div mat-dialog-content class=\"dialog-setting\" style=\"min-height: 105px;\">\n        <div>\n\n            <mat-form-field fxFlexFill>\n                <input matInput tabindex=\"1\" [(ngModel)]=\"myData.channel\" placeholder=\"Channel Name\" required name=\"channelName\">\n                <mat-error>Channel Name is invalid</mat-error>   \n            </mat-form-field>\n            <!-- <mat-checkbox name=\"isPrivate\" checked=\"{{ data.isPrivate }}\" >Private Channel</mat-checkbox> -->\n        \n        </div>\n        \n    </div>\n    <div mat-dialog-actions fxLayout=\"row\" fxLayoutAlign=\"space-around center\">\n        <button mat-button [mat-dialog-close]='{channelName: myData.channel, isPrivate: myData.isPrivate}' tabindex=\"2\" [disabled]=\"!addChannel.form.valid\">OK</button>\n        <button mat-button (click)=\"onNoClick()\" tabindex=\"-1\">CANCEL</button>\n    </div>\n</form>"
 
 /***/ }),
 
@@ -376,7 +376,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/protected/dialogs/online-friends.dialog.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1 mat-dialog-title>{{ data?.payload?.displayName }}</h1>\n\n<div mat-dialog-content>\n    <p>All Group Participants</p>\n</div>\n<mat-nav-list>\n    <div *ngIf=\"data.payload?.chatusers.length; else elseBlock\">\n        <mat-list-item *ngFor=\"let user of data.payload?.chatusers\">\n            <mat-icon color=\"accent\" mat-list-icon class=\"f-s-40\">account_box</mat-icon>\n            \n            <mat-icon mat-list-icon class=\"dialog-online\">\n                fiber_manual_record\n            </mat-icon>\n            \n            <a matLine (click)=\"onOnlineUserClick(user)\">\n                {{ user }}\n            </a>\n            \n        </mat-list-item>\n    </div>\n    <ng-template #elseBlock>\n        <mat-list-item>\n\n            No Users Found\n            \n        </mat-list-item>\n    </ng-template>\n</mat-nav-list>"
+module.exports = "<h1 mat-dialog-title>{{ data?.displayName }}</h1>\n\n<div mat-dialog-content>\n    <p>All Group Participants</p>\n</div>\n<mat-nav-list>\n    <div *ngIf=\"data?.chatusers.length; else elseBlock\">\n        <mat-list-item *ngFor=\"let user of data?.chatusers\">\n            <mat-icon color=\"accent\" mat-list-icon class=\"f-s-40\">account_box</mat-icon>\n            \n            \n            <!-- <a matLine (click)=\"onOnlineUserClick(user)\"> -->\n                {{ user }}\n            <!-- </a> -->\n            \n        </mat-list-item>\n    </div>\n    <ng-template #elseBlock>\n        <mat-list-item>\n\n            No Users Found\n            \n        </mat-list-item>\n    </ng-template>\n</mat-nav-list>"
 
 /***/ }),
 
@@ -580,6 +580,10 @@ var router_es5 = __webpack_require__("./node_modules/@angular/router/@angular/ro
 // EXTERNAL MODULE: ./node_modules/@angular/http/@angular/http.es5.js
 var http_es5 = __webpack_require__("./node_modules/@angular/http/@angular/http.es5.js");
 
+// EXTERNAL MODULE: ./node_modules/rxjs/Rx.js
+var Rx = __webpack_require__("./node_modules/rxjs/Rx.js");
+var Rx_default = /*#__PURE__*/__webpack_require__.n(Rx);
+
 // CONCATENATED MODULE: ./src/app/_services/user.service.ts
 var user_service___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -590,6 +594,7 @@ var user_service___decorate = (this && this.__decorate) || function (decorators,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 var user_service_UserService = (function () {
@@ -603,7 +608,8 @@ var user_service_UserService = (function () {
             }
             return _this.http
                 .get("/api/user-channels/" + id, _this.options)
-                .map(function (response) { return response.json(); });
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
         };
         this.addDirectChannelDetails = function (friendId, channelName, id) {
             if (id === void 0) { id = null; }
@@ -619,7 +625,8 @@ var user_service_UserService = (function () {
             };
             return _this.http
                 .post("/api/user-channels/", body, _this.options)
-                .map(function (response) { return response.json(); });
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
         };
         this.addPublicPrivateChannel = function (channelName, displayName, userId, isPrivate) {
             if (userId === void 0) { userId = null; }
@@ -638,34 +645,59 @@ var user_service_UserService = (function () {
             };
             return _this.http
                 .post("/api/all-channels/", body, _this.options)
-                .map(function (response) { return response.json(); });
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
+        };
+        this.editPublicPrivateChannel = function (cId, displayName, isPrivate, channel) {
+            var body = {
+                "users": [
+                    { "user": _this.currentUser.user.pk, "isAdmin": false }
+                ],
+                "displayName": displayName,
+                "channel": channel,
+                "createdBy": 1,
+                "isPrivate": isPrivate,
+            };
+            console.log(body);
+            return _this.http
+                .put("/api/all-channels/" + cId + "/?userId=" + _this.currentUser.user.pk, body, _this.options)
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
         };
         this.getChannelName = function () {
             return _this.http
                 .get("/api/channel-name", _this.options)
-                .map(function (response) { return response.json(); });
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
         };
         this.getUserDetails = function (name, param) {
             if (param === void 0) { param = 'username'; }
             return _this.http
                 .get("api/user-details/?" + param + "=" + name, _this.options)
-                .map(function (response) { return response.json(); });
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
         };
         this.getUserAllChannels = function (userId) {
             if (userId === void 0) { userId = undefined; }
-            // if (!userId) {
-            //     userId = this.currentUser.user.pk
-            // }     
+            if (!userId) {
+                userId = _this.currentUser.user.pk;
+            }
             return _this.http
-                .get("api/all-channels/", _this.options)
-                .map(function (response) { return response.json(); });
+                .get("api/all-channels/" + userId, _this.options)
+                .map(function (response) { return response.json(); })
+                .catch(_this.handleError);
         };
         this.getUserStateDetails = function (username, friendUserName) {
             if (username && friendUserName) {
                 return _this.http
                     .get("api/user-details/?username=" + username + "&friendUserName=" + friendUserName, _this.options)
-                    .map(function (response) { return response.json(); });
+                    .map(function (response) { return response.json(); })
+                    .catch(_this.handleError);
             }
+        };
+        this.handleError = function (error) {
+            console.log(error, "error2");
+            return Rx["Observable"].throw(error);
         };
         this.options = new http_es5["d" /* RequestOptions */]();
         if (this.options.headers == null) {
@@ -697,7 +729,8 @@ var user_service_UserService = (function () {
             .map(function (response) {
             var apiresponse = JSON.stringify(response);
             return apiresponse;
-        });
+        })
+            .catch(this.handleError);
     };
     return UserService;
 }());
@@ -1397,10 +1430,6 @@ var moment_default = /*#__PURE__*/__webpack_require__.n(moment);
 var Observable = __webpack_require__("./node_modules/rxjs/Observable.js");
 var Observable_default = /*#__PURE__*/__webpack_require__.n(Observable);
 
-// EXTERNAL MODULE: ./node_modules/rxjs/Rx.js
-var Rx = __webpack_require__("./node_modules/rxjs/Rx.js");
-var Rx_default = /*#__PURE__*/__webpack_require__.n(Rx);
-
 // CONCATENATED MODULE: ./src/app/_store/constants.ts
 var Constants = (function () {
     function Constants() {
@@ -1490,20 +1519,20 @@ var newchat_service___metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 // import 'rxjs/add/operator/switchMap';
 var newchat_service_NewchatService = (function () {
-    function NewchatService(ngRedux, route, UserServicee, router) {
+    function NewchatService(ngRedux, route, UserServicee, router, snackBar, auth) {
         var _this = this;
         this.ngRedux = ngRedux;
         this.route = route;
         this.UserServicee = UserServicee;
         this.router = router;
-        // room: string = 'general';
-        this.rooms = ['general', 'annoucement'];
-        this.privateRooms = [];
-        // allUsers: any = [];
+        this.snackBar = snackBar;
+        this.auth = auth;
         this.globalChannel = 'Djangular';
-        this.onlineGroupUsers = 0;
+        // onlineGroupUsers = 0;
         this.channelInput = this.route.snapshot.paramMap.get('channel');
         this.myDirectChannel = [];
         this.myPPChannels = [];
@@ -1534,7 +1563,7 @@ var newchat_service_NewchatService = (function () {
             return chat;
         };
         this.getAllChannelDetails = function (callback) {
-            var alldata = Rx["Observable"].forkJoin(_this.UserServicee.getUserAllChannels(), _this.UserServicee.getDirectChannelDetails());
+            var alldata = Observable["Observable"].forkJoin(_this.UserServicee.getUserAllChannels(), _this.UserServicee.getDirectChannelDetails());
             if (callback && typeof (callback) === "function") {
                 callback();
             }
@@ -1575,7 +1604,7 @@ var newchat_service_NewchatService = (function () {
                 });
                 _this.ngRedux.dispatch({ type: Constants.USERADD, payload: response[1].data.friend });
             }, function (error) {
-                console.log("Error", error);
+                console.log("Error");
             }, function () {
                 //Completed        
                 _this.eventListerners();
@@ -1585,7 +1614,7 @@ var newchat_service_NewchatService = (function () {
         this.subscribe = function (chatRoom) {
             var isAlreadySubscribed = _this.subscribedRooms.includes(chatRoom.channel);
             if (!isAlreadySubscribed) {
-                _this.subscribedRooms.push(chatRoom.channel);
+                _this.subscribedRooms.push(chatRoom.chapynnel);
                 chatRoom.on('message', function (payload) {
                     _this.noticeData.showNotice = false;
                     console.log("A new MEssage is received");
@@ -1602,6 +1631,7 @@ var newchat_service_NewchatService = (function () {
             }
         };
         this.connectChat = function (chat) {
+            console.log("In COnnect");
             if (chat.hasConnected) {
                 _this.history(chat);
             }
@@ -1664,7 +1694,7 @@ var newchat_service_NewchatService = (function () {
             });
             _this.ChatEngine.on('$.created.user', function (data, user) {
                 // console.log("UserCreated");
-                var userDetails = Rx["Observable"].forkJoin(_this.UserServicee.getUserDetails(user.uuid), _this.UserServicee.getChannelName());
+                var userDetails = Observable["Observable"].forkJoin(_this.UserServicee.getUserDetails(user.uuid), _this.UserServicee.getChannelName());
                 userDetails.switchMap(function (res) {
                     return _this.UserServicee.addDirectChannelDetails(res[0].data.id, res[1].data.name);
                 }).subscribe(function (response) {
@@ -1754,6 +1784,11 @@ var newchat_service_NewchatService = (function () {
                 // }   
             }
         };
+        // chatUser = (chat) => {
+        //     return new Promise((resolve, reject) => {
+        //         resolve(Object.keys(chat.users));
+        //     })
+        // }
         // Input: Current Opened Channel or CHannel we tried to shift into
         this.isChannelCurrent = function (channelInput) {
             if (channelInput === void 0) { channelInput = undefined; }
@@ -1768,12 +1803,15 @@ var newchat_service_NewchatService = (function () {
                 //If Channel we tried to shift into is Public/Private Channel
                 displayName = '#' + ppElement.displayName;
                 var chat = _this.createChat(ppElement.channel);
+                // this.chatUser(chat).then((res) => console.log(res));
+                console.log("PP");
                 var payload = {
                     'channel': ppElement.channel,
                     'isPrivate': ppElement.isPrivate,
                     'displayName': displayName,
                     'isDirect': false,
-                    'chatusers': Object.keys(chat.users)
+                    'chatusers': Object.keys(chat.users),
+                    'cId': ppElement.id
                 };
                 //REMOVING NEW MESSAGE INDICATOR
                 var ppChannelEditPayload = { 'channel': ppElement.channel, 'isCurrentChannel': true };
@@ -1783,6 +1821,7 @@ var newchat_service_NewchatService = (function () {
             else if (directElement) {
                 _this.isPrivate = true;
                 var chat = _this.createChat(directElement.channel);
+                console.log("DP", directElement);
                 //If Channel we tried to shift into is Direct Channel
                 displayName = '@' + directElement.username;
                 var payload = {
@@ -1790,7 +1829,8 @@ var newchat_service_NewchatService = (function () {
                     'isPrivate': true,
                     'displayName': displayName,
                     'isDirect': true,
-                    'chatusers': Object.keys(chat.users)
+                    'chatusers': Object.keys(chat.users),
+                    'cId': null
                 };
                 //REMOVING NEW MESSAGE INDICATOR
                 var userEditPayload = { 'channel': directElement.channel, 'isCurrentChannel': true };
@@ -1840,53 +1880,60 @@ var newchat_service_NewchatService = (function () {
                 _this.router.navigate(["../messages", response.data.channel]);
             });
         };
-        this.channelEdit = function (channelDisplayName) {
-            var channelName = _this.UserServicee.getChannelName()
-                .switchMap(function (response) {
-                return _this.UserServicee.addPublicPrivateChannel(response.data.name, channelDisplayName, false);
-            });
-            channelName.subscribe(function (response) {
-                var allChannels = _this.getAllChannelDetails(_this.createChat(response.data.channel, false));
-                _this.handleAllChannels(allChannels);
-                _this.router.navigate(["../messages", response.data.channel]);
-            });
+        this.channelEdit = function (dataObj) {
+            if (_this.currentChatObj.cId) {
+                var channelName = _this.UserServicee.editPublicPrivateChannel(_this.currentChatObj.cId, dataObj.channelName, dataObj.isPrivate, _this.currentChatObj.channel);
+                channelName.subscribe(function (responseData) {
+                    window.location.reload();
+                });
+            }
         };
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.username = currentUser.user.username;
         this.fullName = currentUser.user.first_name + ' ' + currentUser.user.last_name;
     }
+    NewchatService.prototype.logout = function (subscribe) {
+        var _this = this;
+        if (subscribe === void 0) { subscribe = false; }
+        console.log("Logout");
+        return this.auth.logout().subscribe(function (res) {
+            _this.snackBar.open("Successfully Logged Out", " ", {
+                duration: 2000,
+            });
+        });
+    };
     return NewchatService;
 }());
 newchat_service___decorate([
     Object(src["select"])(['public_channel', 'payload']),
-    newchat_service___metadata("design:type", typeof (newchat_service__a = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__a || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__a = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && newchat_service__a || Object)
 ], newchat_service_NewchatService.prototype, "publicChats$", void 0);
 newchat_service___decorate([
     Object(src["select"])(['private_channel', 'payload']),
-    newchat_service___metadata("design:type", typeof (newchat_service__b = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__b || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__b = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && newchat_service__b || Object)
 ], newchat_service_NewchatService.prototype, "privateChats$", void 0);
 newchat_service___decorate([
     Object(src["select"])(['direct_channel', 'payload']),
-    newchat_service___metadata("design:type", typeof (newchat_service__c = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__c || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__c = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && newchat_service__c || Object)
 ], newchat_service_NewchatService.prototype, "directChats$", void 0);
 newchat_service___decorate([
     Object(src["select"])(['users', 'payload']),
-    newchat_service___metadata("design:type", typeof (newchat_service__d = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__d || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__d = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && newchat_service__d || Object)
 ], newchat_service_NewchatService.prototype, "users$", void 0);
 newchat_service___decorate([
     Object(src["select"])(['current_channel', 'payload']),
-    newchat_service___metadata("design:type", typeof (newchat_service__e = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__e || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__e = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && newchat_service__e || Object)
 ], newchat_service_NewchatService.prototype, "currentChannel$", void 0);
 newchat_service___decorate([
     Object(src["select"])(['message', 'payload']),
-    newchat_service___metadata("design:type", typeof (newchat_service__f = typeof Rx["Observable"] !== "undefined" && Rx["Observable"]) === "function" && newchat_service__f || Object)
+    newchat_service___metadata("design:type", typeof (newchat_service__f = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && newchat_service__f || Object)
 ], newchat_service_NewchatService.prototype, "messages$", void 0);
 newchat_service_NewchatService = newchat_service___decorate([
     Object(core_es5["Injectable"])(),
-    newchat_service___metadata("design:paramtypes", [typeof (_g = typeof src["NgRedux"] !== "undefined" && src["NgRedux"]) === "function" && _g || Object, typeof (_h = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && _h || Object, typeof (_j = typeof user_service_UserService !== "undefined" && user_service_UserService) === "function" && _j || Object, typeof (_k = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && _k || Object])
+    newchat_service___metadata("design:paramtypes", [typeof (_g = typeof src["NgRedux"] !== "undefined" && src["NgRedux"]) === "function" && _g || Object, typeof (_h = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && _h || Object, typeof (_j = typeof user_service_UserService !== "undefined" && user_service_UserService) === "function" && _j || Object, typeof (_k = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && _k || Object, typeof (_l = typeof material_es5["n" /* MatSnackBar */] !== "undefined" && material_es5["n" /* MatSnackBar */]) === "function" && _l || Object, typeof (_m = typeof authentication_service_AuthenticationService !== "undefined" && authentication_service_AuthenticationService) === "function" && _m || Object])
 ], newchat_service_NewchatService);
 
-var newchat_service__a, newchat_service__b, newchat_service__c, newchat_service__d, newchat_service__e, newchat_service__f, _g, _h, _j, _k;
+var newchat_service__a, newchat_service__b, newchat_service__c, newchat_service__d, newchat_service__e, newchat_service__f, _g, _h, _j, _k, _l, _m;
 //# sourceMappingURL=newchat.service.js.map
 // CONCATENATED MODULE: ./src/app/protected/dialogs/add-channel.dialog.ts
 var add_channel_dialog___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1943,7 +1990,7 @@ var EditChannelDialog = (function () {
     function EditChannelDialog(dialogRef, data) {
         this.dialogRef = dialogRef;
         this.data = data;
-        this.isPrivate = false;
+        this.myData = data;
     }
     EditChannelDialog.prototype.onNoClick = function () {
         this.dialogRef.close();
@@ -2012,8 +2059,7 @@ var dashboard_component___metadata = (this && this.__metadata) || function (k, v
 // import { PubNubAngular } from 'pubnub-angular2';
 
 
-
-
+// import { AuthenticationService } from '../../_services/authentication.service'
 
 
 
@@ -2022,7 +2068,8 @@ var dashboard_component___metadata = (this && this.__metadata) || function (k, v
 
 
 var dashboard_component_DashboardComponent = (function () {
-    function DashboardComponent(chatService, ngRedux, dialog, router, route, snackBar, auth) {
+    // @select(['current_channel', 'payload']) readonly currentChannel$: Observable<any>;
+    function DashboardComponent(chatService, ngRedux, dialog, router, route, snackBar) {
         var _this = this;
         this.chatService = chatService;
         this.ngRedux = ngRedux;
@@ -2030,7 +2077,6 @@ var dashboard_component_DashboardComponent = (function () {
         this.router = router;
         this.route = route;
         this.snackBar = snackBar;
-        this.auth = auth;
         this.title = 'Dashboard';
         this.rakeArray = new Array(90);
         this.newChannel = '';
@@ -2038,7 +2084,6 @@ var dashboard_component_DashboardComponent = (function () {
             room: "no",
             online: 0
         };
-        // currentChannel:string = '#general';
         this.currentChat = this.chatService.currentChat;
         this.sendMessage = function (form) {
             var message = form.value.message;
@@ -2047,11 +2092,6 @@ var dashboard_component_DashboardComponent = (function () {
                 this.chatService.publish(message);
             }
             form.reset();
-        };
-        this.subscribeCurrentChannel = function () {
-            _this.currentChannel$.subscribe(function (payload) {
-                _this.currentChannelPayload = payload;
-            });
         };
         this.onOnlineUserClick = function (user) {
         };
@@ -2084,9 +2124,9 @@ var dashboard_component_DashboardComponent = (function () {
     }
     DashboardComponent.prototype.ngOnInit = function () {
         this.scrollToBottom();
-        this.events(router_es5["b" /* NavigationEnd */]);
+        // this.events(NavigationEnd);
         this.chatService.callStack();
-        this.subscribeCurrentChannel();
+        // this.subscribeCurrentChannel();
         // let channel = this.route.snapshot.paramMap.get('channel');		
         // this.currentChat = this.fetchChannelNameFromString()
         // this.currentChannel$.subscribe((event) => {
@@ -2123,12 +2163,21 @@ var dashboard_component_DashboardComponent = (function () {
             }
         });
     };
-    DashboardComponent.prototype.onlineUsers = function () {
+    // subscribeCurrentChannel = () => {
+    // 	this.currentChannel$.subscribe(
+    // 		(payload) => {
+    // 			this.currentChannelPayload = payload
+    // 		});
+    // }
+    DashboardComponent.prototype.onlineUsers = function (displayName) {
+        var chat = this.chatService.createChat(this.chatService.currentChatObj.channel);
+        var dataObj = {
+            displayName: this.chatService.currentChatObj.displayName,
+            chatusers: Object.keys(chat.users)
+        };
         var dialogRef = this.dialog.open(OnlineFriendsDialog, {
             width: '300px',
-            data: {
-                payload: this.currentChannelPayload
-            },
+            data: dataObj,
         });
         dialogRef.afterClosed().subscribe(function (result) {
             if (result === void 0) { result = ""; }
@@ -2142,16 +2191,16 @@ var dashboard_component_DashboardComponent = (function () {
             width: '400px',
             data: { channel: currentChatDisplayName, isPrivate: isPrivate }
         });
-        dialogRef.afterClosed().subscribe(function (result) {
-            if (result === void 0) { result = ""; }
-            console.log("Resukt", result);
-            if (result) {
-                result = result.channelName.replace(/\s/g, '');
+        dialogRef.afterClosed().subscribe(function (dataObj) {
+            if (dataObj === void 0) { dataObj = {}; }
+            console.log("Resukt", dataObj);
+            if (dataObj.channelName) {
+                dataObj.channelName = dataObj.channelName.replace(/\s/g, '');
             }
-            if (result) {
-                console.log(result);
-                _this.newChannel = result;
-                // this.chatService.channelAdd(result)
+            if (dataObj.channelName) {
+                console.log(dataObj);
+                // this.newChannel = result;
+                _this.chatService.channelEdit(dataObj);
                 // console.log('result', result);
             }
         });
@@ -2167,12 +2216,7 @@ var dashboard_component_DashboardComponent = (function () {
         });
     };
     DashboardComponent.prototype.logout = function () {
-        var _this = this;
-        this.auth.logout().subscribe(function (res) {
-            _this.snackBar.open("Successfully Logged Out", " ", {
-                duration: 2000,
-            });
-        });
+        this.chatService.logout();
     };
     return DashboardComponent;
 }());
@@ -2180,22 +2224,18 @@ dashboard_component___decorate([
     Object(core_es5["ViewChild"])('scrollMe'),
     dashboard_component___metadata("design:type", typeof (dashboard_component__a = typeof core_es5["ElementRef"] !== "undefined" && core_es5["ElementRef"]) === "function" && dashboard_component__a || Object)
 ], dashboard_component_DashboardComponent.prototype, "myScrollContainer", void 0);
-dashboard_component___decorate([
-    Object(src["select"])(['current_channel', 'payload']),
-    dashboard_component___metadata("design:type", typeof (dashboard_component__b = typeof Observable["Observable"] !== "undefined" && Observable["Observable"]) === "function" && dashboard_component__b || Object)
-], dashboard_component_DashboardComponent.prototype, "currentChannel$", void 0);
 dashboard_component_DashboardComponent = dashboard_component___decorate([
     Object(core_es5["Component"])({
         selector: 'app-dashboard',
         template: __webpack_require__("./src/app/protected/dashboard/dashboard.component.html"),
         styles: [__webpack_require__("./src/app/protected/dashboard/dashboard.component.css")],
-        providers: [newchat_service_NewchatService, authentication_service_AuthenticationService]
+        providers: [newchat_service_NewchatService]
         // encapsulation: ViewEncapsulation.None,
     }),
-    dashboard_component___metadata("design:paramtypes", [typeof (dashboard_component__c = typeof newchat_service_NewchatService !== "undefined" && newchat_service_NewchatService) === "function" && dashboard_component__c || Object, typeof (dashboard_component__d = typeof src["NgRedux"] !== "undefined" && src["NgRedux"]) === "function" && dashboard_component__d || Object, typeof (dashboard_component__e = typeof material_es5["e" /* MatDialog */] !== "undefined" && material_es5["e" /* MatDialog */]) === "function" && dashboard_component__e || Object, typeof (dashboard_component__f = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && dashboard_component__f || Object, typeof (dashboard_component__g = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && dashboard_component__g || Object, typeof (dashboard_component__h = typeof material_es5["n" /* MatSnackBar */] !== "undefined" && material_es5["n" /* MatSnackBar */]) === "function" && dashboard_component__h || Object, typeof (dashboard_component__j = typeof authentication_service_AuthenticationService !== "undefined" && authentication_service_AuthenticationService) === "function" && dashboard_component__j || Object])
+    dashboard_component___metadata("design:paramtypes", [typeof (dashboard_component__b = typeof newchat_service_NewchatService !== "undefined" && newchat_service_NewchatService) === "function" && dashboard_component__b || Object, typeof (dashboard_component__c = typeof src["NgRedux"] !== "undefined" && src["NgRedux"]) === "function" && dashboard_component__c || Object, typeof (dashboard_component__d = typeof material_es5["e" /* MatDialog */] !== "undefined" && material_es5["e" /* MatDialog */]) === "function" && dashboard_component__d || Object, typeof (dashboard_component__e = typeof router_es5["c" /* Router */] !== "undefined" && router_es5["c" /* Router */]) === "function" && dashboard_component__e || Object, typeof (dashboard_component__f = typeof router_es5["a" /* ActivatedRoute */] !== "undefined" && router_es5["a" /* ActivatedRoute */]) === "function" && dashboard_component__f || Object, typeof (dashboard_component__g = typeof material_es5["n" /* MatSnackBar */] !== "undefined" && material_es5["n" /* MatSnackBar */]) === "function" && dashboard_component__g || Object])
 ], dashboard_component_DashboardComponent);
 
-var dashboard_component__a, dashboard_component__b, dashboard_component__c, dashboard_component__d, dashboard_component__e, dashboard_component__f, dashboard_component__g, dashboard_component__h, dashboard_component__j;
+var dashboard_component__a, dashboard_component__b, dashboard_component__c, dashboard_component__d, dashboard_component__e, dashboard_component__f, dashboard_component__g;
 //# sourceMappingURL=dashboard.component.js.map
 // CONCATENATED MODULE: ./src/app/auth-guard.service.ts
 var auth_guard_service___decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2306,14 +2346,15 @@ var app_routing_module___decorate = (this && this.__decorate) || function (decor
 // import { MyOwnCustomMaterialModule } from './material.module';
 
 
+var userName = 'general';
 var APPROUTES = [
     {
         path: '', component: ProtectedComponent, canActivate: [AuthGuard], children: [
             { path: 'messages/:channel/:type', component: dashboard_component_DashboardComponent },
             { path: 'messages/:channel', component: dashboard_component_DashboardComponent },
-            { path: 'messages', redirectTo: 'messages/general', pathMatch: 'full' },
-            { path: '', redirectTo: 'messages/general', pathMatch: 'full' },
-            { path: 'dashboard', redirectTo: 'messages/general', pathMatch: 'full' },
+            { path: 'messages', redirectTo: "messages/" + userName, pathMatch: 'full' },
+            { path: '', redirectTo: "messages/" + userName, pathMatch: 'full' },
+            { path: 'dashboard', redirectTo: "messages/" + userName, pathMatch: 'full' },
         ]
     },
     {

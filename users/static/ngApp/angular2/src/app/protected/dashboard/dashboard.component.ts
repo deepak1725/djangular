@@ -12,7 +12,7 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { ChatService} from '../../_services/chat.service'
 import { NewchatService } from '../../_services/newchat.service'
-import { AuthenticationService } from '../../_services/authentication.service'
+// import { AuthenticationService } from '../../_services/authentication.service'
 import { Router, ActivatedRoute, ParamMap, Event, NavigationStart, NavigationEnd } from '@angular/router';
 import {rootReducer,IAppState } from '../../_store/store';
 import { NgRedux, select } from '@angular-redux/store';
@@ -36,7 +36,7 @@ import { UserService } from '../../_services/user.service';
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.css'],
-	providers: [NewchatService, AuthenticationService ]
+	providers: [NewchatService ]
 	// encapsulation: ViewEncapsulation.None,
 
 })
@@ -52,11 +52,9 @@ export class DashboardComponent implements OnInit {
 		room : "no",
 		online: 0
 	}
-	channelNameForDialog: string;
-	currentChannelPayload;
-	// currentChannel:string = '#general';
+	
 	currentChat = this.chatService.currentChat
-	@select(['current_channel', 'payload']) readonly currentChannel$: Observable<any>;
+	// @select(['current_channel', 'payload']) readonly currentChannel$: Observable<any>;
 
 
 	constructor(
@@ -66,7 +64,6 @@ export class DashboardComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		public snackBar: MatSnackBar,
-		private auth: AuthenticationService
 		
 	) {
 		
@@ -74,9 +71,9 @@ export class DashboardComponent implements OnInit {
 
 	ngOnInit() {
 		this.scrollToBottom();
-		this.events(NavigationEnd);
+		// this.events(NavigationEnd);
 		this.chatService.callStack();
-		this.subscribeCurrentChannel();
+		// this.subscribeCurrentChannel();
 		// let channel = this.route.snapshot.paramMap.get('channel');		
 		// this.currentChat = this.fetchChannelNameFromString()
 		// this.currentChannel$.subscribe((event) => {
@@ -133,23 +130,29 @@ export class DashboardComponent implements OnInit {
 		});
 	}
 
-	subscribeCurrentChannel = () => {
-		this.currentChannel$.subscribe(
-			(payload) => {
-				this.currentChannelPayload = payload
-			});
-	}
-	onlineUsers():void{
-		
+	// subscribeCurrentChannel = () => {
+	// 	this.currentChannel$.subscribe(
+	// 		(payload) => {
+	// 			this.currentChannelPayload = payload
+	// 		});
+	// }
+
+	onlineUsers(displayName):void{
+		let chat = this.chatService.createChat(this.chatService.currentChatObj.channel); 
+		let dataObj = {
+			displayName: this.chatService.currentChatObj.displayName,
+			chatusers: Object.keys(chat.users)
+		}	
+
 		let dialogRef = this.dialog.open(OnlineFriendsDialog, {
 			width: '300px',
-			data: {
-				payload: this.currentChannelPayload
-			},
+			data: dataObj,
 		});
+		
 		dialogRef.afterClosed().subscribe((result = "") => {
 		});
 	}
+
 	onOnlineUserClick = (user) => {
 
 	}
@@ -164,15 +167,15 @@ export class DashboardComponent implements OnInit {
 			data: { channel: currentChatDisplayName, isPrivate: isPrivate  }
 		});
 
-		dialogRef.afterClosed().subscribe((result = "") => {
-			console.log("Resukt", result)
-			if (result) {
-				result = result.channelName.replace(/\s/g, '')
+		dialogRef.afterClosed().subscribe((dataObj = {}) => {
+			console.log("Resukt", dataObj)
+			if (dataObj.channelName) {
+				dataObj.channelName = dataObj.channelName.replace(/\s/g, '')
 			}
-			if (result) {
-				console.log(result);
-				this.newChannel = result;
-				// this.chatService.channelAdd(result)
+			if (dataObj.channelName) {
+				console.log(dataObj);
+				// this.newChannel = result;
+				this.chatService.channelEdit(dataObj)
 				// console.log('result', result);
 			}
 		});
@@ -190,16 +193,9 @@ export class DashboardComponent implements OnInit {
 				// this.chatService.removeChannel(this.chatService.channelInfo.name)
 		});
 	}
+
 	logout(){
-		this.auth.logout().subscribe(
-			(res) => {
-				this.snackBar.open("Successfully Logged Out", " ", {
-					duration: 2000,
-				}); 
-			}
-		);
-
-
+		this.chatService.logout()
 	}
 
 	// fetchChannelNameFromString = ():any => {

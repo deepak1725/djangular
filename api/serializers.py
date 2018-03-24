@@ -96,6 +96,7 @@ class GroupUserField(serializers.ModelSerializer):
     first_name = serializers.CharField(read_only=True, source="user.first_name")
     last_name = serializers.CharField(read_only=True, source="user.last_name")
     username = serializers.CharField(read_only=True, source="user.username")
+    isAdmin = serializers.BooleanField(default=False)
 
     class Meta:
         model = GroupUsers
@@ -114,7 +115,6 @@ class AllChannelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        print("Hello in create")
         users = validated_data.pop('users')
         instanceAllChannels = AllChannels.objects.filter(channel=validated_data['channel'])
 
