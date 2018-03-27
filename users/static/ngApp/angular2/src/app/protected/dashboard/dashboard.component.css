@@ -5,7 +5,18 @@ mat-grid-tile {
 .online{
   font-size: 15px !important; 
   color: #35902a;
+  height: 13px !important;
+
+  
 }
+.offline {
+  font-size: 12px !important;
+  color: #717274;
+  height: 13px !important;
+
+
+}
+
 .channel-title{
   margin-bottom: 5px;
 }

@@ -38,7 +38,7 @@ export class NewchatService {
     currentChatObj :any;
     noticeData = {
         showNotice: false,
-        isMine: false,
+        isMine: false, //IS channel of Self Chat
         message: "d"
     }
 
@@ -121,7 +121,7 @@ export class NewchatService {
                     let chatObj = this.createChat(element.channel, element.isPrivate)
                     this.subscribe(chatObj);
                     element.isNewMessageArrived =  false; 
-                    return element
+                    return element //TODO
                 });
 
                 
@@ -135,7 +135,19 @@ export class NewchatService {
                     let chatObj = this.createChat(element.channel, true)
                     this.subscribe(chatObj);
                     element.isNewMessageArrived = false;
-                    return element
+                    element.isOnline = false; 
+                    let user = this.ChatEngine.User(element.username);
+                    
+                    // console.log(Object.keys(this.ChatEngine.global.users));
+                    
+                    if (Object.keys(user.state).length) {
+                        element.isOnline = true; 
+                    }
+                    // console.log(user.state);
+                    
+
+
+                    // return element
                 });
 
                 this.ngRedux.dispatch({ type: Constants.USERADD, payload: response[1].data.friend })
@@ -174,7 +186,6 @@ export class NewchatService {
     }
 
     connectChat = (chat) => {
-        console.log("In COnnect");
         
         if (chat.hasConnected) {
             this.history(chat)
@@ -192,37 +203,40 @@ export class NewchatService {
         
         // wait for our chat to connect
         this.ngRedux.dispatch({ type: Constants.MESSAGEREMOVE, payload: {} })        
-        let data = null;
+        let dataFound = false;
 
         currentChatObject.search({
             event: 'message',
             limit: 50
         }).on('message', (response) => {
-            console.log("res", response.data);
-            data = response.data;
+            dataFound = true;
             this.renderMessage(response.data);
 
         }).on('$.search.finish', () => {
-            if (!data) {
+            
+            if (dataFound) {
+                this.noticeData = {
+                    showNotice: false,
+                    isMine: false,
+                    message: ""
+                }
+
+            }else{
+                // if length is 0
+                console.log("leng 0");
+                
                 if (this.currentChat == this.username) {
-                    this.noticeData =  {
-                        showNotice : true,
-                        isMine : true,
-                        message:"This is your Space! Start typing Anything."
+                    this.noticeData = {
+                        showNotice: true,
+                        isMine: true,
+                        message: "This is your Space! Start typing Anything."
                     }
-                }else{
+                } else {
                     this.noticeData = {
                         showNotice: true,
                         isMine: false,
                         message: "This is starting of your conversation. Why not start with a Hello.."
                     }
-                }
-                
-            }else{
-                this.noticeData = {
-                    showNotice: false,
-                    isMine: false,
-                    message: ""
                 }
             }
         });
@@ -249,7 +263,7 @@ export class NewchatService {
         });
 
         this.ChatEngine.on('$.created.user', (data, user) => {
-            // console.log("UserCreated");
+            console.log("UserCreated");
             
             let userDetails = Observable.forkJoin(
                     this.UserServicee.getUserDetails(user.uuid),
@@ -313,6 +327,7 @@ export class NewchatService {
     // }
 
     updateUserState = (me) => {
+
         me.update({
             lastOnline: new Date(),
             nickName: this.username,
@@ -388,9 +403,7 @@ export class NewchatService {
             displayName = '#' + ppElement.displayName;
             let chat = this.createChat(ppElement.channel);
             
-            // this.chatUser(chat).then((res) => console.log(res));
             
-            console.log("PP")
             let payload = {
                 'channel': ppElement.channel,
                 'isPrivate': ppElement.isPrivate,
@@ -431,7 +444,8 @@ export class NewchatService {
         }else{
             // If none of above condition is met, the channel is invalid, hence redirect user
             this.router.navigate([`../messages`, this.username]);
-            this.shiftChannel(this.username, true)
+            this.isChannelCurrent(this.username)
+            // this.shiftChannel(this.username, true)
             console.log("This is not a valid channel :", channelInput);
         }
     }

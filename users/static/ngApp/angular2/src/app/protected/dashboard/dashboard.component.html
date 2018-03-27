@@ -109,9 +109,19 @@
 
 
 					<div fxLayout="row" fxLayoutAlign="start center">
-						<mat-icon mat-list-icon class="online">
-							fiber_manual_record
-						</mat-icon>
+						
+						<div *ngIf="occupant.isOnline; else elseBlock">
+							<mat-icon mat-list-icon class="online">
+								fiber_manual_record
+							</mat-icon>
+						</div>
+
+						<ng-template #elseBlock>
+							<mat-icon mat-list-icon class="offline">
+								 panorama_fish_eye
+							</mat-icon>
+						</ng-template>
+						
 						<div>
 				 			{{ occupant.first_name }}&nbsp;{{ occupant.last_name }}
 							<small class="dull">@{{ occupant.username }} </small>
