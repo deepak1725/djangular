@@ -110,7 +110,7 @@
 
 					<div fxLayout="row" fxLayoutAlign="start center">
 						
-						<div *ngIf="occupant.isOnline; else elseBlock">
+						<div *ngIf="occupant.state?.isOnline; else elseBlock">
 							<mat-icon mat-list-icon class="online">
 								fiber_manual_record
 							</mat-icon>

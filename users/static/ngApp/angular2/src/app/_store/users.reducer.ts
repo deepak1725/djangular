@@ -31,10 +31,10 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
             };
 
         case Constants.USERADD:
-            let lastId = 0
-            // console.log("State", state)
-            // console.log("Action", action)
-            // state.payload.find(findd => action.payload)
+            action.payload.map((user) => {
+                user["state"] = {},
+                user['isNewMessageArrived'] = false
+            })
             return {
                 type: action.type,
                 payload: [ ...action.payload],
@@ -42,15 +42,12 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
             };
 
         case Constants.USEREDIT:
-            let newisMessageArrived = true;
-
-            if (action.payload.isCurrentChannel) {
-                newisMessageArrived = false;
-            }
+          
             state.payload.map((element) => {
 
-                if (action.payload.channel === element.channel) {
-                    element.isNewMessageArrived = newisMessageArrived
+                if ((action.payload.channel === element.channel) || (action.payload.channel === element.username)) {
+                    element.isNewMessageArrived = action.payload.isNewMessageArrived
+                    element.state = action.payload.state
                     return;
                 }
             });
