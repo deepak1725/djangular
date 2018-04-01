@@ -1586,7 +1586,8 @@ var newchat_service_NewchatService = (function () {
                 _this.handleAllChannels(allChannels);
             });
         };
-        this.handleAllChannels = function (allChannels) {
+        this.handleAllChannels = function (allChannels, caseOfAddNewChannel) {
+            if (caseOfAddNewChannel === void 0) { caseOfAddNewChannel = false; }
             allChannels.subscribe(function (response) {
                 //Public/Private
                 _this.myPPChannels = response[0].data;
@@ -1598,6 +1599,9 @@ var newchat_service_NewchatService = (function () {
                     return element; //TODO
                 });
                 _this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: response[0].data });
+                if (caseOfAddNewChannel) {
+                    return;
+                }
                 //Direct
                 _this.myDirectChannel = response[1].data.friend;
                 response[1].data.friend.map(function (element) {
@@ -1605,12 +1609,6 @@ var newchat_service_NewchatService = (function () {
                     _this.subscribe(chatObj);
                     element.isNewMessageArrived = false;
                     element.isOnline = false;
-                    // let user = this.ChatEngine.User(element.username);
-                    // if (Object.keys(user.state).length) {
-                    //     element.isOnline = true; 
-                    // }
-                    // console.log(user.state);
-                    // return element
                 });
                 _this.ngRedux.dispatch({ type: Constants.USERADD, payload: response[1].data.friend });
             }, function (error) {
@@ -1624,7 +1622,7 @@ var newchat_service_NewchatService = (function () {
         this.subscribe = function (chatRoom) {
             var isAlreadySubscribed = _this.subscribedRooms.includes(chatRoom.channel);
             if (!isAlreadySubscribed) {
-                _this.subscribedRooms.push(chatRoom.chapynnel);
+                _this.subscribedRooms.push(chatRoom.channel);
                 chatRoom.on('message', function (payload) {
                     _this.noticeData.showNotice = false;
                     console.log("A new MEssage is received");
@@ -1912,13 +1910,14 @@ var newchat_service_NewchatService = (function () {
         this.global = function () {
         };
         this.channelAdd = function (channelDisplayName) {
+            //Only Public Channel Add runs this
             var channelName = _this.UserServicee.getChannelName()
                 .switchMap(function (response) {
                 return _this.UserServicee.addPublicPrivateChannel(response.data.name, channelDisplayName, false);
             });
             channelName.subscribe(function (response) {
                 var allChannels = _this.getAllChannelDetails(_this.createChat(response.data.channel, false));
-                _this.handleAllChannels(allChannels);
+                _this.handleAllChannels(allChannels, true);
                 _this.router.navigate(["../messages", response.data.channel]);
             });
         };

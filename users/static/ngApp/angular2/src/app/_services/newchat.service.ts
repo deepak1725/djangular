@@ -118,7 +118,7 @@ export class NewchatService {
         });
     }
 
-    handleAllChannels = (allChannels) => {
+    handleAllChannels = (allChannels, caseOfAddNewChannel = false) => {
         allChannels.subscribe(
             (response) => {
 
@@ -135,6 +135,9 @@ export class NewchatService {
                 
                 this.ngRedux.dispatch({ type: Constants.PUBLICCHANNELADD, payload: response[0].data })
 
+                if (caseOfAddNewChannel) {
+                    return;
+                }
 
                 //Direct
                 this.myDirectChannel = response[1].data.friend
@@ -144,17 +147,7 @@ export class NewchatService {
                     this.subscribe(chatObj);
                     element.isNewMessageArrived = false;
                     element.isOnline = false; 
-                    // let user = this.ChatEngine.User(element.username);
-                    
-                    
-                    // if (Object.keys(user.state).length) {
-                    //     element.isOnline = true; 
-                    // }
-                    // console.log(user.state);
-                    
-
-
-                    // return element
+                   
                 });
 
                 this.ngRedux.dispatch({ type: Constants.USERADD, payload: response[1].data.friend })
@@ -175,7 +168,7 @@ export class NewchatService {
     subscribe = (chatRoom) => {
         let isAlreadySubscribed = this.subscribedRooms.includes(chatRoom.channel);
         if (!isAlreadySubscribed) {
-            this.subscribedRooms.push(chatRoom.chapynnel);
+            this.subscribedRooms.push(chatRoom.channel);
             chatRoom.on('message', (payload) => {
                 this.noticeData.showNotice = false
                 console.log("A new MEssage is received");
@@ -545,6 +538,7 @@ export class NewchatService {
     }
 
     channelAdd = (channelDisplayName) => {
+        //Only Public Channel Add runs this
         let channelName = this.UserServicee.getChannelName()
             .switchMap((response) => {
                 return this.UserServicee.addPublicPrivateChannel(response.data.name, channelDisplayName, false)
@@ -552,7 +546,7 @@ export class NewchatService {
             
         channelName.subscribe(response => {
             let allChannels = this.getAllChannelDetails(this.createChat(response.data.channel, false));
-            this.handleAllChannels(allChannels);
+            this.handleAllChannels(allChannels, true);
             this.router.navigate([`../messages`, response.data.channel]);
         })                       
     }
