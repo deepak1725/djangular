@@ -1570,7 +1570,6 @@ var newchat_service_NewchatService = (function () {
             return alldata;
         };
         this.lobby = function () {
-            console.log("In lobby");
             var allChannels = _this.getAllChannelDetails();
             //Initializing User
             _this.ChatEngine.connect(_this.currentUserData.user.username, {
@@ -1582,7 +1581,6 @@ var newchat_service_NewchatService = (function () {
             });
             //Setting up Socket
             _this.ChatEngine.on('$.ready', function (data) {
-                console.log("ready");
                 var me = _this.me = data.me;
                 // this.updateUserState(me);
                 _this.handleAllChannels(allChannels);
@@ -1638,7 +1636,6 @@ var newchat_service_NewchatService = (function () {
                         var userEditPayload = {
                             'channel': payload.data.channel,
                             'isCurrentChannel': false,
-                            'state': null,
                             'isNewMessageArrived': true
                         };
                         _this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload });
@@ -1653,7 +1650,6 @@ var newchat_service_NewchatService = (function () {
             }
             else {
                 chat.on('$.connected', function () {
-                    console.log("in Connect Chat");
                     _this.history(chat);
                 });
             }
@@ -1702,16 +1698,28 @@ var newchat_service_NewchatService = (function () {
             };
             _this.ngRedux.dispatch({ type: Constants.MESSAGEADD, newData: newData });
         };
+        this.updateOnlineState = function () {
+            // Updating State of All Users
+            var allOnlineUsers = _this.ChatEngine.global.users;
+            var clearStatePayload = {
+                'clearState': true,
+                'state': {},
+            };
+            _this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: clearStatePayload });
+            for (var user in allOnlineUsers) {
+                if (allOnlineUsers.hasOwnProperty(user)) {
+                    var element_1 = allOnlineUsers[user];
+                    var userEditPayload = {
+                        'channel': element_1.uuid,
+                        'state': element_1.state,
+                    };
+                    _this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload });
+                }
+            }
+        };
         this.eventListerners = function () {
             _this.ChatEngine.on('$.state', function (payload) {
-                // Updating State of All Users
-                var userEditPayload = {
-                    'channel': payload.user.uuid,
-                    'isCurrentChannel': false,
-                    'state': payload.state,
-                    'isNewMessageArrived': false
-                };
-                _this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload });
+                _this.updateOnlineState();
             });
             _this.ChatEngine.on('$.created.chat', function (data, chat) {
                 // this.fetchChannel(chat.channel);
@@ -1721,6 +1729,9 @@ var newchat_service_NewchatService = (function () {
             });
             _this.ChatEngine.on('$.created.user', function (data, user) {
                 _this.manageDirectChannels(user);
+            });
+            _this.ChatEngine.on('$.offline.*', function (data, user) {
+                _this.updateOnlineState();
             });
             _this.me.direct.on('$.invite', function (payload) {
                 // console.log("You got annn Invite", payload);
@@ -1753,8 +1764,8 @@ var newchat_service_NewchatService = (function () {
                 _this.myDirectChannel = response.data.friend;
                 for (var friend in response.data.friend) {
                     if (response.data.friend.hasOwnProperty(friend)) {
-                        var element_1 = response.data.friend[friend];
-                        _this.sendInvite(element_1.username, element_1.channel);
+                        var element_2 = response.data.friend[friend];
+                        _this.sendInvite(element_2.username, element_2.channel);
                     }
                 }
                 _this.ngRedux.dispatch({ type: Constants.USERADD, payload: response.data.friend });
@@ -1800,18 +1811,18 @@ var newchat_service_NewchatService = (function () {
             // let chat = element.split("#");
             var currentChatRoom = null;
             for (var _i = 0, _a = _this.myDirectChannel; _i < _a.length; _i++) {
-                var element_2 = _a[_i];
+                var element_3 = _a[_i];
                 // this.fetchChannel(element, true);
                 // console.log(element);
                 // let userDetails = this.myDirectChannel.find((arg):any => arg.channel == chat[3] )
                 // if (userDetails) {
                 var payload = {
-                    channel: element_2.channel,
-                    uuid: element_2.username,
-                    firstName: element_2.first_name,
-                    lastName: element_2.last_name,
+                    channel: element_3.channel,
+                    uuid: element_3.username,
+                    firstName: element_3.first_name,
+                    lastName: element_3.last_name,
                 };
-                _this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: element_2 });
+                _this.ngRedux.dispatch({ type: Constants.PRIVATECHANNELADD, payload: element_3 });
                 // }   
             }
         };
@@ -1850,7 +1861,6 @@ var newchat_service_NewchatService = (function () {
             else if (directElement) {
                 _this.isPrivate = true;
                 var chat = _this.createChat(directElement.channel);
-                console.log("DP", directElement);
                 //If Channel we tried to shift into is Direct Channel
                 displayName = '@' + directElement.username;
                 var payload = {
@@ -1862,12 +1872,11 @@ var newchat_service_NewchatService = (function () {
                     'cId': null
                 };
                 //REMOVING NEW MESSAGE INDICATOR
+                // console.log(Object.keys(chat.users))
                 var userEditPayload = {
                     'channel': directElement.channel,
                     'isCurrentChannel': true,
                     'isNewMessageArrived': false,
-                    'state': null,
-                    'username': _this.currentUserData.user.username
                 };
                 _this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload });
                 _this.ngRedux.dispatch({ type: Constants.CURRENTCHANNELADD, payload: payload });
@@ -2656,8 +2665,7 @@ function userReducer(state, action) {
             };
         case Constants.USERADD:
             action.payload.map(function (user) {
-                user["state"] = {},
-                    user['isNewMessageArrived'] = false;
+                user['isNewMessageArrived'] = false;
             });
             return {
                 type: action.type,
@@ -2666,9 +2674,16 @@ function userReducer(state, action) {
             };
         case Constants.USEREDIT:
             state.payload.map(function (element) {
-                if ((action.payload.channel === element.channel) || (action.payload.channel === element.username)) {
+                if (action.payload.clearState) {
+                    element.state = {};
+                }
+                if (action.payload.state) {
+                    if (action.payload.channel === element.username) {
+                        element.state = action.payload.state;
+                    }
+                }
+                else if (action.payload.channel === element.channel) {
                     element.isNewMessageArrived = action.payload.isNewMessageArrived;
-                    element.state = action.payload.state;
                     return;
                 }
             });

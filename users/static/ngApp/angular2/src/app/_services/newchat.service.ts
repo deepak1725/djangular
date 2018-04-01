@@ -98,7 +98,6 @@ export class NewchatService {
     }
 
     lobby = () => {
-        console.log("In lobby");
         
         let allChannels = this.getAllChannelDetails()
         
@@ -113,7 +112,6 @@ export class NewchatService {
 
         //Setting up Socket
         this.ChatEngine.on('$.ready', (data) => {
-            console.log("ready");
             let me = this.me = data.me;
             // this.updateUserState(me);
             this.handleAllChannels(allChannels)
@@ -189,7 +187,6 @@ export class NewchatService {
                     let userEditPayload = {
                         'channel': payload.data.channel,
                         'isCurrentChannel': false,
-                        'state': null,
                         'isNewMessageArrived': true
                     }
 
@@ -208,7 +205,6 @@ export class NewchatService {
 
         }else{
             chat.on('$.connected', () => {
-                console.log("in Connect Chat");
                 
                 this.history(chat)                
             });
@@ -270,17 +266,38 @@ export class NewchatService {
         this.ngRedux.dispatch({ type: Constants.MESSAGEADD, newData })
     }
 
-    eventListerners = () => {
-        this.ChatEngine.on('$.state', (payload) => {
-            // Updating State of All Users
-            let userEditPayload = {
-                 'channel': payload.user.uuid, 
-                 'isCurrentChannel': false,
-                 'state': payload.state,
-                 'isNewMessageArrived': false 
+
+    updateOnlineState = () => {
+        // Updating State of All Users
+        let allOnlineUsers = this.ChatEngine.global.users;
+
+        let clearStatePayload = {
+            'clearState': true,
+            'state': {},
+        }
+        this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: clearStatePayload })
+
+        for (const user in allOnlineUsers) {
+
+            if (allOnlineUsers.hasOwnProperty(user)) {
+
+                const element = allOnlineUsers[user];
+
+                let userEditPayload = {
+                    'channel': element.uuid,
+                    'state': element.state,
+                }
+
+                this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload })
             }
+        }
+    }
+
+    eventListerners = () => {
+
+        this.ChatEngine.on('$.state', (payload) => {
             
-            this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload })
+            this.updateOnlineState()
             
         });
 
@@ -294,6 +311,11 @@ export class NewchatService {
 
         this.ChatEngine.on('$.created.user', (data, user) => {
             this.manageDirectChannels(user)
+        });
+
+        this.ChatEngine.on('$.offline.*', (data, user) => {
+            this.updateOnlineState()
+            
         });
 
         this.me.direct.on('$.invite', (payload) => {
@@ -457,7 +479,6 @@ export class NewchatService {
         else if(directElement){
             this.isPrivate = true;
             let chat = this.createChat(directElement.channel);
-            console.log("DP", directElement)
             
             //If Channel we tried to shift into is Direct Channel
             displayName = '@' + directElement.username;
@@ -472,12 +493,12 @@ export class NewchatService {
                 
             }
             //REMOVING NEW MESSAGE INDICATOR
+            // console.log(Object.keys(chat.users))
+            
             let userEditPayload = { 
                 'channel': directElement.channel, 
                 'isCurrentChannel': true,
                 'isNewMessageArrived' : false,
-                'state': null,
-                'username': this.currentUserData.user.username
             };
             this.ngRedux.dispatch({ type: Constants.USEREDIT, payload: userEditPayload })
 

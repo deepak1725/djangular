@@ -32,7 +32,6 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
 
         case Constants.USERADD:
             action.payload.map((user) => {
-                user["state"] = {},
                 user['isNewMessageArrived'] = false
             })
             return {
@@ -44,12 +43,23 @@ export function userReducer(state: IUserState = INITIAL_STATE, action): IUserSta
         case Constants.USEREDIT:
           
             state.payload.map((element) => {
+                
+                if (action.payload.clearState) {                    
+                    element.state = {}
+                }
 
-                if ((action.payload.channel === element.channel) || (action.payload.channel === element.username)) {
+                if (action.payload.state) {
+                
+                    if (action.payload.channel === element.username) {
+                        element.state = action.payload.state
+                    }
+                }
+                else if (action.payload.channel === element.channel) {
                     element.isNewMessageArrived = action.payload.isNewMessageArrived
-                    element.state = action.payload.state
                     return;
                 }
+                
+                
             });
             return {
                 type: action.type,
