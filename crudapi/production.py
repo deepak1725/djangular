@@ -213,14 +213,20 @@ ACCOUNT_EMAIL_REQUIRED =  True
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = "media"
+MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'local_statics'),
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
 DATABASES['default'].update(db_from_env)
-django_heroku.settings(locals())
+django_heroku.settings(locals(), staticfiles=False)
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
