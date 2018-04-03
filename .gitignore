@@ -157,3 +157,5 @@ Thumbs.db
 !/crudapi/my_cdn/empty
 /users/static/ngApp/angular2/aot/
 /home/deepak/projects/crudapi/users/static/ngApp/angular2/node_modules
+/staticfiles/
+!/staticfiles/empty

@@ -17,6 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import dj_database_url
 import datetime
 import django_heroku
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -24,7 +25,7 @@ import django_heroku
 SECRET_KEY = 'wtouj#(&=4_x)z_7#lu9qfuz04jy#&q-k!_jb=fs9ehg68h1!$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 

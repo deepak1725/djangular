@@ -15,6 +15,8 @@ from django.core.mail.backends.filebased import EmailBackend
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import dj_database_url
+import datetime
+import django_heroku
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.CrudConfig',
     'ngApp.apps.AppConfig',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -55,7 +57,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -64,7 +66,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
-INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('*',)
 
 ROOT_URLCONF = 'crudapi.urls'
 
@@ -114,11 +116,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'crudapi',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD':'123456',
-        'HOST':'localhost',
-        'PORT': '',
+        'PASSWORD': '123456',
+        'PORT': '5432',
     }
 }
 
@@ -156,7 +157,8 @@ USE_L10N = True
 USE_TZ = True
 
 REST_USE_JWT = True
-
+JWT_ALLOW_REFRESH = False
+JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=300000000)
 # from django.urls import reverse
 
 # Static files (CSS, JavaScript, Images)
@@ -168,9 +170,9 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR,'sent_emails')
 
 
 SITE_ID = 1
-LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'users:index'
-LOGOUT_REDIRECT_URL = 'users:login'
+LOGIN_URL = 'app:app_index'
+LOGIN_REDIRECT_URL = 'app:app_index'
+LOGOUT_REDIRECT_URL = 'app:app_index'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
@@ -180,6 +182,8 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+            'rest_framework.authentication.BasicAuthentication',
+
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
@@ -209,25 +213,14 @@ ACCOUNT_EMAIL_REQUIRED =  True
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'my_cdn')
+# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 STATIC_URL = '/static/'
 
-# MEDIA_ROOT = "media"
-# MEDIA_URL = '/media/'
-# PROJECT_ROOT > crudapi.crudapi...
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'local_statics'),
-)
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
 DATABASES['default'].update(db_from_env)
+django_heroku.settings(locals())
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
