@@ -1,4 +1,4 @@
-# Djangular        [![Build Status](https://travis-ci.org/deepak1725/django-angular4.svg?branch=master)](https://travis-ci.org/deepak1725/django-angular4)
+# Djangular        [![Build Status](https://travis-ci.org/deepak1725/djangular.svg?branch=master)](https://travis-ci.org/deepak1725/djangular)
 
 Djangular is a real time chat app, which aims at delieving messages with minimum latenty and best user experience.
 
