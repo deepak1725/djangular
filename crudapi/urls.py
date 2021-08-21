@@ -3,10 +3,7 @@
 from django.contrib import admin
 from django.conf.urls import include,url
 from django.conf import settings
-from users.views import MyPasswordResetConfirm
 from rest_auth.registration.views import VerifyEmailView
-from rest_auth.views import PasswordResetConfirmView
-# from ngApp.views import ResetPasswordConfirm
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 

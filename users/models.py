@@ -19,7 +19,7 @@ class Question(models.Model):
 
 class UserChatRecords(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    user = models.OneToOneField(User, unique=True)
+    user = models.OneToOneField(User, unique=True, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
 
@@ -31,7 +31,7 @@ class UserChatRecords(models.Model):
 
 
 class FriendChannels(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     channel = models.CharField(max_length=50)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
@@ -41,7 +41,7 @@ class FriendChannels(models.Model):
 
 
 class UserChannels(models.Model):
-    user = models.ForeignKey(User, related_name='UserChannel')
+    user = models.ForeignKey(User, related_name='UserChannel', on_delete=models.DO_NOTHING)
     friend = models.ManyToManyField(FriendChannels, related_name='FriendChannel')
     created = models.DateTimeField(auto_created=True, auto_now_add=True)
     modified = models.DateTimeField(auto_created=True, auto_now=True)
@@ -51,7 +51,7 @@ class UserChannels(models.Model):
 
 
 class GroupUsers(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     isAdmin = models.BooleanField()
 
 
@@ -62,7 +62,7 @@ class AllChannels(models.Model):
     created = models.DateTimeField(auto_created=True, auto_now=True)
     modified = models.DateTimeField(auto_created=True, auto_now_add=True)
     displayName = models.CharField(max_length=50)
-    createdBy = models.ForeignKey(User)
+    createdBy = models.ForeignKey(User, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.channel

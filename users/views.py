@@ -6,7 +6,7 @@ from .forms import SignupForm, LoginForm, MyForgotPasswordForm, MySetPasswordFor
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView,PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.sessions.models import Session

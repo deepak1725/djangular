@@ -16,10 +16,7 @@ from django.core.mail.backends.filebased import EmailBackend
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 import dj_database_url
 import datetime
-import django_heroku
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'wtouj#(&=4_x)z_7#lu9qfuz04jy#&q-k!_jb=fs9ehg68h1!$'
@@ -110,17 +107,17 @@ WSGI_APPLICATION = 'crudapi.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'postgres',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'postgres',
+    #     'PORT': '5432',
+    # }
 }
 
 
@@ -142,10 +139,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -159,7 +152,6 @@ USE_TZ = True
 REST_USE_JWT = True
 JWT_ALLOW_REFRESH = False
 JWT_EXPIRATION_DELTA = datetime.timedelta(seconds=300000000)
-# from django.urls import reverse
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -178,10 +170,8 @@ EMAIL_PORT = 1025
 
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
             'rest_framework.authentication.BasicAuthentication',
 
     ],
@@ -190,6 +180,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
+
+DEFAULT_AUTO_FIELD="django.db.models.AutoField"
 
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 
@@ -228,5 +220,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 db_from_env = dj_database_url.config(conn_max_age=500)
 
 DATABASES['default'].update(db_from_env)
-django_heroku.settings(locals(), staticfiles=False)
 

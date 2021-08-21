@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers, models
+from rest_framework import serializers
 # from views import
 UserModel = get_user_model()
 from allauth.account.utils import setup_user_email

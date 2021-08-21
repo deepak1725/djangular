@@ -2,16 +2,11 @@ from django.contrib.auth.models import User
 from api.serializers import ChatRecordsSerializer, UserChannelsSerializer, AllChannelSerializer
 from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route, list_route
 from rest_framework import status
-from django.http import HttpResponse
-from users.models import UserChatRecords,UserChannels, FriendChannels, AllChannels, GroupUsers
+from users.models import UserChatRecords,UserChannels, FriendChannels, AllChannels
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-import random, string, types
-from rest_framework import generics
-from django.core import serializers
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+import random, string
 
 
 class UsersChatRecoredsViewSet(viewsets.ModelViewSet):

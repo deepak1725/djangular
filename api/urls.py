@@ -3,13 +3,14 @@ from api import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 from users.views import MyPasswordResetConfirm
-from rest_framework_jwt.views import obtain_jwt_token
 from rest_auth.views import (
     LoginView, LogoutView, UserDetailsView, PasswordChangeView,
     PasswordResetView, PasswordResetConfirmView
 )
 from rest_auth.registration.views import RegisterView, VerifyEmailView
 from django.views.generic import TemplateView
+
+app_name = 'api'
 
 
 router = DefaultRouter()
